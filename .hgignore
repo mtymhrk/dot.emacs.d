@@ -1,0 +1,24 @@
+syntax: glob
+
+tmp/*
+ddskk/emacs-id
+ddskk/jisyo*
+ddskk/record
+ddskk/study*
+undohist/*
+ac-comphist.dat
+anything-c-adaptive-history
+session.*
+auto-save-list/*
+var/*
+url/*
+elisp/**/*.elc
+elpa/archives/*
+elpa/*.txt
+elpa/gnupg/*
+elpa/**/*.elc
+bookmarks
+projectile-bookmarks.eld
+.mc-lists.el
+**/.git*
+ido.last
