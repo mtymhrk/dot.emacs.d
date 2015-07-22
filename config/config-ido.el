@@ -13,6 +13,8 @@
                       '(ido-confirm-unique-completion t)
                       '(ido-auto-merge-work-directories-length -1))
 
+(custom-set-variables '(ido-vertical-define-keys 'C-n-and-C-p-only))
+
 (ido-mode 1)
 (ido-vertical-mode 1)
 (ido-ubiquitous-mode 1)
