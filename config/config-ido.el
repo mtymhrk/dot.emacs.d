@@ -11,7 +11,8 @@
                       '(ido-everywhere t)
                       '(ido-use-filename-at-point 'guess)
                       '(ido-confirm-unique-completion t)
-                      '(ido-auto-merge-work-directories-length -1))
+                      '(ido-auto-merge-work-directories-length -1)
+                      '(ido-cannot-complete-command 'ido-next-match))
 
 (custom-set-variables '(ido-vertical-define-keys 'C-n-and-C-p-only))
 
