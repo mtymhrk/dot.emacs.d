@@ -210,9 +210,6 @@
      (defun my-flycheck-add-suffix-if-needed (filename suffix)
        (if (and (derived-mode-p 'c-mode)
                 filename
-                (string-match-p "-gcc-?"
-                                (symbol-name (or flycheck-last-checker
-                                                 flycheck-checker)))
                 (string-match-p "\\.h$" filename))
            (concat filename suffix)
          filename))
