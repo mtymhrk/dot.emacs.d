@@ -18,25 +18,38 @@
      (progn (backward-word) (point)))
     (message "word copied")))
 
-;;; リージョンを選択していないときにワードを kill し、選択している場合はリー
-;;; ジョンを kill するコマンド
-(defun kill-region-or-backward-kill-word (beg end &optional region)
+;;; リージョンを選択している場合はリージョンを kill し、選択していない場合は
+;;; 変数に設定された関数を実行するコマンド
+(defvar kill-region-or-do-something nil)
+(defun kill-region-or-do-something (beg end &optional region)
   (interactive (list (point) (mark) 'region))
-  (if (region-active-p)
-      (kill-region beg end region)
-    (backward-kill-word 1)))
+  (cond ((region-active-p)
+         (kill-region beg end region))
+        (kill-region-or-do-something
+         (funcall kill-region-or-do-something))
+        (t                              ; nothing to do
+         )))
 
-(global-set-key (kbd "C-w") 'kill-region-or-backward-kill-word)
+;;; リージョン選択されていない場合は word を kill する
+(setq kill-region-or-do-something (lambda () (backward-kill-word 1)))
+(global-set-key (kbd "C-w") 'kill-region-or-do-something)
 
-;;; リージョンを選択していないときにワードを kill-ring にコピーし、選択してい
-;;; る場合はリージョンを kill-ring へコピーするコマンド
-(defun kill-ring-save-or-copy-backward-word (beg end &optional region)
+
+;;; リージョンを選択している場合はリージョンを kill-ring へコピーし、選択し
+;;; ていない場合は変数に設定された関数を実行するコマンド
+(defvar kill-ring-save-or-do-something nil)
+(defun kill-ring-save-or-do-something (beg end &optional region)
   (interactive (list (mark) (point)
                      (prefix-numeric-value current-prefix-arg)))
-  (if (region-active-p)
-      (kill-ring-save beg end region)
-    (copy-backward-word)))
+  (cond ((region-active-p)
+         (kill-ring-save beg end region))
+        (kill-ring-save-or-do-something
+         (funcall kill-ring-save-or-do-something))
+        (t                              ; nothing to do
+         )))
 
-(global-set-key (kbd "M-w") 'kill-ring-save-or-copy-backward-word)
+;;; リージョン選択されていない場合は word を kill-ring へコピーする
+(setq kill-ring-save-or-do-something 'copy-backward-word)
+(global-set-key (kbd "M-w") 'kill-ring-save-or-do-something)
 
 (provide 'config-extend-kill-region)
