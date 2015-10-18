@@ -57,6 +57,10 @@
 ;;; M-: (eval-expression) にて tab で補完を行う
 (define-key read-expression-map (kbd "TAB") 'lisp-complete-symbol)
 
+;;; just-on-space の代りに cycle-spacing を使う
+(global-set-key (kbd "M-SPC") 'cycle-spacing)
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; 基本設定
 
