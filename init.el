@@ -20,9 +20,6 @@
     ;; Package System
     "config-package"
 
-    ;; Input Method
-    "config-ddskk"
-
     ;; Minor-modes and Utilities
     "config-exec-path-from-shell"
     "config-whitespace"
@@ -88,6 +85,9 @@
     "config-w3m"
     "config-dired"
     "config-ag"
+
+    ;; Input Method
+    "config-ddskk"
 
     "config-clean-mode-line"
 ))
