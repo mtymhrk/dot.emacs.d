@@ -4,7 +4,7 @@
 
 (require 'multiple-cursors)
 
-(defvar my-mc/prefix-key "C-M-m")
+(defvar my-mc/prefix-key "M-M")
 (defvar my-mc/keybinds `((,my-mc/prefix-key . 'mc/mark-next-like-this)
                          ("n" . 'mc/mark-next-like-this)
                          ("p" . 'mc/mark-previous-like-this)
