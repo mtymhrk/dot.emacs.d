@@ -43,7 +43,8 @@
      squirrel-mode
      text-mode
      tcl-mode
-     visual-basic-mode ))
+     visual-basic-mode
+     cmake-mode))
 
 (defun my-highlight-symbol-mode-maybe ()
   (if (and (not (minibufferp (current-buffer)))
