@@ -77,7 +77,8 @@
     (keymap . ,helm-generic-files-map)
     (helm-message . helm-generic-file-help-message)
     (candidate-number-limit . ,helm-filelist-candidate-number-limit)
-    (mode-line . helm-generic-file-mode-line-string)))
+    ;(mode-line . helm-generic-file-mode-line-string)
+    ))
 
 (defun helm-filelist ()
   (interactive)
