@@ -32,7 +32,7 @@
 (setq skk-tut-file "~/.emacs.d/elisp/ddskk/etc/SKK.tut")
 
 ;;; C-x j で skk-mode
-(global-set-key (kbd "C-x j") 'skk-mode)
+(global-set-key (kbd "C-x C-j") 'skk-mode)
 
 (defun skk-load-hook--0 ()
   ;; コメント行を抜けたら ascii にする
