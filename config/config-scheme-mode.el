@@ -25,6 +25,16 @@
      (add-hook 'scheme-mode-hook 'enable-paredit-mode)
      ))
 
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; popwin for inferior-scheme-mode
+
+(eval-after-load 'config-popwin
+  '(progn
+     (add-popwin-special-display-config
+      '(inferior-scheme-mode :noselect t :stick t))))
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Gauche
 
@@ -36,13 +46,9 @@
   (switch-to-buffer-other-window (get-buffer-create "*scheme*"))
   (run-scheme scheme-program-name))
 
-(define-key global-map "\C-xS" 'scheme-other-window)
-
 (defun gauche-info ()
   (interactive)
   (info "/usr/share/info/gauche-refe.info.gz"))
-
-(define-key global-map "\C-xI" 'gauche-info)
 
 ;; from Gauche:EditingWithEmacs 
 ;;      (http://www.shiro.dreamhost.com/scheme/wiliki/wiliki.cgi?Gauche%3aEditingWithEmacs)
