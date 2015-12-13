@@ -23,86 +23,31 @@
 
 (add-hook 'c-mode-common-hook 'c-mode-common-hook--0)
 
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; build-info
-;;; .dir-locals.el に build-information 変数を設定してその値を元に flycheck
-;;; 等の設定をするための前準備
 
-(require 'cl-lib)
+(require 'build-info)
 
-(defvar-local build-information nil)
-(defvar build-info-update-hook nil)
-
-(defun build-info-list-of-strings-p (val)
-  (and (listp val)
-       (cl-loop for v in val
-                always (stringp v))))
-
-(defun build-info-safe-p (val)
-  (or (null val)
-      (and (listp val)
-           (stringp (cdr (assoc 'project-name val)))
-           (symbolp (cdr (assoc 'compiler-type val)))
-           (stringp (cdr (assoc 'compiler-path val)))
-           (build-info-list-of-strings-p
-            (cdr (assoc 'compile-flags val)))
-           (build-info-list-of-strings-p
-            (cdr (assoc 'compile-warnings val)))
-           (build-info-list-of-strings-p
-            (cdr (assoc 'compile-quoted-include-paths val)))
-           (build-info-list-of-strings-p
-            (cdr (assoc 'compile-include-paths val)))
-           (build-info-list-of-strings-p
-            (cdr (assoc 'compile-definitions val))))))
-
-(put 'build-information
-     'safe-local-variable #'build-info-safe-p)
-
-(defun build-info-updated ()
-  (run-hooks 'build-info-update-hook))
-
-(defun build-info-init (val)
-  (when (build-info-safe-p (val))
-    (setq-default build-information val)))
-
-(defun build-info-update (val)
-  (when (build-info-safe-p (val))
-    (setq build-information val)
-    (build-info-updated)))
-
-(add-hook 'hack-local-variables-hook 'build-info-updated)
+(build-info:setup-default '((project-name . "unknown")
+                            (compiler-type . gcc)
+                            (compiler-path . "gcc")
+                            (compile-flags . ("-g" "-std=gnu99" "-O2"))
+                            (compile-warnings . ("all" "extra" "format=2" "strict-aliasing=2" "cast-qual" "cast-align" "write-strings" "conversion" "float-equal" "pointer-arith" "switch-enum" "no-unused-parameter" "no-format-nonliteral"))
+                            (compile-quoted-include-paths . nil)
+                            (compile-include-paths . nil)
+                            (compile-definitions . nil)))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; ff-find-other-file
 
-(require 'cl-lib)
-
-(defun my-setup-ff-find-other-file-with-build-info ()
-  (if build-information
-      (let* ((paths (append (cdr (assoc 'compile-quoted-include-paths
-                                        build-information))
-                            (cdr (assoc 'compile-include-paths
-                                        build-information)))))
-        (setq ff-search-directories
-              (cons "."
-                    (cl-loop for x in paths
-                             collect x
-                             if (string-match-p "/include/?$" x)
-                             collect (concat x "/*")))))
-    (setq ff-search-directories 'cc-search-directories)))
-
-
 (defun c-mode-common-hook--ff-find-other-file ()
-  (my-setup-ff-find-other-file-with-build-info)
   (cond ((eq major-mode 'c-mode)
          (define-key c-mode-map (kbd "C-c .") 'ff-find-other-file))
         ((eq major-mode 'c++-mode)
          (define-key c++-mode-map (kbd "C-c .") 'ff-find-other-file))))
 
 (add-hook 'c-mode-common-hook 'c-mode-common-hook--ff-find-other-file)
-(add-hook 'build-info-update-hook 'my-setup-ff-find-other-file-with-build-info)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -167,215 +112,12 @@
 
 (eval-after-load 'config-flycheck
   '(progn
+    (require 'flycheck-gcc)
 
-     ;;; include した先でエラー等がある場合のエラーメッセージの解析や、
-     ;;; エラー情報のフォーマットに問題があったので独自に作成
-     (defun my-flycheck-gcc-error-format-for-fold (err)
-       (let ((file (flycheck-error-filename err))
-             (line (flycheck-error-line err))
-             (column (flycheck-error-column err))
-             (message (flycheck-error-message err)))
-         (if column
-             (format "%s:%s:%s: %s" file line column message)
-           (format "%s:%s: %s" file line message))))
+    (defun c-mode-common-hook--flycheck ()
+      (flycheck-mode t))
 
-     (defun my-flycheck-gcc-fold-include-errors (errors)
-       (let (include-error)
-         (dolist (err errors)
-           (-when-let* ((message (flycheck-error-message err))
-                        (filename (flycheck-error-filename err)))
-             (cond
-              ((and (string= message "In file included from")
-                    (not include-error))
-               (setq include-error err))
-              ((and include-error (string= message "from"))
-               (setq include-error err))
-              (include-error
-               (setf (flycheck-error-message include-error)
-                     (my-flycheck-gcc-error-format-for-fold err))
-               (setf (flycheck-error-level include-error)
-                     (flycheck-error-level err))
-               (setq include-error nil)))))
-         (when include-error
-           (let ((including (elt errors-in-include 0)))
-             (setf (flycheck-error-message include-error)
-                   (my-flycheck-gcc-format-msg-for-fold err))
-             (setf (flycheck-error-level include-error)
-                   (flycheck-error-level err)))))
-       errors)
-
-     ;;; check 対象がヘッダーファイルの場合、サフイックスに .c を付ける。
-     ;;; gcc にコンパイル対象として .h ファイルを渡すとエラーになってし
-     ;;; まうため。
-     (defun my-flycheck-add-suffix-if-needed (filename suffix)
-       (if (and (derived-mode-p 'c-mode)
-                filename
-                (string-match-p "\\.h$" filename))
-           (concat filename suffix)
-         filename))
-
-     (defadvice flycheck-temp-file-inplace
-       (before change-filename-of-headerfile activate)
-       (ad-set-arg 0 (my-flycheck-add-suffix-if-needed (ad-get-arg 0) ".c")))
-
-     (defadvice flycheck-temp-file-system
-       (before change-filename-of-headerfile activate)
-       (ad-set-arg 0 (my-flycheck-add-suffix-if-needed (ad-get-arg 0) ".c")))
-
-     ;;; make の -C で指定するディレクトリ
-     (defvar-local my-flycheck-make-execute-directory nil)
-
-     ;;; my-flycheck-make-execute-directory を元に -C オプションを作成する
-     (defun my-flycheck-make--C-option (opt val)
-       (unless val
-         (setq val "."))
-       (list opt val))
-
-     ;;; Makefile があるかどうかで checker が有効かどうかを判断する。ある場合
-     ;;; はチェック実施用の準備も行う
-     (defun my-find-build-file (build-file-name source-file-name)
-       (and source-file-name
-            (locate-dominating-file (file-name-directory source-file-name)
-                                    build-file-name)))
-
-     (defun my-flycheck-make-enable-p ()
-       (or my-flycheck-make-execute-directory
-           (let ((build-file-dir
-                  (my-find-build-file "Makefile" buffer-file-name)))
-             (if build-file-dir
-                 (progn
-                   (setq my-flycheck-make-execute-directory build-file-dir)
-                   t)
-               nil))))
-
-     ;;; flymake のように make check-syntax を使って静的解析を行う flycheck
-     ;;; の checker
-     (flycheck-define-checker c/c++-make-gcc
-       ""
-       :command ("make"
-                 "-s"
-                 (option "-C"
-                         my-flycheck-make-execute-directory
-                         my-flycheck-make--C-option)
-                 "SYNTAX_CHECK_MODE=1"
-                 (eval
-                  (format "CHK_SOURCES=%s"
-                          (flycheck-save-buffer-to-temp
-                           #'flycheck-temp-file-inplace)))
-                 "check-syntax")
-       :error-patterns
-       ((info line-start
-              (message "In file included from") " " (file-name)
-              ":" line ":" column (or ":" ",") line-end)
-        (info line-start
-              (message (and (one-or-more " ") "from")) " " (file-name)
-              ":" line ":" line-end)
-        (info line-start (file-name) ":" line ":" column
-              ": note: " (message) line-end)
-        (warning line-start (file-name) ":" line ":" column
-                 ": warning: " (message) line-end)
-        (error line-start (file-name) ":" line ":" column
-               ": " (or "fatal error" "error") ": " (message) line-end))
-       :error-filter
-       (lambda (errors)
-         (my-flycheck-gcc-fold-include-errors
-          (flycheck-sanitize-errors errors)))
-       :modes (c-mode c++-mode)
-       :predicate my-flycheck-make-enable-p
-       :next-checkers ((warning . c/c++-cppcheck))
-       )
-
-     (push 'c/c++-make-gcc flycheck-checkers)
-
-     ;;; gcc 実行時に追加したいオプションを文字列のリスト形式で設定
-     (defvar-local my-flycheck-gcc-argument-appendix nil)
-
-     ;;; gcc -iquote で指定するパスを文字列のリスト形式で設定
-     (defvar-local my-flycheck-gcc-quoted-include-path nil)
-
-     (defun my-flycheck-gcc-enable-p ()
-       (or (not build-information)
-           (eq (cdr (assoc 'compiler-type build-information))
-               'gcc)))
-
-     ;;; gcc による checker
-     ;;; 元々 flycheck で定義してあるものでは不満があるので、再定義
-     (flycheck-define-checker c/c++-gcc
-       "A C/C++ syntax checker using GCC.
-
-Requires GCC 4.8 or newer.  See URL `https://gcc.gnu.org/'."
-       :command ("gcc"
-                 "-fshow-column"
-                 "-fno-diagnostics-show-caret" ; Do not visually indicate the source location
-                 "-fno-diagnostics-show-option" ; Do not show the corresponding
-                                        ; warning group
-                 "-iquote" (eval (flycheck-c/c++-quoted-include-directory))
-                 (option-list "-iquote" my-flycheck-gcc-quoted-include-path)
-                 (option "-std=" flycheck-gcc-language-standard concat)
-                 (option-flag "-fno-exceptions" flycheck-gcc-no-exceptions)
-                 (option-flag "-fno-rtti" flycheck-gcc-no-rtti)
-                 (option-list "-include" flycheck-gcc-includes)
-                 (option-list "-W" flycheck-gcc-warnings concat)
-                 (option-list "-D" flycheck-gcc-definitions concat)
-                 (option-list "-I" flycheck-gcc-include-path)
-                 (eval my-flycheck-gcc-argument-appendix)
-                 "-x" (eval
-                       (pcase major-mode
-                         (`c++-mode "c++")
-                         (`c-mode "c")))
-                 source
-                 ;; GCC performs full checking only when actually compiling, so
-                 ;; `-fsyntax-only' is not enough. Just let it generate assembly
-                 ;; code.
-                 "-S" "-o" null-device)
-       :error-patterns
-       ((info line-start
-              (message "In file included from") " " (file-name)
-              ":" line ":" column (or ":" ",") line-end)
-        (info line-start
-              (message (and (one-or-more " ") "from")) " " (file-name)
-              ":" line ":" line-end)
-        (info line-start (file-name) ":" line ":" column
-              ": note: " (message) line-end)
-        (warning line-start (file-name) ":" line ":" column
-                 ": warning: " (message) line-end)
-        (error line-start (file-name) ":" line ":" column
-               ": " (or "fatal error" "error") ": " (message) line-end))
-       :error-filter
-       (lambda (errors)
-         (my-flycheck-gcc-fold-include-errors
-          (flycheck-sanitize-errors errors)))
-       :modes (c-mode c++-mode)
-       :predicate my-flycheck-gcc-enable-p
-       :next-checkers ((warning . c/c++-cppcheck)))
-
-
-     ;;; build-information 変数 (.dir-locals.el で設定)が設定されている場合は
-     ;;; それらの変数を使って、flycheck 実行のためのセットアップを行なう
-     (defun my-setup-flycheck-with-build-info ()
-       (when (and build-information
-                  (eq 'gcc (cdr (assoc 'compiler-type build-information))))
-         (setq flycheck-gcc-warnings
-               (cdr (assoc 'compile-warnings
-                           build-information)))
-         (setq my-flycheck-gcc-quoted-include-path
-               (cdr (assoc 'compile-quoted-include-paths
-                           build-information)))
-         (setq flycheck-gcc-include-path
-               (cdr (assoc 'compile-include-paths build-information)))
-         (setq flycheck-gcc-definitions
-               (cdr (assoc 'compile-definitions build-information)))
-         (setq my-flycheck-gcc-argument-appendix
-               (cdr (assoc 'compile-flags build-information)))))
-
-
-     (defun c-mode-common-hook--flycheck ()
-       (my-setup-flycheck-with-build-info)
-       (flycheck-mode t))
-
-     (add-hook 'c-mode-common-hook 'c-mode-common-hook--flycheck)
-     (add-hook 'build-info-update-hook 'my-setup-flycheck-with-build-info)
-     ))
+    (add-hook 'c-mode-common-hook 'c-mode-common-hook--flycheck)))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -406,18 +148,9 @@ Requires GCC 4.8 or newer.  See URL `https://gcc.gnu.org/'."
 ;;; 実行するバージョンを使用している。(https://github.com/mooz/c-eldoc)
 
 (require 'c-eldoc)
+(require 'build-info)
 
 (add-hook 'c-mode-common-hook 'c-turn-on-eldoc-mode)
-
-(defun my-setup-c-eldoc-with-build-info ()
-  (when build-information
-    (setq-local c-eldoc-includes
-                (mapconcat
-                 (lambda (x) (concat "-I " x))
-                 (cdr (assq 'compile-include-paths build-information))
-                 " "))))
-
-(add-hook 'build-info-update-hook 'my-setup-c-eldoc-with-build-info)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
