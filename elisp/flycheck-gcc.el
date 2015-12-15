@@ -47,13 +47,11 @@
       (concat filename suffix)
     filename))
 
-(defadvice flycheck-gcc:flycheck-temp-file-inplace
-    (before change-filename-of-headerfile activate)
-  (ad-set-arg 0 (flycheck-gcc:add-suffix-if-needed (ad-get-arg 0) ".c")))
+(defun flycheck-gcc:temp-file-inplace (filename)
+  (flycheck-temp-file-inplace (flycheck-gcc:add-suffix-if-needed filename ".c")))
 
-(defadvice flycheck-gcc:temp-file-system
-    (before change-filename-of-headerfile activate)
-  (ad-set-arg 0 (flycheck-gcc:add-suffix-if-needed (ad-get-arg 0) ".c")))
+(defun flycheck-gcc:temp-file-system (filename)
+  (flycheck-temp-file-system (flycheck-gcc:add-suffix-if-needed filename ".c")))
 
 ;;; make の -C で指定するディレクトリ
 (defvar-local flycheck-gcc:execute-directory-make nil)
@@ -94,7 +92,7 @@
             (eval
              (format "CHK_SOURCES=%s"
                      (flycheck-save-buffer-to-temp
-                      #'flycheck-temp-file-inplace)))
+                      #'flycheck-gcc:temp-file-inplace)))
             "check-syntax")
   :error-patterns
   ((info line-start
