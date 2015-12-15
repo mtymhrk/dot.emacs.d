@@ -12,6 +12,9 @@
 
 (global-auto-complete-mode t)
 
+;;; コメントや文字列の中でも auto-complete を有効にする
+(setq ac-disable-faces nil)
+
 ;;; 補完機能起動コマンドをバインド
 ;;;   ac-auto-start の設定による自動起動では fuzzy.el を使用した曖昧マッチを利用
 ;;;   できない。曖昧マッチを利用したい時にこのキーバインドを叩く

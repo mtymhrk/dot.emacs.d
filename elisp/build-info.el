@@ -141,4 +141,27 @@
      (add-hook 'build-info:update-hook 'build-info:setup-c-eldoc)
      (build-info:setup-c-eldoc)))
 
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; auto-complete-c-headers
+
+(defvar build-info:auto-complete-c-headers:directories
+  '((c-mode . ("." "/usr/include" "/usr/local/include"))
+    (c++-mode . ("." "/usr/include" "/usr/local/include"))))
+
+(defun build-info:setup-achead ()
+  (when (and (featurep 'auto-complete-c-headers) (build-info:enable-p))
+    (make-local-variable 'achead:include-directories)
+    (setq achead:include-directories
+          (append (cdr (assq major-mode
+                             build-info:auto-complete-c-headers:directories))
+                  (build-info:info-compile-quoted-include-paths)
+                  (build-info:info-compile-include-paths)))))
+
+(eval-after-load 'auto-complete-c-headers
+  '(progn
+     (add-hook 'c-mode-common-hook 'build-info:setup-achead)
+     (add-hook 'build-info:update-hook 'build-info:setup-achead)
+    ))
+
 (provide 'build-info)

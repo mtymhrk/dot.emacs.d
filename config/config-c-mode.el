@@ -138,12 +138,51 @@
   '(progn
      ;;; c-mode でのカーソル位置の文字削除で auto-complete が起動するのを抑制
      (push 'c-electric-delete-forward ac-non-trigger-commands)
+
+
+     ;;; auto-complete-c-headers の設定
+     (require 'auto-complete-c-headers)
+     (require 'build-info)
+
+     (setq my:achead:include-directories-c
+           '("/usr/lib/gcc/x86_64-linux-gnu/4.8/include"
+             "/usr/local/include"
+             "/usr/lib/gcc/x86_64-linux-gnu/4.8/include-fixed"
+             "/usr/include/x86_64-linux-gnu"
+             "/usr/include"
+             "."))
+
+     (setq my:achead:include-directories-c++
+           '("/usr/include/c++/4.8"
+             "/usr/include/x86_64-linux-gnu/c++/4.8"
+             "/usr/include/c++/4.8/backward"
+             "/usr/lib/gcc/x86_64-linux-gnu/4.8/include"
+             "/usr/local/include"
+             "/usr/lib/gcc/x86_64-linux-gnu/4.8/include-fixed"
+             "/usr/include/x86_64-linux-gnu"
+             "/usr/include"
+             "."))
+
+     (setcdr (assq 'c-mode build-info:auto-complete-c-headers:directories)
+             my:achead:include-directories-c)
+     (setcdr (assq 'c++-mode build-info:auto-complete-c-headers:directories)
+             my:achead:include-directories-c++)
+
+     (defun my:achead:init ()
+       (unless (featurep 'build-info)
+         (make-local-variable 'achead:include-directories)
+         (cond ((eq major-mode 'c-mode)
+                (setq achead:include-directories my:achead:include-directories-c))
+               ((eq major-mode 'c++-mode)
+                (setq achead:include-directories my:achead:include-directories-c++))))
+       (add-to-list 'ac-sources 'ac-source-c-headers))
+
+     (add-hook 'c-mode-common-hook 'my:achead:init)
      ))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; c-eldoc
-
 ;;; c-eldoc は本家のものではなく、deferred.el を使ってプリプロセッサを非同期
 ;;; 実行するバージョンを使用している。(https://github.com/mooz/c-eldoc)
 
