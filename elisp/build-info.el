@@ -99,6 +99,11 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; flycheck
 
+(defvar build-info:flycheck-variables
+  '(flycheck-gcc-warnings flycheck-gcc-include-path flycheck-gcc-definitions
+    flycheck-gcc-args flycheck-clang-warnings flycheck-clang-include-path
+    flycheck-clang-definitions flycheck-clang-args))
+
 (defun build-info:setup-flycheck-args ()
   (append (build-info:info-compile-flags)
           (cl-mapcar (lambda (x) (format "-iquote %s" x))
@@ -106,6 +111,8 @@
 
 (defun build-info:setup-flycheck ()
   (when (and (featurep 'flycheck) (build-info:enable-p))
+    (dolist (var build-info:flycheck-variables)
+      (make-local-variable var))
     (cond ((or (eq 'gcc (build-info:info-compiler-type))
                (eq 'clang (build-info:info-compiler-type)))
            (setq flycheck-gcc-warnings (build-info:info-compile-warnings))
