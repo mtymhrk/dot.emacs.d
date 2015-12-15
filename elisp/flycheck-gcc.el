@@ -12,29 +12,35 @@
         (format "%s:%s:%s: %s" file line column message)
       (format "%s:%s: %s" file line message))))
 
-(defun flycheck-gcc:fold-include-errors (errors)
+(defun flycheck-gcc:fold-include-errors-gcc (errors)
   (let (include-error)
     (dolist (err errors)
-      (-when-let* ((message (flycheck-error-message err))
-                   (filename (flycheck-error-filename err)))
+      (-when-let* ((message (flycheck-error-message err)))
         (cond
-         ((and (string= message "In file included from")
-               (not include-error))
-          (setq include-error err))
-         ((and include-error (string= message "from"))
+         ((or (string= message "In file included from") (string= message "from"))
           (setq include-error err))
          (include-error
           (setf (flycheck-error-message include-error)
                 (flycheck-gcc:error-format-for-fold err))
           (setf (flycheck-error-level include-error)
                 (flycheck-error-level err))
-          (setq include-error nil)))))
-    (when include-error
-      (let ((including (elt errors-in-include 0)))
-        (setf (flycheck-error-message include-error)
-              (flycheck-gcc:error-format-for-fold err))
-        (setf (flycheck-error-level include-error)
-              (flycheck-error-level err)))))
+          (setq include-error nil))))))
+  errors)
+
+(defun flycheck-gcc:fold-include-errors-clang (errors)
+  (let (include-error)
+    (dolist (err errors)
+      (-when-let* ((message (flycheck-error-message err)))
+        (cond
+         ((string= message "In file included from")
+          (unless include-error
+            (setq include-error err)))
+         (include-error
+          (setf (flycheck-error-message include-error)
+                (flycheck-gcc:error-format-for-fold err))
+          (setf (flycheck-error-level include-error)
+                (flycheck-error-level err))
+          (setq include-error nil))))))
   errors)
 
 ;;; check 対象がヘッダーファイルの場合、サフイックスに .c を付ける。
@@ -164,10 +170,66 @@ Requires GCC 4.8 or newer.  See URL `https://gcc.gnu.org/'."
           ": " (or "fatal error" "error") ": " (message) line-end))
   :error-filter
   (lambda (errors)
-    (flycheck-gcc:fold-include-errors
+    (flycheck-gcc:fold-include-errors-gcc
      (flycheck-sanitize-errors errors)))
   :modes (c-mode c++-mode)
   :next-checkers ((warning . c/c++-cppcheck)))
 
+;;; clang による checker
+;;; 元々 flycheck で定義してあるものでは不満があるので、再定義
+(flycheck-define-checker c/c++-clang
+  "A C/C++ syntax checker using Clang.
+
+See URL `http://clang.llvm.org/'."
+  :command ("clang"
+            "-fsyntax-only"
+            "-fno-color-diagnostics"    ; Do not include color codes in output
+            "-fno-caret-diagnostics"    ; Do not visually indicate the source
+                                        ; location
+            "-fno-diagnostics-show-option" ; Do not show the corresponding
+                                        ; warning group
+            "-iquote" (eval (flycheck-c/c++-quoted-include-directory))
+            (option "-std=" flycheck-clang-language-standard concat)
+            (option-flag "-pedantic" flycheck-clang-pedantic)
+            (option-flag "-pedantic-errors" flycheck-clang-pedantic-errors)
+            (option "-stdlib=" flycheck-clang-standard-library concat)
+            (option-flag "-fms-extensions" flycheck-clang-ms-extensions)
+            (option-flag "-fno-exceptions" flycheck-clang-no-exceptions)
+            (option-flag "-fno-rtti" flycheck-clang-no-rtti)
+            (option-flag "-fblocks" flycheck-clang-blocks)
+            (option-list "-include" flycheck-clang-includes)
+            (option-list "-W" flycheck-clang-warnings concat)
+            (option-list "-D" flycheck-clang-definitions concat)
+            (option-list "-I" flycheck-clang-include-path)
+            (eval flycheck-clang-args)
+            "-x" (eval
+                  (pcase major-mode
+                    (`c++-mode "c++")
+                    (`c-mode "c")))
+            ;; Read from standard input
+            "-")
+  :standard-input t
+  :error-patterns
+  ((info line-start
+          (message "In file included from") " " (or "<stdin>" (file-name))
+          ":" line ":" line-end)
+   (info line-start (or "<stdin>" (file-name)) ":" line ":" column
+         ": note: " (optional (message)) line-end)
+   (warning line-start (or "<stdin>" (file-name)) ":" line ":" column
+            ": warning: " (optional (message)) line-end)
+   (error line-start (or "<stdin>" (file-name)) ":" line ":" column
+          ": " (or "fatal error" "error") ": " (optional (message)) line-end))
+  :error-filter
+  (lambda (errors)
+    (let ((errors (flycheck-sanitize-errors errors)))
+      (dolist (err errors)
+        ;; Clang will output empty messages for #error/#warning pragmas without
+        ;; messages.  We fill these empty errors with a dummy message to get
+        ;; them past our error filtering
+        (setf (flycheck-error-message err)
+              (or (flycheck-error-message err) "no message")))
+      (flycheck-gcc:fold-include-errors-clang errors)))
+  :modes (c-mode c++-mode)
+  :next-checkers ((warning . c/c++-cppcheck)))
 
 (provide 'flycheck-gcc)
