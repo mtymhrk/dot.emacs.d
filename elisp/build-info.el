@@ -85,9 +85,15 @@
                                  if (string-match-p "/include/?$" x)
                                  collect (concat x "/*")))))))
 
+(defun build-info:enable-ff-find-other-file ()
+  (dolist (hook '(c-mode-common-hook build-info:update-hook))
+    (add-hook hook 'build-info:setup-ff-find-other-file)))
 
-(add-hook 'c-mode-common-hook 'build-info:setup-ff-find-other-file)
-(add-hook 'build-info:update-hook 'build-info:setup-ff-find-other-file)
+(defun build-info:disable-ff-find-other-file ()
+  (dolist (hook '(c-mode-common-hook build-info:update-hook))
+    (remove-hook hook 'build-info:setup-ff-find-other-file)))
+
+(build-info:enable-ff-find-other-file)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -118,11 +124,17 @@
            (flycheck-select-checker 'c/c++-clang)))
     (flycheck-buffer-deferred)))
 
+(defun build-info:enable-flycheck ()
+  (dolist (hook '(c-mode-common-hook build-info:update-hook))
+    (add-hook hook 'build-info:setup-flycheck)))
+
+(defun build-info:disable-flycheck ()
+  (dolist (hook '(c-mode-common-hook build-info:update-hook))
+    (remove-hook hook 'build-info:setup-flycheck)))
+
 (eval-after-load 'flycheck
   '(progn
-     (add-hook 'c-mode-common-hook 'build-info:setup-flycheck)
-     (add-hook 'build-info:update-hook 'build-info:setup-flycheck)
-     (build-info:setup-flycheck)))
+     (build-info:enable-flycheck)))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -136,10 +148,17 @@
                  (build-info:info-compile-include-paths)
                  " "))))
 
+(defun build-info:enable-c-eldoc ()
+  (dolist (hook '(c-mode-common-hook build-info:update-hook))
+    (add-hook hook 'build-info:setup-c-eldoc)))
+
+(defun build-info:disable-c-eldoc ()
+  (dolist (hook '(c-mode-common-hook build-info:update-hook))
+    (remove-hook hook 'build-info:setup-c-eldoc)))
+
 (eval-after-load 'c-eldoc
   '(progn
-     (add-hook 'build-info:update-hook 'build-info:setup-c-eldoc)
-     (build-info:setup-c-eldoc)))
+     (build-info:enable-c-eldoc)))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -158,10 +177,16 @@
                   (build-info:info-compile-quoted-include-paths)
                   (build-info:info-compile-include-paths)))))
 
+(defun build-info:enable-auto-complete-c-headers ()
+  (dolist (hook '(c-mode-common-hook build-info:update-hook))
+    (add-hook hook 'build-info:setup-achead)))
+
+(defun build-info:disable-auto-complete-c-headers ()
+  (dolist (hook '(c-mode-common-hook build-info:update-hook))
+    (remove-hook hook 'build-info:setup-achead)))
+
 (eval-after-load 'auto-complete-c-headers
   '(progn
-     (add-hook 'c-mode-common-hook 'build-info:setup-achead)
-     (add-hook 'build-info:update-hook 'build-info:setup-achead)
-    ))
+     (build-info:enable-auto-complete-c-headers)))
 
 (provide 'build-info)
