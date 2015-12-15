@@ -144,23 +144,25 @@ Requires GCC 4.8 or newer.  See URL `https://gcc.gnu.org/'."
                   (pcase major-mode
                     (`c++-mode "c++")
                     (`c-mode "c")))
-            source
             ;; GCC performs full checking only when actually compiling, so
             ;; `-fsyntax-only' is not enough. Just let it generate assembly
             ;; code.
-            "-S" "-o" null-device)
+            "-S" "-o" null-device
+            ;; Read from standard input
+            "-")
+  :standard-input t
   :error-patterns
   ((info line-start
-         (message "In file included from") " " (file-name)
+         (message "In file included from") " " (or "<stdin>" (file-name))
          ":" line ":" column (or ":" ",") line-end)
    (info line-start
-         (message (and (one-or-more " ") "from")) " " (file-name)
+         (message (and (one-or-more " ") "from")) " " (or "<stdin>" (file-name))
          ":" line ":" line-end)
-   (info line-start (file-name) ":" line ":" column
+   (info line-start (or "<stdin>" (file-name)) ":" line ":" column
          ": note: " (message) line-end)
-   (warning line-start (file-name) ":" line ":" column
+   (warning line-start (or "<stdin>" (file-name)) ":" line ":" column
             ": warning: " (message) line-end)
-   (error line-start (file-name) ":" line ":" column
+   (error line-start (or "<stdin>" (file-name)) ":" line ":" column
           ": " (or "fatal error" "error") ": " (message) line-end))
   :error-filter
   (lambda (errors)
