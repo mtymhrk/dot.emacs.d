@@ -66,7 +66,7 @@
      (setq helm-c-yas-space-match-any-greedy t)
      (setq helm-c-yas-display-key-on-candidate t)
 
-     (define-key helm-my-command-keymap (kbd "s") 'helm-c-yas-complete)
+     (define-key my:helm-command-keymap (kbd "s") 'helm-c-yas-complete)
      ))
 
 

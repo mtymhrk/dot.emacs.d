@@ -46,7 +46,7 @@
 
 (eval-after-load 'config-helm
   '(progn
-     (define-key helm-my-command-keymap (kbd "g") 'helm-do-ag)))
+     (define-key my:helm-command-keymap (kbd "g") 'helm-do-ag)))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -61,12 +61,12 @@
          (helm-run-after-quit
           (lambda () (ag pattern dir)))))
 
-    (defvar my-helm-do-ag-keymap (let ((map (make-sparse-keymap)))
+    (defvar my:helm-do-ag-keymap (let ((map (make-sparse-keymap)))
                                    (define-key map (kbd "C-c o")
                                      'helm-quit-and-exec-ag)
                                    map))
 
-    (my-helm-override-keymap 'helm-source-do-ag my-helm-do-ag-keymap)))
+    (my:helm-override-keymap 'helm-source-do-ag my:helm-do-ag-keymap)))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

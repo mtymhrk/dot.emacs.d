@@ -33,7 +33,7 @@
   '(progn
      (require 'helm-flymake-or-flycheck)
 
-     (define-key helm-my-command-keymap (kbd "`") 'helm-flymake-or-flycheck)
+     (define-key my:helm-command-keymap (kbd "`") 'helm-flymake-or-flycheck)
      ))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

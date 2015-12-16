@@ -97,7 +97,7 @@
      (let ((attr (assq 'recenter helm-source-flymake-error)))
        (when attr (setcdr attr t)))
 
-     (define-key helm-my-command-keymap (kbd "`") 'helm-flymake-or-flycheck)
+     (define-key my:helm-command-keymap (kbd "`") 'helm-flymake-or-flycheck)
      ))
 
 

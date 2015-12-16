@@ -11,7 +11,7 @@
 ;;; minibuffer の入力にて C-h を一文字削除に割り当てる
 ;; (define-key helm-map (kbd "C-h") 'delete-backward-char)
 
-;;; 選択されている要素の色がドフォルトでは見づらかったので変更する
+;;; 選択されている要素の色がデフォルトでは見づらかったので変更する
 (set-face-background 'helm-selection "DeepSkyBlue4")
 ;; (set-face-background 'helm-selection "firebrick4")
 ;; (set-face-background 'helm-selection "DarkGreen")
@@ -57,7 +57,7 @@
 (require 'helm-mode)
 
 ;;; helm-mode が有効でも、ファイルの選択では helm を起動させない設定
-(defun my-read-file-name (&rest _)
+(defun my:read-file-name (&rest _)
   (helm-mode -1)
   (unwind-protect
       (apply 'read-file-name-default _)
@@ -65,7 +65,7 @@
 
 (defadvice helm-mode (after reset-read-file-name activate)
   (when helm-mode
-    (setq read-file-name-function 'my-read-file-name)))
+    (setq read-file-name-function 'my:read-file-name)))
 
 ;;; 上記の設定でも ffap は helm が起動してしまうので、find-file-at-point を
 ;;; ブラックリストへ追加
@@ -94,29 +94,12 @@
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; helm バッファを split-root で表示する設定
+;;; helm バッファを popwin で表示する設定
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defvar helm-compilation-window-height-percent 50.0)
-
-;; (require 'split-root nil t) ;; http://nschum.de/src/emacs/split-root/
-
-;; (defun helm-compilation-window-root (buf)
-;;   (if helm-full-frame (switch-to-buffer buf)
-;;     (progn
-;;       (setq helm-compilation-window
-;;             (split-root-window
-;;              (truncate (* (window-height)
-;;                           (/ helm-compilation-window-height-percent
-;;                              100.0)))))
-;;       (set-window-buffer helm-compilation-window buf))))
-
-;; (defadvice helm (before close-popwin-window-before-exec-helm activate)
-;;   (when (featurep 'popwin) (popwin:close-popup-window)))
-
-;; (setq helm-display-function 'helm-compilation-window-root)
-
 (require 'popwin)
+
+(defvar helm-compilation-window-height-percent 50.0)
 
 (defun helm-display-function--popwin (buf)
   (if helm-full-frame
@@ -152,7 +135,7 @@
 ;;; register 登録用ソース
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defvar helm-source-my-register-set
+(defvar helm-source-register-set
   '((name . "Set Register")
     (dummy)
     (no-delay-on-input)
@@ -169,7 +152,7 @@
     (helm-run-after-quit
      (lambda () (occur helm-pattern)))))
 
-(defun my-helm-override-keymap (source-sym keymap)
+(defun my:helm-override-keymap (source-sym keymap)
   (let* ((source (symbol-value source-sym))
          (k (assq 'keymap source)))
     (if (and k (not (eq k keymap)))
@@ -178,13 +161,13 @@
       (set source-sym
            (cons (cons 'keymap keymap) source)))))
 
-(defvar my-helm-occur-keymap
+(defvar my:helm-occur-keymap
   (let ((map (make-sparse-keymap)))
     (define-key map (kbd "C-c o") 'helm-quit-and-exec-occur)
     map))
 
 (helm-occur-init-source)
-(my-helm-override-keymap 'helm-source-occur my-helm-occur-keymap)
+(my:helm-override-keymap 'helm-source-occur my:helm-occur-keymap)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -199,7 +182,7 @@
 (defvar helm-source-occur-for-move-in-buf
   (helm-make-source "Occur" 'helm-source-multi-occur))
 
-(defvar my-helm-occur-for-move-in-buf-keymap
+(defvar my:helm-occur-for-move-in-buf-keymap
   (let ((map (make-sparse-keymap)))
     (define-key map (kbd "C-w") 'backward-kill-word)
     (define-key map (kbd "C-c o") 'helm-quit-and-exec-occur)
@@ -210,8 +193,8 @@
       (setcdr attr 100)
     (push '(candidate-number-limit . 100) helm-source-occur-for-move-in-buf)))
 
-(my-helm-override-keymap 'helm-source-occur-for-move-in-buf
-                         my-helm-occur-for-move-in-buf-keymap)
+(my:helm-override-keymap 'helm-source-occur-for-move-in-buf
+                         my:helm-occur-for-move-in-buf-keymap)
 
 
 (defvar helm-for-movement-in-buffer-sources
@@ -220,7 +203,7 @@
     helm-source-bookmarks
     helm-source-register
     helm-source-bookmark-set
-    helm-source-my-register-set))
+    helm-source-register-set))
 
 (defun preproc-helm-occur (source)
  (let ((bufs (list (buffer-name (current-buffer)))))
@@ -269,29 +252,17 @@
  '(helm-filelist-file-name "/tmp/anything-filelist.all.filelist")
  '(helm-filelist-async t))
 
-;; ;;; helm-for-files の source に含まれる locate を filelist に置き換える
-;; (setq helm-for-files-preferred-list
-;;       (loop for source in helm-for-files-preferred-list
-;;             collect
-;;             (if (eq 'helm-source-locate source)
-;;                 (helm-source-filelist)
-;;               source)))
-
-;; ;;; helm-for-files の source に fielist を追加する
-;; (setq helm-for-files-preferred-list
-;;       (append helm-for-files-preferred-list (list (helm-source-filelist))))
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; キーバインド
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defvar helm-my-command-keymap (make-keymap))
+(defvar my:helm-command-keymap (make-keymap))
 
 ;; (global-set-key (kbd "C-;") 'helm-for-files)
 (global-set-key (kbd "C-;") 'helm-filelist+)
 (global-set-key (kbd "C-M-;") 'helm-for-movement-in-buffer)
-(global-set-key (kbd "C-'") helm-my-command-keymap)
+(global-set-key (kbd "C-'") my:helm-command-keymap)
 (global-set-key (kbd "C-M-'") 'helm-resume)
 ;; (global-set-key (kbd "C-x C-f") 'my-helm-C-x-C-f)
 (global-set-key (kbd "M-x") 'helm-M-x)
@@ -300,17 +271,10 @@
 (global-set-key (kbd "C-x b") 'helm-buffers-list)
 (global-set-key (kbd "M-o") 'helm-occur)
 
-(define-key helm-my-command-keymap (kbd "C-y") 'helm-show-kill-ring)
-(define-key helm-my-command-keymap (kbd "C-M-s") 'helm-regexp)
-(define-key helm-my-command-keymap (kbd "a") 'helm-apropos)
-(define-key helm-my-command-keymap (kbd "z") 'helm-elscreen)
-(define-key helm-my-command-keymap (kbd "m") 'helm-for-manuals)
-(define-key helm-my-command-keymap (kbd "g") 'helm-do-grep)
-
-
-(eval-after-load 'config-elscreen
-  '(progn
-     (global-set-key (kbd "C-z C-z") 'helm-elscreen)
-     ))
+(define-key my:helm-command-keymap (kbd "C-y") 'helm-show-kill-ring)
+(define-key my:helm-command-keymap (kbd "C-M-s") 'helm-regexp)
+(define-key my:helm-command-keymap (kbd "a") 'helm-apropos)
+(define-key my:helm-command-keymap (kbd "m") 'helm-for-manuals)
+(define-key my:helm-command-keymap (kbd "g") 'helm-do-grep-ag)
 
 (provide 'config-helm)
