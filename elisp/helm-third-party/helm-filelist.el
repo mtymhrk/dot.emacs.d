@@ -6,11 +6,37 @@
 (require 'helm)
 (require 'helm-files)
 
-(defvar helm-filelist-file-name "/tmp/all.filelist")
-(defvar helm-filelist-case-fold-search helm-case-fold-search)
-(defvar helm-filelist-grep-command "LANG=C grep")
-(defvar helm-filelist-candidate-number-limit 200)
-(defvar helm-filelist-async t)
+(defvar helm-filelist-need-to-update-source t)
+
+(defgroup helm-filelist nil
+  ""
+  :group 'helm)
+
+(defcustom helm-filelist-file-name "/tmp/all.filelist"
+  ""
+  :group 'helm-filelist)
+
+(defcustom helm-filelist-case-fold-search helm-case-fold-search
+  ""
+  :group 'helm-filelist)
+
+(defcustom helm-filelist-grep-command "LANG=C grep"
+  ""
+  :group 'helm-filelist)
+
+(defcustom helm-filelist-candidate-number-limit 200
+  ""
+  :group 'helm-filelist
+  :set (lambda (variable limit)
+         (set-default variable limit)
+         (setq helm-filelist-need-to-update-source t)))
+
+(defcustom helm-filelist-async t
+  ""
+  :group 'helm-filelist
+  :set (lambda (variable flag)
+         (set-default variable flag)
+         (setq helm-filelist-need-to-update-source t)))
 
 (defun helm-filelist-split-pattern (patterns)
   (delq "" (split-string patterns " ")))
@@ -64,21 +90,33 @@
                                  helm-filelist-candidate-number-limit))
    "\n"))
 
+(defclass helm-source-filelist-async (helm-source-async helm-type-file)
+  ((candidates-process :initform 'helm-filelist-init-async)
+   (delayed :initform nil)
+   (require-pattern :initform 3)
+   (keymap :initform helm-generic-files-map)
+   (helm-message :initform helm-generic-file-help-message)
+   (candidate-number-limit :initform helm-filelist-candidate-number-limit)))
+
+(defclass helm-source-filelist-sync (helm-source-sync helm-type-file)
+  ((candidates :initform 'helm-filelist-init)
+   (volatile :initform t)
+   (require-pattern :initform 3)
+   (keymap :initform helm-generic-files-map)
+   (helm-message :initform helm-generic-file-help-message)
+   (candidate-number-limit :initform helm-filelist-candidate-number-limit)))
+
+(defvar helm-source-filelist nil)
+
 (defun helm-source-filelist ()
-  `((name . "FileList")
-    ,@(if helm-filelist-async
-          '((candidates-process . helm-filelist-init-async)
-            (delayed))
-        '((candidates . helm-filelist-init)
-          (volatile)))
-    (type . file)
-    (requires-pattern . 3)
-    (history . ,'helm-file-name-history)
-    (keymap . ,helm-generic-files-map)
-    (helm-message . helm-generic-file-help-message)
-    (candidate-number-limit . ,helm-filelist-candidate-number-limit)
-    ;(mode-line . helm-generic-file-mode-line-string)
-    ))
+  (when helm-filelist-need-to-update-source
+    (setq helm-source-filelist
+          (helm-make-source "FileList"
+              (if helm-filelist-async
+                  'helm-source-filelist-async 'helm-source-filelist-sync)
+            :candidate-number-limit helm-filelist-candidate-number-limit))
+    (setq helm-filelist-need-to-update-source nil))
+  helm-source-filelist)
 
 (defun helm-filelist ()
   (interactive)

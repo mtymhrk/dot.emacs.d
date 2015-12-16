@@ -265,8 +265,9 @@
 
 (require 'helm-filelist)
 
-(setq helm-filelist-file-name "/tmp/anything-filelist.all.filelist")
-(setq helm-filelist-async t)
+(custom-set-variables
+ '(helm-filelist-file-name "/tmp/anything-filelist.all.filelist")
+ '(helm-filelist-async t))
 
 ;; ;;; helm-for-files の source に含まれる locate を filelist に置き換える
 ;; (setq helm-for-files-preferred-list
