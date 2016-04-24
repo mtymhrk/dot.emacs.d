@@ -10,17 +10,17 @@
    ((string-match "^2[34]\." emacs-version)  ;; setup for Emacs23 and
     (cond
      ((string-match "spinel" (system-name))
-      (set-frame-font "ricty-10.5")
+      (set-frame-font "MyricaM M-10.5")
       (set-fontset-font (frame-parameter nil 'font)
                         'japanese-jisx0208
-                        '("ricty" . "unicode-bmp"))
+                        '("MyricaM M" . "unicode-bmp"))
       (setq my-default-frame-height 62)
       (setq my-default-frame-width 246))  ;; 3 Window を横にならべる場合
      ((string-match "amber" (system-name))
-      (set-frame-font "ricty-10.5")
+      (set-frame-font "MyricaM M-10.5")
       (set-fontset-font (frame-parameter nil 'font)
                         'japanese-jisx0208
-                        '("ricty" . "unicode-bmp"))
+                        '("MyricaM M" . "unicode-bmp"))
       (setq my-default-frame-height 43)
       (setq my-default-frame-width 163)) ;; 2 Window を横にならべる場合
      ((string-match "helblindi" (system-name))
