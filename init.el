@@ -18,12 +18,12 @@
     "config-permanent-scratch"
     "config-isearch"
 
+    ;; Package System
+    "config-package"
+
     ;; Appearance
     "config-frame-and-font"
     "config-theme"
-
-    ;; Package System
-    "config-package"
 
     ;; Minor-modes and Utilities
     "config-exec-path-from-shell"
