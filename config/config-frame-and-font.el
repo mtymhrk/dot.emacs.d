@@ -7,50 +7,35 @@
 
 (when window-system
   (cond
-   ((string-match "^2[34]\." emacs-version)  ;; setup for Emacs23 and
-    (cond
-     ((string-match "spinel" (system-name))
-      (set-frame-font "MyricaM M-10.5")
-      (set-fontset-font (frame-parameter nil 'font)
-                        'japanese-jisx0208
-                        '("MyricaM M" . "unicode-bmp"))
-      (setq my-default-frame-height 62)
-      (setq my-default-frame-width 246))  ;; 3 Window を横にならべる場合
-     ((string-match "amber" (system-name))
-      (set-frame-font "MyricaM M-10.5")
-      (set-fontset-font (frame-parameter nil 'font)
-                        'japanese-jisx0208
-                        '("MyricaM M" . "unicode-bmp"))
-      (setq my-default-frame-height 43)
-      (setq my-default-frame-width 163)) ;; 2 Window を横にならべる場合
-     ((string-match "helblindi" (system-name))
-      (set-frame-font "Inconsolata-9")
-      (set-fontset-font (frame-parameter nil 'font)
-                        'japanese-jisx0208
-                        '("Takaoゴシック" . "unicode-bmp"))
-      (setq my-default-frame-height 65)
-      (setq my-default-frame-width 163)) ;; 2 Window を横にならべる場合
-     (t
-      (set-frame-font "DejaVu Sans Mono-9")
-      (set-fontset-font (frame-parameter nil 'font)
-                        'japanese-jisx0208
-                        '("Takaoゴシック" . "unicode-bmp"))
-      (setq my-default-frame-height 65)
-      (setq my-default-frame-width 80))) ;; 1 Window 設定
-    )
-   (t  ;; setup for Emacs22
-    (create-fontset-from-fontset-spec
-     "-misc-fixed-medium-r-normal--12-*-*-*-*-*-fontset-12,
-        ascii:-mplus-fxd-medium-r-*-*-12-*-*-*-*-*-iso8859-*,
-        japanese-jisx0208:-mplus-gothic-medium-r-normal-*-12-*-*-*-*-*-jisx0208.1990-*,
-        korean-ksc5601:-*-mincho-medium-r-normal--16-*-*-*-*-*-ksc*-*,
-        chinese-gb2312:-*-fang*-medium-r-normal--16-*-*-*-*-*-gb2312*-*")
-    (set-frame-font "fontset-12")
-    (setq my-default-frame-height 70)
-    (setq my-default-frame-width 80)
-    (push '(font . "-misc-fixed-medium-r-normal--12-*-*-*-*-*-fontset-12")
-          initial-frame-alist)
-    ))
+   ((string-match "spinel" (system-name))
+    (set-frame-font "MyricaM M-10.5")
+    (set-fontset-font (frame-parameter nil 'font)
+                      'japanese-jisx0208
+                      '("MyricaM M" . "unicode-bmp"))
+    (setq my-default-frame-height 62)
+    (setq my-default-frame-width 246))  ;; 3 Window を横にならべる場合
+   ((string-match "amber" (system-name))
+    (set-frame-font "MyricaM M-10.5")
+    (set-fontset-font (frame-parameter nil 'font)
+                      'japanese-jisx0208
+                      '("MyricaM M" . "unicode-bmp"))
+    (setq my-default-frame-height 43)
+    (setq my-default-frame-width 163)) ;; 2 Window を横にならべる場合
+   ((string-match "helblindi" (system-name))
+    (set-frame-font "Inconsolata-9")
+    (set-fontset-font (frame-parameter nil 'font)
+                      'japanese-jisx0208
+                      '("Takaoゴシック" . "unicode-bmp"))
+    (setq my-default-frame-height 65)
+    (setq my-default-frame-width 163)) ;; 2 Window を横にならべる場合
+   (t
+    (set-frame-font "DejaVu Sans Mono-9")
+    (set-fontset-font (frame-parameter nil 'font)
+                      'japanese-jisx0208
+                      '("Takaoゴシック" . "unicode-bmp"))
+    (setq my-default-frame-height 65)
+    (setq my-default-frame-width 80))) ;; 1 Window 設定
+
   (push `(height . ,my-default-frame-height) initial-frame-alist)
   (push `(width . ,my-default-frame-width) initial-frame-alist)
   (setq default-frame-alist initial-frame-alist)
