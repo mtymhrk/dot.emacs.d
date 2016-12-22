@@ -2,15 +2,15 @@
 ;;; init.el
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;;; emacs -q -lした時に、user-emacs-directoryが変わるように
+(when load-file-name
+  (setq user-emacs-directory (file-name-directory load-file-name)))
+
 ;; Added by Package.el.  This must come before configurations of
 ;; installed packages.  Don't delete this line.  If you don't want it,
 ;; just comment it out by adding a semicolon to the start of the line.
 ;; You may delete these explanatory comments.
 (package-initialize)
-
-;;; emacs -q -lした時に、user-emacs-directoryが変わるように
-(when load-file-name
-  (setq user-emacs-directory (file-name-directory load-file-name)))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -121,6 +121,13 @@
 
 (add-to-list 'load-path my-init-config-dir)
 (my-load-init-config-files my-init-config-file-list)
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; 25.1 から custom-set-variables が init.el に書き出されるようになってい
+;;; て邪魔なので ~/.emacs.d/custom.el に書き出すよう変更する
+(setq custom-file (expand-file-name "custom.el" user-emacs-directory))
+(load custom-file)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
