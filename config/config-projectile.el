@@ -36,11 +36,11 @@
                        'my-helm-quit-and-exec-helm-projectile-switch-project))
 
 ;;; helm-projectile-switch-project の action に不満があるので変更
-(setcdr (assoc "Switch to project"
-               (cdr (assoc 'action helm-source-projectile-projects)))
-        (lambda (project)
-          (let ((projectile-switch-project-action 'helm-projectile))
-            (projectile-switch-project-by-name project))))
+;; (setcdr (assoc "Switch to project"
+;;                (cdr (assoc 'action helm-source-projectile-projects)))
+;;         (lambda (project)
+;;           (let ((projectile-switch-project-action 'helm-projectile))
+;;             (projectile-switch-project-by-name project))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; プロジェクトの切り替え時の入力補完に helm を使用するための設定
