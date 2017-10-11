@@ -7,9 +7,9 @@
 ;;; elisp のインストール場所
 (setq package-user-dir (concat user-emacs-directory "elpa"))
 
-;;; リポジトリ Marmalade を追加
-(add-to-list 'package-archives
-             '("marmalade" . "http://marmalade-repo.org/packages/"))
+;; ;;; リポジトリ Marmalade を追加
+;; (add-to-list 'package-archives
+;;              '("marmalade" . "http://marmalade-repo.org/packages/"))
 
 ;;; リポジトリ MELPA を追加
 (add-to-list 'package-archives
