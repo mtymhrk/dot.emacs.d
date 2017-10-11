@@ -13,6 +13,16 @@
  '(switch-window-shortcut-style 'qwerty)
  '(switch-window-qwerty-shortcuts '("j" "k" "l" ";" "i" "o" "a" "s" "d" "f" "w" "e")))
 
+
+(setq switch-window-extra-map
+  (let ((map (make-sparse-keymap)))
+    (define-key map (kbd "w") 'switch-window-mvborder-up)
+    (define-key map (kbd "d") 'switch-window-mvborder-down)
+    (define-key map (kbd "s") 'switch-window-mvborder-left)
+    (define-key map (kbd "f") 'switch-window-mvborder-right)
+    (define-key map (kbd "b") 'balance-windows)
+    map))
+
 ;; (global-set-key (kbd "C-x C-o") 'switch-window)
 (global-set-key (kbd "C-<tab>") 'switch-window)
 (global-set-key (kbd "<C-S-iso-lefttab>") 'switch-window-then-delete)
