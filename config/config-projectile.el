@@ -119,6 +119,9 @@
 
 ;;; 現在 C-; にバインドしている helm-filelist+ の source の keymap にキーバ
 ;;; インドを追加
+
+(require 'helm-for-files)
+
 (my-helm-add-keybind 'helm-source-buffers-list
                      "C-;" 'my-helm-exec-projectile)
 

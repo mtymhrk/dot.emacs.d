@@ -4,7 +4,7 @@
 
 (require 'ido)
 (require 'ido-vertical-mode)
-(require 'ido-ubiquitous)
+(require 'ido-completing-read+)
 
 (custom-set-variables '(ido-max-window-height 0.75)
                       '(ido-enable-flex-matching t)
