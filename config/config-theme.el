@@ -27,6 +27,7 @@
 (add-to-list 'custom-theme-load-path
              (file-name-as-directory (concat user-emacs-directory "elisp")))
 
-(load-theme 'original t)
+;; (load-theme 'original t)
+(load-theme 'atom-one-dark t)
 
 (provide 'config-theme)

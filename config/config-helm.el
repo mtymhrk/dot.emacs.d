@@ -12,7 +12,7 @@
 ;; (define-key helm-map (kbd "C-h") 'delete-backward-char)
 
 ;;; 選択されている要素の色がデフォルトでは見づらかったので変更する
-(set-face-background 'helm-selection "DeepSkyBlue4")
+;; (set-face-background 'helm-selection "DeepSkyBlue4")
 ;; (set-face-background 'helm-selection "firebrick4")
 ;; (set-face-background 'helm-selection "DarkGreen")
 ;; (set-face-background 'helm-selection "cyan4")
