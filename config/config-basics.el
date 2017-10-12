@@ -7,6 +7,7 @@
 
 (add-to-list 'load-path (concat user-emacs-directory "elisp"))
 
+(add-to-list 'load-path (concat user-emacs-directory "elisp/orig"))
 (add-to-list 'load-path (concat user-emacs-directory "elisp/apel"))
 (add-to-list 'load-path (concat user-emacs-directory "elisp/flim"))
 (add-to-list 'load-path (concat user-emacs-directory "elisp/semi"))
