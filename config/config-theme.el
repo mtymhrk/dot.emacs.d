@@ -30,4 +30,10 @@
 ;; (load-theme 'original t)
 (load-theme 'atom-one-dark t)
 
+;; region と highlight の face 設定が同一で見づらいため region の face を変更
+(custom-theme-set-faces
+ 'atom-one-dark
+ '(region ((t (:background "DarkSlateBlue")))))
+
+
 (provide 'config-theme)
