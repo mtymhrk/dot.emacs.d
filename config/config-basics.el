@@ -226,5 +226,18 @@
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; etc
+
+;; kill-region と kill-ring-save の拡張
+(require 'ex-kill-region)
+
+;; *scratch* バッファを永続化
+(require 'permanent-scratch)
+
+;; isearch の挙動変更
+(require 'mod-isearch)
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (provide 'config-basics)

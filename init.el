@@ -20,9 +20,6 @@
 (defvar my-init-config-file-list
   '(;; Basics
     "config-basics"
-    "config-extend-kill-region"
-    "config-permanent-scratch"
-    "config-isearch"
 
     ;; Package System
     "config-package"
