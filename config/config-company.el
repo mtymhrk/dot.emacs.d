@@ -17,6 +17,8 @@
   (define-key map (kbd "C-p") 'company-select-previous)
   (define-key map (kbd "C-h") nil))
 
+(setq-default company-backends
+              '((company-capf company-files company-keywords company-dabbrev-code company-dabbrev)))
 
 ;; TABの挙動を変更(1と2はデフォルトの動作、3の動作を加える)
 ;; 1. 候補が1つの場合はそれを選択する。
