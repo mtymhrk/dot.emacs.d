@@ -36,6 +36,7 @@
     "config-elscreen"
     "config-recentf"
     "config-compile"
+    "config-irony"
     "config-flymake"
     "config-flycheck"
     "config-auto-save-buffers"

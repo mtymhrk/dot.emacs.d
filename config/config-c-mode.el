@@ -23,20 +23,6 @@
 
 (add-hook 'c-mode-common-hook 'c-mode-common-hook--0)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; build-info
-
-(require 'build-info)
-
-(build-info:setup-default '((project-name . "unknown")
-                            (compiler-type . gcc)
-                            (compiler-path . "gcc")
-                            (compile-flags . ("-g" "-std=gnu99" "-O2"))
-                            (compile-warnings . ("all" "extra" "format=2" "strict-aliasing=2" "cast-qual" "cast-align" "write-strings" "conversion" "float-equal" "pointer-arith" "switch-enum" "no-unused-parameter" "no-format-nonliteral"))
-                            (compile-quoted-include-paths . nil)
-                            (compile-include-paths . nil)
-                            (compile-definitions . nil)))
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; ff-find-other-file
@@ -112,8 +98,6 @@
 
 (eval-after-load 'config-flycheck
   '(progn
-    (require 'flycheck-gcc)
-
     (defun c-mode-common-hook--flycheck ()
       (flycheck-mode t))
 
@@ -139,10 +123,8 @@
      ;;; c-mode でのカーソル位置の文字削除で auto-complete が起動するのを抑制
      (push 'c-electric-delete-forward ac-non-trigger-commands)
 
-
      ;;; auto-complete-c-headers の設定
      (require 'auto-complete-c-headers)
-     (require 'build-info)
 
      (setq my:achead:include-directories-c
            '("/usr/lib/gcc/x86_64-linux-gnu/4.8/include"
@@ -163,18 +145,12 @@
              "/usr/include"
              "."))
 
-     (setcdr (assq 'c-mode build-info:auto-complete-c-headers:directories)
-             my:achead:include-directories-c)
-     (setcdr (assq 'c++-mode build-info:auto-complete-c-headers:directories)
-             my:achead:include-directories-c++)
-
      (defun my:achead:init ()
-       (unless (featurep 'build-info)
-         (make-local-variable 'achead:include-directories)
-         (cond ((eq major-mode 'c-mode)
-                (setq achead:include-directories my:achead:include-directories-c))
-               ((eq major-mode 'c++-mode)
-                (setq achead:include-directories my:achead:include-directories-c++))))
+       (make-local-variable 'achead:include-directories)
+       (cond ((eq major-mode 'c-mode)
+              (setq achead:include-directories my:achead:include-directories-c))
+             ((eq major-mode 'c++-mode)
+              (setq achead:include-directories my:achead:include-directories-c++)))
        (add-to-list 'ac-sources 'ac-source-c-headers))
 
      (add-hook 'c-mode-common-hook 'my:achead:init)
@@ -187,7 +163,6 @@
 ;;; 実行するバージョンを使用している。(https://github.com/mooz/c-eldoc)
 
 (require 'c-eldoc)
-(require 'build-info)
 
 (add-hook 'c-mode-common-hook 'c-turn-on-eldoc-mode)
 
