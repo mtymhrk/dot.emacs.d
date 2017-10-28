@@ -4,13 +4,11 @@
 
 (require 'bm)
 
-(global-set-key (kbd "C-@") 'bm-toggle)
-
 (custom-set-variables '(bm-in-lifo-order t))
 
 (defvar my-bm-key-list '(("n" "next" bm-next "j")
                          ("p" "previous" bm-previous "k")
-                         ("d" "toggle" bm-toggle "t")
+                         ("b" "bookmark" bm-toggle "t")
                          ("D" "remove all" bm-remove-all-current-buffer)))
 
 (defun my-bm-make-keymap ()
@@ -32,8 +30,16 @@
      (set-temporary-overlay-map (my-bm-make-keymap) t)
      (or (minibufferp) (message (my-bm-make-message)))))
 
+(defun my-bm-begin ()
+  (interactive)
+  ; do nothing
+  )
+
+(my-bm-set-temporary-keymap my-bm-begin)
 (my-bm-set-temporary-keymap bm-toggle)
 (my-bm-set-temporary-keymap bm-next)
 (my-bm-set-temporary-keymap bm-previous)
+
+(define-key keymap-ctrl-meta-space (kbd "b") 'my-bm-begin)
 
 (provide 'config-bm)
