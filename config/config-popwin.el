@@ -171,38 +171,43 @@
                              (seq-end)
                            (end-of-line)))
 
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; キーバインド
 
-(defvar my-popwin:keymap-alist
-  '(("M-P" . my-helm-popwin-buffer)
-    ("p" . my-popwin:repopup-window)
-    ("0" . popwin:close-popup-window)
-    ("q" . popwin:close-popup-window)
-    ("j" . my-popwin:scroll-up)
-    ("k" . my-popwin:scroll-down)
-    ("h" . my-popwin:scroll-right)
-    ("l" . my-popwin:scroll-left)
-    ("C-v" . my-popwin:scroll-up-command)
-    ("M-v" . my-popwin:scroll-down-command)
-    ("M-<" . my-popwin:beginning-of-buffer)
-    ("M->" . my-popwin:end-of-buffer)
-    ("C-s" . my-popwin:isearch-forward)
-    ("C-r" . my-popwin:isearch-backward)
-    ("C-a" . my-popwin:seq-home)
-    ("M-m" . my-popwin:seq-home2)
-    ("C-e" . my-popwin:seq-end)
-    ("<C-return>" . popwin:select-popup-window)))
 
-(dolist (key-cmd my-popwin:keymap-alist)
-  (define-key popwin:keymap (kbd (car key-cmd)) (cdr key-cmd)))
+;; ウィンドウがポップアップされていれば何もせず、ポップアップされていれば、
+;; repopup-window を実行するコマンド
+(defun my-popwin:popwin-begin ()
+  (interactive)
+  (unless (popwin:popup-window-live-p)
+    (my-popwin:repopup-window)))
 
-(global-set-key (kbd "M-P") popwin:keymap)
+(define-key keymap-ctrl-meta-space (kbd "p") 'my-popwin:popwin-begin)
 
-(require 'smartrep)
+(require 'attach-transient-keymap)
 
-(smartrep-define-key global-map "M-P"
-  (cons '("C-q" . keyboard-quit)
-        my-popwin:keymap-alist))
+(attach-transientkey:define-keylist
+ my-popwin:keymap-list
+ (("p"          "cycle"         my-popwin:repopup-window)
+  ("q"          "close"         popwin:close-popup-window "0")
+  ("j"          "scroll-up"     my-popwin:scroll-up)
+  ("k"          "scroll-down"   my-popwin:scroll-down)
+  ("h"          "scroll-right"  my-popwin:scroll-right)
+  ("l"          "scroll-left"   my-popwin:scroll-left)
+  ("C-v"        ""              my-popwin:scroll-up-command)
+  ("M-v"        ""              my-popwin:scroll-down-command)
+  ("M-<"        ""              my-popwin:beginning-of-buffer)
+  ("M->"        ""              my-popwin:end-of-buffer)
+  ("C-s"        "isearch"       my-popwin:isearch-forward)
+  ("C-r"        ""              my-popwin:isearch-backward)
+  ("C-a"        ""              my-popwin:seq-home)
+  ("M-m"        ""              my-popwin:seq-home2)
+  ("C-e"        ""              my-popwin:seq-end)
+  ("<C-return>" "select"        popwin:select-popup-window)))
 
+(attach-transientkey:attach my-popwin:popwin-begin my-popwin:keymap-list)
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (provide 'config-popwin)
