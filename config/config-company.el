@@ -27,15 +27,15 @@
 (defun my-company--insert-candiate (candidate)
   (when (> (length candidate) 0)
     (setq candidate (substring-no-properties candidate))
-    ;; XXX: Return value we check here is subject to change.
-    (if (eq (company-call-backend 'ignore-case) 'keep-prefix)
-        (insert (company-strip-prefix candidate))
-      (cond
-       ((equal company-prefix candidate)
-        (company-select-next))
-       (t
-        (delete-region (- (point) (length company-prefix)) (point))
-        (insert candidate))))))
+    (cond
+     ((equal company-prefix candidate)
+      (company-select-next))
+     ;; XXX: Return value we check here is subject to change.
+     ((eq (company-call-backend 'ignore-case) 'keep-prefix)
+      (insert (company-strip-prefix candidate)))
+     (t
+      (delete-region (- (point) (length company-prefix)) (point))
+      (insert candidate)))))
 
 (defvar orig-company--insert-candidate
   (symbol-function 'company--insert-candidate))
