@@ -212,6 +212,15 @@
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; 
+
+(defvar my-orig-C-M-SPC-command (global-key-binding (kbd "C-M-SPC")))
+(defvar keymap-ctrl-meta-space (make-keymap))
+(global-set-key (kbd "C-M-SPC") keymap-ctrl-meta-space)
+(global-set-key (kbd "C-:") keymap-ctrl-meta-space)
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; 雑多なコマンド定義
 
 ;;; カーソル上の文字のフェイスを表示するコマンド
