@@ -168,11 +168,13 @@
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; 1 行の文字数上限を越えた場合にハイライトする
+;;; 1 行の文字数上限可視化する
 
-(require 'highlight-column-limit)
-
-(hcl:add-hook c-mode-common-hook 80)
+(with-eval-after-load 'fill-column-indicator
+  (defun c-mode-common-hook--fci ()
+    (setq fill-column 80)
+    (fci-mode 1))
+  (add-hook 'c-mode-common-hook 'c-mode-common-hook--fci))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

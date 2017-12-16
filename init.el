@@ -71,6 +71,7 @@
     "config-wgrep"
     "config-multiple-cursors"
     "config-bm"
+    "config-fill-column-indicator"
 
     "config-extend-zap-to-char"
     "config-helm-for-my-memo"
