@@ -55,7 +55,7 @@
     "config-sequential-command"
     "config-switch-window"
     "config-undo-tree"
-    "config-ace-jump-mode"
+    "config-avy"
     "config-popwin"
     "config-projectile"
     "config-quickrun"
