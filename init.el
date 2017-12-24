@@ -65,7 +65,6 @@
     "config-volatile-highlights"
     "config-highlight-symbol"
     "config-revbufs"
-    "config-paredit"
     "config-smartparens"
     "config-yascroll"
     "config-wgrep"
