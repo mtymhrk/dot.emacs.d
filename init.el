@@ -86,6 +86,7 @@
     "config-scheme-mode"
     "config-ruby-mode"
     "config-emacs-lisp-mode"
+    "config-rust-mode"
     "config-gdb"
     "config-view-mode"
     "config-vc-mode"
