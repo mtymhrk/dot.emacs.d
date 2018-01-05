@@ -17,13 +17,13 @@
                     (default-value 'flycheck-disabled-checkers)))
 
 
-(eval-after-load 'config-auto-save-buffers
-  '(progn
-     (defun flycheck-mode-hook--remove-after-save-hook ()
-       (remove-hook 'after-save-hook 'flycheck-handle-save 'local))
+;; (eval-after-load 'config-auto-save-buffers
+;;   '(progn
+;;      (defun flycheck-mode-hook--remove-after-save-hook ()
+;;        (remove-hook 'after-save-hook 'flycheck-handle-save 'local))
 
-     (add-hook 'flycheck-mode-hook
-               'flycheck-mode-hook--remove-after-save-hook)))
+;;      (add-hook 'flycheck-mode-hook
+;;                'flycheck-mode-hook--remove-after-save-hook)))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
