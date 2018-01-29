@@ -52,6 +52,7 @@
     "config-helm"
     ;; "config-auto-complete"
     "config-company"
+    "config-smart-tab"
     "config-sequential-command"
     "config-switch-window"
     "config-undo-tree"
