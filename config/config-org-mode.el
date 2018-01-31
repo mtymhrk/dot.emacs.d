@@ -106,7 +106,7 @@
 
 
 (global-set-key (kbd "C-c o c") 'org-capture)
-(global-set-key (kbd "M-O c") 'org-capture)
+(define-key keymap-ctrl-meta-space (kbd "o c") 'org-capture)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -116,7 +116,7 @@
       (list org-directory my-org-capture-journal-dir my-org-capture-note-dir))
 
 (global-set-key (kbd "C-c o a") 'org-agenda)
-(global-set-key (kbd "M-O a") 'org-agenda)
+(define-key keymap-ctrl-meta-space (kbd "o a") 'org-agenda)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

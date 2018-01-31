@@ -106,10 +106,8 @@
             (let ((org-startup-folded 'showeverything))
               (helm-reopen-my-memo-aux item))))
 
-
-        (global-set-key (kbd "M-O g") 'helm-grep-my-memo)
-        (global-set-key (kbd "M-O r") 'helm-reopen-my-memo)
-
+        (define-key keymap-ctrl-meta-space (kbd "o g") 'helm-grep-my-memo)
+        (define-key keymap-ctrl-meta-space (kbd "o r") 'helm-reopen-my-memo)
         )))
 
 (provide 'config-helm-for-my-memo)
