@@ -74,7 +74,6 @@
     "config-fill-column-indicator"
 
     "config-extend-zap-to-char"
-    "config-helm-for-my-memo"
     ;; "config-point-stack"
     "config-display-line-info"
     "config-header-line-info"
@@ -97,6 +96,9 @@
     "config-w3m"
     "config-dired"
     "config-ag"
+
+    ;; for dependency
+    "config-helm-for-my-memo"
 
     ;; Input Method
     "config-ddskk"
