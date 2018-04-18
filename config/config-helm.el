@@ -63,49 +63,25 @@
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; mod-helm
+;;; mod-helm & keybindings
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(use-package mod-helm)
+(use-package mod-helm
+  :config
 
+  (bind-key "M-x" 'helm-M-x)
+  (bind-key "M-X" 'execute-extended-command)
+  (bind-key "M-y" 'helm-show-kill-ring)
+  (bind-key "C-;"  mod-helm:command-keymap)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; キーバインド
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;;; TODO: delte
-(defvar my:helm-command-keymap mod-helm:command-keymap)
-
-;; (global-set-key (kbd "C-;") 'helm-for-files)
-(global-set-key (kbd "C-;") 'mod-helm:filelist)
-(global-set-key (kbd "C-M-;") 'mod-helm:move-in-buffer)
-(global-set-key (kbd "C-'") my:helm-command-keymap)
-(global-set-key (kbd "C-M-'") 'helm-resume)
-;; (global-set-key (kbd "C-x C-f") 'my-helm-C-x-C-f)
-(global-set-key (kbd "M-x") 'helm-M-x)
-(global-set-key (kbd "M-X") 'execute-extended-command)
-(global-set-key (kbd "M-y") 'helm-show-kill-ring)
-(global-set-key (kbd "C-x b") 'helm-buffers-list)
-(global-set-key (kbd "M-o") 'helm-occur)
-
-(define-key my:helm-command-keymap (kbd "C-y") 'helm-show-kill-ring)
-(define-key my:helm-command-keymap (kbd "C-M-s") 'helm-regexp)
-(define-key my:helm-command-keymap (kbd "a") 'helm-apropos)
-(define-key my:helm-command-keymap (kbd "m") 'mod-helm:manuals)
-(define-key my:helm-command-keymap (kbd "g") 'helm-do-grep-ag)
-
-
-
-;;; TODO: delete
-(defun my:helm-override-keymap (source-sym keymap)
-  (let* ((source (symbol-value source-sym))
-         (k (assq 'keymap source)))
-    (if (and k (not (eq k keymap)))
-        (progn (set-keymap-parent keymap (cdr k))
-               (setcdr k keymap))
-      (set source-sym
-           (cons (cons 'keymap keymap) source)))))
-
-
-
-
+  ;; (bind-key "C-;" 'helm-for-files)
+  (bind-key "C-;"   'mod-helm:filelist       mod-helm:command-keymap)
+  (bind-key "C-'"   'mod-helm:move-in-buffer mod-helm:command-keymap)
+  (bind-key ";"     'helm-resume             mod-helm:command-keymap)
+  (bind-key "M-x"   'helm-M-x                mod-helm:command-keymap)
+  (bind-key "C-y"   'helm-show-kill-ring     mod-helm:command-keymap)
+  (bind-key "C-M-s" 'helm-regexp             mod-helm:command-keymap)
+  (bind-key "o"     'helm-occur              mod-helm:command-keymap)
+  (bind-key "a"     'helm-apropos            mod-helm:command-keymap)
+  (bind-key "m"     'mod-helm:manuals        mod-helm:command-keymap)
+  (bind-key "g"     'helm-do-grep-ag         mod-helm:command-keymap))
