@@ -2,9 +2,10 @@
 ;; text-mode
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defun text-mode-hook--0 ()
-  (turn-on-auto-fill))
+(eval-when-compile (require 'use-package))
 
-(add-hook 'text-mode-hook 'text-mode-hook--0)
+(use-package text-mode
+  :hook
+  ((text-mode . turn-on-auto-fill)))
 
 (provide 'config-text-mode)

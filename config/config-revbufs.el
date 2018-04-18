@@ -6,7 +6,8 @@
 ;;; Emacs で開いているファイルが Emacs 外で変更されている場合、一斉に
 ;;; revert-buffer するコマンド
 
+(eval-when-compile (require 'use-package))
 
-(require 'revbufs)
+(use-package revbufs)
 
 (provide 'config-revbufs)

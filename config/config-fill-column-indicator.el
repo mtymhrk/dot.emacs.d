@@ -2,7 +2,11 @@
 ;;; bm.el
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(require 'fill-column-indicator)
+
+(eval-when-compile (require 'use-package))
+
+(use-package fill-column-indicator
+  :commands fci-mode)
 
 
 (provide 'config-fill-column-indicator)

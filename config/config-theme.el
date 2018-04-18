@@ -59,7 +59,10 @@
 ;; region と highlight の face 設定が同一で見づらいため region の face を変更
 (custom-theme-set-faces
  'atom-one-dark
- '(region ((t (:background "DarkSlateBlue")))))
+ ;; region と highlight の face 設定が同一で見づらいため region の face を変更
+ '(region ((t (:background "DarkSlateBlue"))))
+ ;; カーソルのデフォルト色が skk かなモード時と似ていてるのでカーソルの色を変更
+ '(cursor ((t (:background "brown")))))
 
 
 (provide 'config-theme)

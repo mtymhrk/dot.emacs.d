@@ -2,16 +2,17 @@
 ;;; display-line-info
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(require 'display-line-info)
+(eval-when-compile (require 'use-package))
 
-;;; mode-line に whic-func による関数名表示を行わない
-(require 'which-func)
-(setq orig-which-func-format which-func-format)
-(setq which-func-format "")
-
-;;; キーバンド
-(global-set-key (kbd "C-c d") 'dli-display)
-
-
+(use-package display-line-info
+  :init
+  ;; mode-line に whic-func による関数名表示を行わない
+  (require 'which-func)
+  (setq orig-which-func-format which-func-format)
+  (setq which-func-format "")
+  :config
+  ;; キーバンド
+  :bind
+  ("C-c d" . dli-display))
 
 (provide 'config-display-line-info)

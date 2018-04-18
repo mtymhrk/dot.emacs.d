@@ -2,23 +2,30 @@
 ;;; rust-mode
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;;; rust-modeでrust-format-on-saveをtにすると自動でrustfmtが走る
-(eval-after-load "rust-mode"
-  '(setq-default rust-format-on-save t))
+(eval-when-compile (require 'use-package))
 
-;;; rustのファイルを編集するときにracerを起動する
-(add-hook 'rust-mode-hook #'racer-mode)
+(use-package rust-mode
+  :commands rust-mode
+  :config
+  ;; rust-modeでrust-format-on-saveをtにすると自動でrustfmtが走る
+  (setq-default rust-format-on-save t)
 
-;;; rustのファイルを編集するときにflycheckを起動する
-(with-eval-after-load 'flycheck
-  (add-hook 'flycheck-mode-hook #'flycheck-rust-setup)
-  (add-hook 'rust-mode-hook #'flycheck-mode))
+  ;; rustのファイルを編集するときにracerを起動する
+  (add-hook 'rust-mode-hook #'racer-mode)
 
-;;; racerのeldocサポートを使う
-(add-hook 'racer-mode-hook #'eldoc-mode)
+  ;; rustのファイルを編集するときにflycheckを起動する
+  (use-package flycheck
+    :config
+    (add-hook 'flycheck-mode-hook #'flycheck-rust-setup)
+    :hook
+    ((rust-mode . flycheck-mode)))
 
-;;; racerの補完サポートを使う
-(with-eval-after-load 'company
-  (add-hook 'racer-mode-hook #'company-mode))
+  ;; racerのeldocサポートを使う
+  (add-hook 'racer-mode-hook #'eldoc-mode)
+
+  ;; racerの補完サポートを使う
+  (use-package company
+    :hook
+    ((racer-mode . company-mode))))
 
 (provide 'config-rust-mode)

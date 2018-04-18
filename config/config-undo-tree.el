@@ -18,16 +18,18 @@
 ;;; ;;;        にポイントを移動
 ;;; ;;;     2. 上下分割から左右分割に変更
 
-(require 'undo-tree)
+(eval-when-compile (require 'use-package))
+
+(use-package undo-tree
+  :commands undo-tree-mode global-undo-tree-mode
+  :config
+  (use-package mod-popwin
+    :config
+    (mod-popwin:add-display-config
+     `(,undo-tree-visualizer-buffer-name :height 0.45 :position bottom :stick t)))
+  )
+
 (global-undo-tree-mode)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; popwin for undo-tree
 
-(eval-after-load 'config-popwin
-  '(progn
-     (add-popwin-special-display-config
-      `(,undo-tree-visualizer-buffer-name :height 0.45 :position bottom :stick t))))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (provide 'config-undo-tree)

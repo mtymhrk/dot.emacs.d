@@ -1,13 +1,14 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; expand-region.el
-;;;   https://github.com/magnars/expand-region.el.git
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;;; git clone https://github.com/magnars/expand-region.el.git
+(eval-when-compile (require 'use-package))
 
-(require 'expand-region)
-
-(define-key keymap-ctrl-meta-space (kbd "r") 'er/expand-region)
-(custom-set-variables '(expand-region-contract-fast-key "R"))
+(use-package expand-region
+  :custom
+  (expand-region-contract-fast-key "R")
+  :bind
+  (:map keymap-ctrl-meta-space
+        ("r" . er/expand-region)))
 
 (provide 'config-expand-region)

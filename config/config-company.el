@@ -2,65 +2,45 @@
 ;;; company.el
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(require 'company)
+(eval-when-compile (require 'use-package))
+
+(use-package company
+  :commands company-mode global-company-mode
+  :custom
+  (company-idle-delay nil)
+  (company-minimum-prefix-length 2)
+  (company-selection-wrap-around t)
+  :bind
+  (:map company-mode-map
+        ("M-i" . company-complete))
+  (:map company-active-map
+        ("M-n" . company-select-next)
+        ("M-p" . company-select-previous)
+        ("M-i" . company-complete-common)
+        ("M-m" . company-complete-selection)
+        ("C-n" . company-select-next)
+        ("C-p" . company-select-previous)
+        ("C-h" . nil))
+  :config
+  (setq-default company-backends
+                '((company-capf company-files company-keywords company-dabbrev-code company-dabbrev))))
+
+(use-package mod-company)
 
 (global-company-mode)
-(custom-set-variables
- '(company-idle-delay nil)
- '(company-minimum-prefix-length 2)
- '(company-selection-wrap-around t))
-
-(let ((map company-mode-map))
-  (define-key map (kbd "M-i") 'company-complete))
-
-(let ((map company-active-map))
-  (define-key map (kbd "M-n") 'company-select-next)
-  (define-key map (kbd "M-p") 'company-select-previous)
-  (define-key map (kbd "M-i") 'company-complete-common)
-  (define-key map (kbd "M-m") 'company-complete-selection)
-  (define-key map (kbd "C-n") 'company-select-next)
-  (define-key map (kbd "C-p") 'company-select-previous)
-  (define-key map (kbd "C-h") nil))
-
-(setq-default company-backends
-              '((company-capf company-files company-keywords company-dabbrev-code company-dabbrev)))
-
-;; company-complete-common の挙動を変更(1と2はデフォルトの動作、3の動作を加える)
-;; 1. 候補が1つの場合はそれを選択する。
-;; 2. 候補が複数の場合、共通する部分を補完。
-;; 3. 候補が複数あり、共通する部分が無ければ、company-select-nextを実行する。
-(defun my-company--insert-candiate (candidate)
-  (when (> (length candidate) 0)
-    (setq candidate (substring-no-properties candidate))
-    (cond
-     ((equal company-prefix candidate)
-      (company-select-next))
-     ;; XXX: Return value we check here is subject to change.
-     ((eq (company-call-backend 'ignore-case) 'keep-prefix)
-      (insert (company-strip-prefix candidate)))
-     (t
-      (delete-region (- (point) (length company-prefix)) (point))
-      (insert candidate)))))
-
-(defvar orig-company--insert-candidate
-  (symbol-function 'company--insert-candidate))
-
-(fset 'company--insert-candidate
-      (symbol-function 'my-company--insert-candiate))
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; company-irony
 
-(require 'company-irony)
-
-(add-to-list 'company-backends 'company-irony)
+(use-package company-irony
+  :config
+  (add-to-list 'company-backends 'company-irony))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; quickhelp
-(require 'company-quickhelp)
 
+(use-package company-quickhelp)
 (company-quickhelp-mode)
 
 

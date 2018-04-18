@@ -2,8 +2,10 @@
 ;;; recentf
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(setq recentf-max-saved-items 1000)
-(setq recentf-exclude '("/TAGS$" "/var/tmp/"))
+(use-package recentf
+  :config
+  (setq recentf-max-saved-items 1000)
+  (setq recentf-exclude '("/TAGS$" "/var/tmp/")))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -11,7 +13,7 @@
 ;;;   http://www.emacswiki.org/cgi-bin/wiki/download/recentf-ext.el
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(require 'recentf-ext)
+(use-package recentf-ext)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

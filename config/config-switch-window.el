@@ -6,60 +6,28 @@
 
 ;;; (auto-install-from-url "https://raw.github.com/dimitri/switch-window/11ec2487889135d84eae45f25699d03b6fb91d14/switch-window.el")
 
-(require 'switch-window)
+(eval-when-compile (require 'use-package))
 
-(custom-set-variables
- '(switch-window-increase 14)
- '(switch-window-shortcut-style 'qwerty)
- '(switch-window-qwerty-shortcuts '("j" "k" "l" ";" "i" "o" "a" "s" "d" "f" "w" "e")))
+(use-package switch-window
+  :custom
+  (switch-window-increase 14)
+  (switch-window-shortcut-style 'qwerty)
+  (switch-window-qwerty-shortcuts '("j" "k" "l" ";" "i" "o" "a" "s" "d" "f" "w" "e"))
+  :bind
+  ("C-<tab>" . switch-window)
+  ("<C-S-iso-lefttab>" . switch-window-then-delete)
+  (:map switch-window-extra-map
+        ("C-k" . switch-window-mvborder-up)
+        ("C-j" . switch-window-mvborder-down)
+        ("C-h" . switch-window-mvborder-left)
+        ("C-l" . switch-window-mvborder-right)
+        ("C-b" . balance-windows))
+  :config
+  (cl-loop for key in switch-window-qwerty-shortcuts
+           do (bind-key key nil switch-window-extra-map)))
 
 
-(setq switch-window-extra-map
-  (let ((map (make-sparse-keymap)))
-    (define-key map (kbd "w") 'switch-window-mvborder-up)
-    (define-key map (kbd "d") 'switch-window-mvborder-down)
-    (define-key map (kbd "s") 'switch-window-mvborder-left)
-    (define-key map (kbd "f") 'switch-window-mvborder-right)
-    (define-key map (kbd "b") 'balance-windows)
-    map))
-
-;; (global-set-key (kbd "C-x C-o") 'switch-window)
-(global-set-key (kbd "C-<tab>") 'switch-window)
-(global-set-key (kbd "<C-S-iso-lefttab>") 'switch-window-then-delete)
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; switch-window と delete-other-window で表示する数字の face を変更する設定
-
-(defface my:delete-other-window-label-face
-  '((t (:foreground "DarkRed")))
-  "")
-
-(defface my:switch-window-label-face
-  '((t (:foreground "light sky blue")))
-  "")
-
-(defvar my:switch-window-display-number-face 'default)
-
-(defun my:setup-switch-window-display-number-face (orig-func &rest args)
-  (let ((buf (apply orig-func args)))
-    (with-current-buffer buf
-      (put-text-property (point-min) (point-max)
-                         'face my:switch-window-display-number-face))
-    buf))
-
-(defun my:setup-face-for-switch-window (orig-func &rest args)
-  (let ((my:switch-window-display-number-face 'my:switch-window-label-face))
-    (apply orig-func args)))
-
-(defun my:setup-face-for-delete-window (orig-func &rest args)
-  (let ((my:switch-window-display-number-face 'my:delete-other-window-label-face))
-    (apply orig-func args)))
-
-(advice-add 'switch-window--display-number
-            :around 'my:setup-switch-window-display-number-face)
-(advice-add 'switch-window :around 'my:setup-face-for-switch-window)
-(advice-add 'switch-window-then-delete :around 'my:setup-face-for-delete-window)
+(use-package mod-switch-window)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

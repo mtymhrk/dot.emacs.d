@@ -3,50 +3,56 @@
 ;;;    タブと全角スペース、行末の空白を表示する設定
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(cond
- ;; ((require 'whitespace nil t)
- ;;  ;;; whitespace-mode の対象を trailing blank とタブとスペースに設定。
- ;;  ;;; face による可視化機能を有効化
- ;;  (setq whitespace-style '(face trailing tabs tab-mark spaces space-mark))
+(eval-when-compile (require 'use-package))
 
- ;;  ;;; 対象となるスペースを全角スペースに限定
- ;;  (setq whitespace-space-regexp "\\(　+\\)")
+(use-package whitespace
+  :config
+  ;; whitespace-mode の対象を trailing blank とタブとスペースに設定。
+  ;; face による可視化機能を有効化
+  (setq whitespace-style '(face trailing tabs tab-mark spaces space-mark))
 
- ;;  ;;; 全角スペースとタブを他も文字で表示
- ;;  (setq whitespace-display-mappings
- ;;        '((space-mark ?　 [?□])
- ;;          ;; WARNING: the mapping below has a problem.
- ;;          ;; When a TAB occupies exactly one column, it will display the
- ;;          ;; character ?\xBB at that column followed by a TAB which goes to
- ;;          ;; the next TAB column.
- ;;          ;; If this is a problem for you, please, comment the line below.
- ;;          (tab-mark ?\t [?\xBB ?\t] [?\\ ?\t])))
+  ;;; 対象となるスペースを全角スペースに限定
+  (setq whitespace-space-regexp "\\(　+\\)")
 
- ;;  (set-face-attribute 'whitespace-trailing nil
- ;;                      :foreground "purple"
- ;;                      :background 'unspecified
- ;;                      :strike-through nil
- ;;                      :underline t)
+  ;;; 全角スペースとタブを他も文字で表示
+  (setq whitespace-display-mappings
+        '((space-mark ?　 [?□])
+          ;; WARNING: the mapping below has a problem.
+          ;; When a TAB occupies exactly one column, it will display the
+          ;; character ?\xBB at that column followed by a TAB which goes to
+          ;; the next TAB column.
+          ;; If this is a problem for you, please, comment the line below.
+          (tab-mark ?\t [?\xBB ?\t] [?\\ ?\t])))
 
- ;;  (set-face-attribute 'whitespace-space nil
- ;;                      :foreground "purple"
- ;;                      :background 'unspecified
- ;;                      :strike-through nil
- ;;                      :underline nil)
+  (set-face-attribute 'whitespace-trailing nil
+                      :foreground "purple"
+                      :background 'unspecified
+                      :strike-through nil
+                      :underline t)
 
- ;;  (set-face-attribute 'whitespace-tab nil
- ;;                      :foreground "dim gray"
- ;;                      :background 'unspecified
- ;;                      :strike-through nil
- ;;                      :underline t)
+  (set-face-attribute 'whitespace-space nil
+                      :foreground "purple"
+                      :background 'unspecified
+                      :strike-through nil
+                      :underline nil)
 
- ;;  (setq whitespace-global-modes '(not dired-mode))
- ;;  (global-whitespace-mode 1))
+  (set-face-attribute 'whitespace-tab nil
+                      :foreground "dim gray"
+                      :background 'unspecified
+                      :strike-through nil
+                      :underline t)
 
- ((require 'jaspace nil t) ;;; whitespace が使えない場合は jaspace を使う
-  ;;;   http://openlab.dino.co.jp/2008/08/29/230500336.html
-  ;;;   http://homepage3.nifty.com/satomii/software/elisp.ja.html
-  ;;;   http://homepage3.nifty.com/satomii/software/jaspace.el
+  (setq whitespace-global-modes '(not dired-mode))
+  (global-whitespace-mode 1))
+
+
+
+;;;   http://openlab.dino.co.jp/2008/08/29/230500336.html
+;;;   http://homepage3.nifty.com/satomii/software/elisp.ja.html
+;;;   http://homepage3.nifty.com/satomii/software/jaspace.el
+(use-package jaspace
+  :disabled
+  :config
   (setq jaspace-modes (append jaspace-modes
                               (list 'php-mode
                                     'yaml-mode
@@ -59,37 +65,38 @@
                                     'org-mode)))
   (setq jaspace-alternate-jaspace-string "□")
   (setq jaspace-highlight-tabs ?\xBB)
+
   (add-hook 'jaspace-mode-off-hook
-            (lambda()
-              (setq show-trailing-whitespace nil)))
+            #'(lambda()
+                (setq show-trailing-whitespace nil)))
+
   (add-hook 'jaspace-mode-hook
-            (lambda()
-              (setq show-trailing-whitespace t)
-              (face-spec-set 'jaspace-highlight-jaspace-face
-                             '((((class color) (background light))
-                                (:foreground "blue"))
-                               (t (:foreground "purple"))))
-              (face-spec-set 'jaspace-highlight-tab-face
-                             '((((class color) (background light))
-                                (:foreground "red"
-                                             :background "unspecified"
-                                             :strike-through nil
-                                             :underline t))
-                               (t (:foreground "purple"
+            #'(lambda()
+                (setq show-trailing-whitespace t)
+                (face-spec-set 'jaspace-highlight-jaspace-face
+                               '((((class color) (background light))
+                                  (:foreground "blue"))
+                                 (t (:foreground "purple"))))
+                (face-spec-set 'jaspace-highlight-tab-face
+                               '((((class color) (background light))
+                                  (:foreground "red"
                                                :background "unspecified"
                                                :strike-through nil
-                                               :underline t))))
-              (face-spec-set 'trailing-whitespace
-                             '((((class color) (background light))
-                                (:foreground "red"
-                                             :background "unspecified"
-                                             :strike-through nil
-                                             :underline t))
-                               (t (:foreground "purple"
+                                               :underline t))
+                                 (t (:foreground "purple"
+                                                 :background "unspecified"
+                                                 :strike-through nil
+                                                 :underline t))))
+                (face-spec-set 'trailing-whitespace
+                               '((((class color) (background light))
+                                  (:foreground "red"
                                                :background "unspecified"
                                                :strike-through nil
-                                               :underline t)))))))
- (t (error "Available ELISP to visualize whitespace is not exist"))
- )
+                                               :underline t))
+                                 (t (:foreground "purple"
+                                                 :background "unspecified"
+                                                 :strike-through nil
+                                                 :underline t)))))))
+
 
 (provide 'config-whitespace)

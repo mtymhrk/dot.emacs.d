@@ -2,17 +2,21 @@
 ;; dired
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(require 'dired-x)
-(require 'wdired)
-(load "sorter")
+(eval-when-compile (require 'use-package))
 
-;;; dired-find-alternate-file コマンドを有効化
-(put 'dired-find-alternate-file 'disabled nil)
+(use-package dired-x
+  :config
+  (use-package wdired)
+  (load "sorter")
 
-;;; C-m で新規バッファを作成せずにディレクトリ/ファイルを開く
-(define-key dired-mode-map (kbd "C-m") 'dired-find-alternate-file)
-;;; a で新規バッファを作成してディレクトリ/ファイルを開く
-(define-key dired-mode-map (kbd "a") 'dired-find-file)
-(define-key dired-mode-map (kbd "e") 'wdired-change-to-wdired-mode)
+  ;; dired-find-alternate-file コマンドを有効化
+  (put 'dired-find-alternate-file 'disabled nil)
+
+  ;; C-m で新規バッファを作成せずにディレクトリ/ファイルを開く
+  (bind-key "C-m" 'dired-find-alternate-file dired-mode-map)
+
+  ;; a で新規バッファを作成してディレクトリ/ファイルを開く
+  (bind-key "a" 'dired-find-file dired-mode-map)
+  (bind-key "e" 'wdired-change-to-wdired-mode dired-mode-map))
 
 (provide 'config-dired)

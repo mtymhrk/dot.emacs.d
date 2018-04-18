@@ -2,20 +2,21 @@
 ;;; bm.el
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(require 'bm)
 
-(custom-set-variables '(bm-in-lifo-order t))
+(eval-when-compile (require 'use-package))
 
-
-(require 'attach-transient-keymap)
-
-(define-key keymap-ctrl-meta-space (kbd "b") 'bm-toggle)
-
-(attach-transientkey:define-keylist
- my-bm-key-list (("n" "next" bm-next "j")
-                 ("p" "previous" bm-previous "k")
-                 ("b" "bookmark" bm-toggle "t")
-                 ("D" "remove all" bm-remove-all-current-buffer)))
-
+(use-package bm
+  :custom
+  (bm-in-lifo-order t)
+  :config
+  (use-package hydra
+    :config
+    (defhydra hydra-bm ()
+      ("n" bm-next                      "next"              )
+      ("p" bm-previous                  "previous"          )
+      ("b" bm-toggle                    "bookmark"          )
+      ("D" bm-remove-all-current-buffer "remove all"        )
+      ("q" nil                          "quit"       :exit t))
+    (bind-key "b" 'hydra-bm/body keymap-ctrl-meta-space)))
 
 (provide 'config-bm)

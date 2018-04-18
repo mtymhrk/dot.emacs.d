@@ -2,8 +2,11 @@
 ;;; yascroll
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(require 'yascroll)
+(eval-when-compile (require 'use-package))
 
-(global-yascroll-bar-mode 1)
+(use-package yascroll
+  :commands global-yascroll-bar-mode
+  :init
+  (global-yascroll-bar-mode 1))
 
 (provide 'config-yascroll)

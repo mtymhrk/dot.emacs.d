@@ -22,25 +22,32 @@
 
 ;; (global-set-key (kbd "C-o") 'toggle-input-method)
 
+(eval-when-compile (require 'use-package))
+
 (add-to-list 'load-path (concat user-emacs-directory "elisp/ddskk/lisp"))
 
-(require 'skk-autoloads)
+(use-package skk-autoloads
+  :init
+  ;; あらかじめ require しておかないとうまく動かないので、必ず実施されるよう
+  ;; init に記載しておく
+  (require 'skk-autoloads)
 
-(setq skk-user-directory (concat user-emacs-directory "ddskk/"))
+  :config
+  (setq skk-user-directory (concat user-emacs-directory "ddskk/"))
 
-;;; チュートリアルの場所設定
-(setq skk-tut-file "~/.emacs.d/elisp/ddskk/etc/SKK.tut")
+  ;; チュートリアルの場所設定
+  (setq skk-tut-file "~/.emacs.d/elisp/ddskk/etc/SKK.tut")
 
-;;; C-x j で skk-mode
-(global-set-key (kbd "C-x C-j") 'skk-mode)
+  (defun my-hook-skk-load--0 ()
+    ;; コメント行を抜けたら ascii にする
+    (require 'context-skk)
+    ;; C-M-j でアンドゥ確定
+    (bind-key "C-M-j" 'skk-undo-kakutei skk-j-mode-map))
 
-(defun skk-load-hook--0 ()
-  ;; コメント行を抜けたら ascii にする
-  (require 'context-skk)
+  (add-hook 'skk-load-hook 'my-hook-skk-load--0)
 
-  ;; C-M-j でアンドゥ確定
-  (define-key skk-j-mode-map (kbd "C-M-j") 'skk-undo-kakutei))
-
-(add-hook 'skk-load-hook 'skk-load-hook--0)
+  :bind
+  ;; C-x j で skk-mode
+  ("C-x C-j" . skk-mode))
 
 (provide 'config-ddskk)

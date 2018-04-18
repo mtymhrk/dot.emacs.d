@@ -2,27 +2,22 @@
 ;;; WoMan
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(require 'woman)
+(eval-when-compile (require 'use-package))
 
-(setq woman-use-own-frame nil)
+(use-package woman
+  :config
+  (setq woman-use-own-frame nil)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; popwin for Woman-mode
+  (use-package mod-popwin
+    :config
 
-(eval-after-load 'config-popwin
-  '(progn
-     ;;; WoMan バッファをポップアップで表示
-     (add-popwin-special-display-config '("^\\*WoMan" :regexp t :noselect t :stick t))
-     ))
+    ;; popwin for Woman-mode
+    (mod-popwin:add-display-config
+     '("^\\*WoMan" :regexp t :noselect t :stick t))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; popwin for Man-mode
-
-(eval-after-load 'config-popwin
-  '(progn
-     ;;; Man バッファをポップアップで表示
-     (add-popwin-special-display-config '(Man-mode :noselect t :stick t))
-     ))
+    ;; popwin for Man-mode
+    (mod-popwin:add-display-config
+     '(Man-mode :noselect t :stick t))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (provide 'config-woman)

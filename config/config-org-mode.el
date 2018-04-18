@@ -3,76 +3,76 @@
 ;;;   http://orgmode.org/
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(require 'org-install)
+(eval-when-compile (require 'use-package))
 
-(setq org-startup-truncated nil)
-(setq org-return-follows-link t)
-(add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
-(setq org-directory "~/memo/org/")
-(setq org-default-notes-file (concat org-directory "agenda.org"))
+(use-package org-install
+  :config
+  (setq org-startup-truncated nil)
+  (setq org-return-follows-link t)
+  (add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
+  (setq org-directory "~/memo/org/")
+  (setq org-default-notes-file (concat org-directory "agenda.org"))
 
-;;; org-mode で書き換えられたくないキーバインドの書き換えを回避
-(defun my-hook-func-org-mode ()
-  (define-key org-mode-map (kbd "C-<tab>") nil)
-  (define-key org-mode-map (kbd "C-a") nil)
-  (define-key org-mode-map (kbd "C-e") nil)
-  (define-key org-mode-map (kbd "C-'") nil))
+  ;; org-mode で書き換えられたくないキーバインドの書き換えを回避
+  (defun my-hook-func-org-mode ()
+    (define-key org-mode-map (kbd "C-<tab>") nil)
+    (define-key org-mode-map (kbd "C-a") nil)
+    (define-key org-mode-map (kbd "C-e") nil)
+    (define-key org-mode-map (kbd "C-'") nil))
 
-;;; ファイルを開いたとき見出しを折り畳まない
-(setq org-startup-folded 'nofold)
-
-(add-hook 'org-mode-hook 'my-hook-func-org-mode)
+  ;; ファイルを開いたとき見出しを折り畳まない
+  (setq org-startup-folded 'nofold)
+  :hook
+  ((org-mode . my-hook-func-org-mode)))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; org-capture
 
-(require 'org-capture)
+(use-package org-capture
+  :config
+  ;; メモ用のファイル名を作成する関数
+  (setq my-org-capture-journal-dir (concat org-directory "journal/"))
+  (setq my-org-capture-note-dir (concat org-directory "note/"))
+  (setq my-org-capture-cheatsheet-dir (concat org-directory "cheatsheet/"))
 
-;;; メモ用のファイル名を作成する関数
-(setq my-org-capture-journal-dir (concat org-directory "journal/"))
-(setq my-org-capture-note-dir (concat org-directory "note/"))
-(setq my-org-capture-cheatsheet-dir (concat org-directory "cheatsheet/"))
+  (defun create-journal-file-name ()
+    (unless (file-exists-p my-org-capture-journal-dir)
+      (make-directory my-org-capture-journal-dir))
+    (concat my-org-capture-journal-dir
+            (format-time-string "%Y.%m.%d-%H.%M.%S.org")))
 
-(defun create-journal-file-name ()
-  (unless (file-exists-p my-org-capture-journal-dir)
-    (make-directory my-org-capture-journal-dir))
-  (concat my-org-capture-journal-dir
-          (format-time-string "%Y.%m.%d-%H.%M.%S.org")))
+  (defun create-note-file-name ()
+    (unless (file-exists-p my-org-capture-note-dir)
+      (make-directory my-org-capture-note-dir))
+    (concat my-org-capture-note-dir
+            (format-time-string "%Y.%m.%d-%H.%M.%S.org")))
 
-(defun create-note-file-name ()
-  (unless (file-exists-p my-org-capture-note-dir)
-    (make-directory my-org-capture-note-dir))
-  (concat my-org-capture-note-dir
-          (format-time-string "%Y.%m.%d-%H.%M.%S.org")))
+  (defun create-cheatsheet-file-name ()
+    (unless (file-exists-p my-org-capture-cheatsheet-dir)
+      (make-directory my-org-capture-cheatsheet-dir))
+    (concat my-org-capture-cheatsheet-dir
+            (format-time-string "%Y.%m.%d-%H.%M.%S.org")))
 
-(defun create-cheatsheet-file-name ()
-  (unless (file-exists-p my-org-capture-cheatsheet-dir)
-    (make-directory my-org-capture-cheatsheet-dir))
-  (concat my-org-capture-cheatsheet-dir
-          (format-time-string "%Y.%m.%d-%H.%M.%S.org")))
-
-
-(setq org-capture-templates
-      '(("t" "Todo" entry
-         (file+headline "todo.org" "Inbox")
-         "** TODO %?\n   %i\n   %a\n   %t")
-        ("j" "Journal" entry
-         (file create-journal-file-name)
-         "* %?\n[%T]\n")
-        ("n" "Note" entry
-         (file create-note-file-name)
-         "* %?\n[%T]\n")
-        ("c" "Cheatsheet" entry
-         (file create-cheatsheet-file-name)
-         "* %?\n[%T]\n")
-        ("i" "Idea" entry
-         (file+headline "ideas.org" "New Ideas")
-         "** %?\n   %i\n   %a\n   %t")
-        ("b" "Bookmark" entry
-         (file+headline "bookmarks.org" "Bookmarks")
-         "** %?\n   %i\n   %a\n   %t")))
-
+  (setq org-capture-templates
+        '(("t" "Todo" entry
+           (file+headline "todo.org" "Inbox")
+           "** TODO %?\n   %i\n   %a\n   %t")
+          ("j" "Journal" entry
+           (file create-journal-file-name)
+           "* %?\n[%T]\n")
+          ("n" "Note" entry
+           (file create-note-file-name)
+           "* %?\n[%T]\n")
+          ("c" "Cheatsheet" entry
+           (file create-cheatsheet-file-name)
+           "* %?\n[%T]\n")
+          ("i" "Idea" entry
+           (file+headline "ideas.org" "New Ideas")
+           "** %?\n   %i\n   %a\n   %t")
+          ("b" "Bookmark" entry
+           (file+headline "bookmarks.org" "Bookmarks")
+           "** %?\n   %i\n   %a\n   %t")))
 
 ;;;  %[pathname] insert the contents of the file given by `pathname'.
 ;;;  %(sexp)     evaluate elisp `(sexp)' and replace with the result.
@@ -104,26 +104,20 @@
 ;;;              %^{prompt|default|completion2|completion3|...}.
 ;;;  %?          After completing the template, position cursor here.
 
+  ;; org-agenda
+  (setq org-agenda-files
+        (list org-directory my-org-capture-journal-dir my-org-capture-note-dir))
 
-(global-set-key (kbd "C-c o c") 'org-capture)
-(define-key keymap-ctrl-meta-space (kbd "o c") 'org-capture)
+  ;; todo
+  (setq org-todo-keywords
+        '((sequence "TODO(t)" "WAIT(w@/!)" "|" "DONE(d!)" "CANCELED(c@)")))
 
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; org-agenda
-
-(setq org-agenda-files
-      (list org-directory my-org-capture-journal-dir my-org-capture-note-dir))
-
-(global-set-key (kbd "C-c o a") 'org-agenda)
-(define-key keymap-ctrl-meta-space (kbd "o a") 'org-agenda)
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; todo
-
-(setq org-todo-keywords
-      '((sequence "TODO(t)" "WAIT(w@/!)" "|" "DONE(d!)" "CANCELED(c@)")))
+  :bind
+  ("C-c o c" . org-capture)
+  ("C-c o a" . org-agenda)
+  (:map keymap-ctrl-meta-space
+        ("o c" . org-capture)
+        ("o a" . org-agenda)))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

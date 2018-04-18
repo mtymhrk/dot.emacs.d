@@ -2,12 +2,14 @@
 ;;; irony
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(require 'irony)
+(eval-when-compile (require 'use-package))
 
-(add-hook 'c++-mode-hook 'irony-mode)
-(add-hook 'c-mode-hook 'irony-mode)
-
-(add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
+(use-package irony
+  :commands irony-mode
+  :hook
+  ((c++-mode . irony-mode)
+   (c-mode . irony-mode)
+   (irony-mode . irony-cdb-autosetup-compile-options)))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

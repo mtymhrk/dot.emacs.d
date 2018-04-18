@@ -2,47 +2,27 @@
 ;;; emacs-lisp-mode
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(eval-after-load 'config-theme
-  '(progn
-     ;;; 括弧に色付けするよう設定
-     (defvar my-lisp-paren-face 'my-paren-face)
-     (push '("(\\|)" . my-lisp-paren-face) lisp-font-lock-keywords-2)
-     ))
+(eval-when-compile (require 'use-package))
 
-(defun emacs-lisp-mode-hook--0 ()
-  (turn-on-eldoc-mode)
-  (setq indent-tabs-mode nil))
+(use-package elisp-mode
+  :commands emacs-lisp-mode
+  :config
+  (defun my-hook-emacs-lisp-mode--0 ()
+    (setq indent-tabs-mode nil))
 
-(add-hook 'emacs-lisp-mode-hook 'emacs-lisp-mode-hook--0)
+  (add-hook 'emacs-lisp-mode-hook #'my-hook-emacs-lisp-mode--0)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; paredit for emacs-lisp-mode
+  (use-package flycheck
+    :hook
+    ((emacs-lisp-mode . flycheck-mode)))
 
-(eval-after-load 'config-paredit
-  '(progn
-     (add-hook 'emacs-lisp-mode-hook 'enable-paredit-mode)
-     ))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; flycheck for emacs-lisp-mode
-
-(eval-after-load 'config-flycheck
-  '(progn
-     (defun emacs-lisp-mode-hook--flycheck ()
-       (flycheck-mode t))
-
-     (add-hook 'emacs-lisp-mode-hook 'emacs-lisp-mode-hook--flycheck)
-     ))
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; 1 行の文字数上限可視化する
-
-(with-eval-after-load 'fill-column-indicator
-  (defun emacs-lisp-mode-hook--fci ()
-    (setq fill-column 80)
-    (fci-mode 1))
-  (add-hook 'emacs-lisp-mode-hook 'emacs-lisp-mode-hook--fci))
+  (use-package fill-column-indicator
+    :init
+    (defun my-hook-emacs-lisp-mode--fci ()
+      (setq fill-column 80)
+      (fci-mode 1))
+    :hook
+    ((emacs-lisp-mode . my-hook-emacs-lisp-mode--fci))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

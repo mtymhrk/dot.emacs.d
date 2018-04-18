@@ -6,16 +6,14 @@
 
 ;;; (auto-install-from-url "https://raw.github.com/syohex/emacs-quickrun/master/quickrun.el")
 
-(require 'quickrun)
+(eval-when-compile (require 'use-package))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; popwin for quickrun
-
-(eval-after-load 'config-popwin
-  '(progn
-     ;;; quickrun 実行結果をポップアップで表示
-     (add-popwin-special-display-config '("*quickrun*" :noselect t :stick t))
-     ))
+(use-package quickrun
+  :commands quickrun
+  :config
+  (use-package mod-popwin
+    :config
+    (add-popwin-special-display-config '("*quickrun*" :noselect t :stick t))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (provide 'config-quickrun)

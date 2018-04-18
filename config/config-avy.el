@@ -2,8 +2,13 @@
 ;;; avy
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(eval-when-compile (require 'use-package))
 
-(define-key isearch-mode-map (kbd ";") 'avy-isearch)
+(use-package avy
+  :bind
+  (:map isearch-mode-map
+        (";" . avy-isearch)))
+
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

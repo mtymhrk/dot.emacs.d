@@ -2,23 +2,24 @@
 ;;; sh-mode
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(require 'sh-script)
+(eval-when-compile (require 'use-package))
 
-(defun sh-mode-hook--0 ()
-  (setq sh-basic-offset 2) ; インデント幅の設定
-  (setq sh-indentation 2)) ; インデント幅の設定
+(use-package sh-script
+  :commands sh-mode
+  :config
+  (defun my-hook-sh-mode--0 ()
+    (setq sh-basic-offset 2) ; インデント幅の設定
+    (setq sh-indentation 2)) ; インデント幅の設定
 
-(add-hook 'sh-mode-hook 'sh-mode-hook--0)
+  (add-hook 'sh-mode-hook #'my-hook-sh-mode--0)
 
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; 1 行の文字数上限可視化する
-
-(with-eval-after-load 'fill-column-indicator
-  (defun sh-mode-hook--fci ()
-    (setq fill-column 80)
-    (fci-mode 1))
-  (add-hook 'sh-mode-hook 'sh-mode-hook--fci))
+  (use-package fill-column-indicator
+    :init
+    (defun my-hook-sh-mode--fci ()
+      (setq fill-column 80)
+      (fci-mode 1))
+    :hook
+    ((sh-mode . my-hook-sh-mode--fci))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
