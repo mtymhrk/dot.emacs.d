@@ -9,11 +9,12 @@
   (setq  projectile-completion-system 'helm))
 
 (use-package helm-projectile
+  :after (mod-helm)
   :config
   (helm-projectile-on)
   :bind
-  (:map keymap-ctrl-meta-space
-        ("C-;" . helm-projectile)))
+  (:map mod-helm:command-keymap
+        ("p" . helm-projectile)))
 
 (projectile-global-mode)
 
