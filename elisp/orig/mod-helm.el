@@ -91,7 +91,7 @@
 
 (defun mod-helm:manuals ()
   (interactive)
-  (helm-other-buffer mod-helm:manuals-sources "*helm for manuals"))
+  (helm-other-buffer mod-helm:manuals-sources "*helm for manuals*"))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
