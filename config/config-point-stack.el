@@ -20,4 +20,4 @@
 (require 'smartrep)
 (smartrep-define-key global-map point-stack-prefix-key point-stack-keymap-alist)
 
-(provide 'config-point-stack)
+

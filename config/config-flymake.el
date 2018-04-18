@@ -54,7 +54,7 @@
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(provide 'config-flymake)
+
 
 ;;; 参考
 ;;; http://www.02.246.ne.jp/~torutk/cxx/emacs/flymake.html

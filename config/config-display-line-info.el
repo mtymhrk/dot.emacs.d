@@ -15,4 +15,4 @@
   :bind
   ("C-c d" . dli-display))
 
-(provide 'config-display-line-info)
+

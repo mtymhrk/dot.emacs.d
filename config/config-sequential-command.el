@@ -40,4 +40,4 @@
   ("M-U" . seq-upcase-capitalize-downcase-backword-word))
 
 
-(provide 'config-sequential-command)
+

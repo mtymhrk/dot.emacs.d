@@ -33,4 +33,4 @@
             (symbol-function 'orig-buffer-substring-no-properties)))))
 
 
-(provide 'config-popup-keybindings)
+

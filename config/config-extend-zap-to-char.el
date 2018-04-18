@@ -10,4 +10,4 @@
 
 (global-set-key (kbd "M-z") 'extend-zap-to-char)
 
-(provide 'config-extend-zap-to-char)
+

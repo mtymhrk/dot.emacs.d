@@ -13,4 +13,4 @@
   ;; とで、もう一度初期設定を行なわせる
   (setq Info-directory-list nil))
 
-(provide 'config-info)
+

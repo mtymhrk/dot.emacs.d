@@ -11,4 +11,4 @@
   (:map keymap-ctrl-meta-space
         ("r" . er/expand-region)))
 
-(provide 'config-expand-region)
+

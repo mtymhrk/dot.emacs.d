@@ -10,4 +10,4 @@
 
 (use-package revbufs)
 
-(provide 'config-revbufs)
+

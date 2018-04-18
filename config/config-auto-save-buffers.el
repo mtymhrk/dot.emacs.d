@@ -17,4 +17,4 @@
 
   (auto-save-buffers-enhanced t))
 
-(provide 'config-auto-save-buffers)
+

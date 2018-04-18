@@ -21,4 +21,4 @@
 
   (migemo-init))
 
-(provide 'config-migemo)
+

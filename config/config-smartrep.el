@@ -22,4 +22,4 @@
     ("C-n" . 'next-error)
     ("C-p" . 'previous-error)))
 
-(provide 'config-smartrep)
+

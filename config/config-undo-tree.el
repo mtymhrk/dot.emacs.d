@@ -32,4 +32,4 @@
 (global-undo-tree-mode)
 
 
-(provide 'config-undo-tree)
+

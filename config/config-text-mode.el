@@ -8,4 +8,4 @@
   :hook
   ((text-mode . turn-on-auto-fill)))
 
-(provide 'config-text-mode)
+

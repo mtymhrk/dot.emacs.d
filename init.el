@@ -110,7 +110,7 @@
   (let ((load-errors '()))
     (dolist (file file-list)
       (condition-case err
-          (require (intern file))
+          (load-file (concat my-init-config-dir file ".el"))
         (error
          (push (cons file err) load-errors)
          (message "Error has occurred while loading `%s': %s"
@@ -122,7 +122,6 @@
           (princ (format "  %s: %s\n"
                          (car err) (error-message-string (cdr err)))))))))
 
-(add-to-list 'load-path my-init-config-dir)
 (my-load-init-config-files my-init-config-file-list)
 
 

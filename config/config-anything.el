@@ -528,4 +528,4 @@
 
   (define-key anything-my-command-keymap (kbd "`") 'anything-flymake))
 
-(provide 'config-anything)
+

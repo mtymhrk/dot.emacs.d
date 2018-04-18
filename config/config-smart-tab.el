@@ -24,5 +24,5 @@
 
 (global-smart-tab-mode)
 
-(provide 'config-smart-tab)
+
 

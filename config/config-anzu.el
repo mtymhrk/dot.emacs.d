@@ -20,4 +20,4 @@
   ("C-M-%" . anzu-query-replace-regexp))
 
 
-(provide 'config-anzu)
+

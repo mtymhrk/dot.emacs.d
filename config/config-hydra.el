@@ -12,4 +12,4 @@
     ("C-n" next-error "next")
     ("C-p" previous-error "previous")))
 
-(provide 'config-hydra)
+

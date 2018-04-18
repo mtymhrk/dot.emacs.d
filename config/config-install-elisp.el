@@ -8,4 +8,4 @@
 (setq install-elisp-repository-directory "~/lib/emacs/site-lisp/")
 
 
-(provide 'config-install-elisp)
+

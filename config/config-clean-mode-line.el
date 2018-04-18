@@ -34,4 +34,4 @@
           (lisp-interaction-mode . "λ")
           (emacs-lisp-mode . "ELisp"))))
 
-(provide 'config-clean-mode-line)
+

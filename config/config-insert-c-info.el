@@ -18,4 +18,4 @@
   (newline)
   (insert "*/") (newline))
 
-(provide 'config-insert-c-info)
+

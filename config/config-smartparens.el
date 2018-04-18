@@ -20,4 +20,4 @@
   (bind-key "C-<" 'sp-splice-sexp-killing-backward smartparens-mode-map)
   (bind-key "C->" 'sp-splice-sexp-killing-forward smartparens-mode-map))
 
-(provide 'config-smartparens)
+

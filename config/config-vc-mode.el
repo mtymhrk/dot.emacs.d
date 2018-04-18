@@ -9,4 +9,4 @@
   ;; vc-mode を使用しない
   (setq vc-handled-backends nil))
 
-(provide 'config-vc-mode)
+

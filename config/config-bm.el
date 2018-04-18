@@ -19,4 +19,4 @@
       ("q" nil                          "quit"       :exit t))
     (bind-key "b" 'hydra-bm/body keymap-ctrl-meta-space)))
 
-(provide 'config-bm)
+

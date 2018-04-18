@@ -28,4 +28,4 @@
     :hook
     ((racer-mode . company-mode))))
 
-(provide 'config-rust-mode)
+

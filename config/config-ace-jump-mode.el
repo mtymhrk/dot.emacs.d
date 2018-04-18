@@ -75,4 +75,4 @@
 ;; (loop for c from ?a to ?z do (add-keys-to-ace-jump-mode "H-M-" c))
 ;; (loop for c from ?! to ?~ do (add-keys-to-ace-jump-mode "H-M-" c))
 
-(provide 'config-ace-jump-mode)
+

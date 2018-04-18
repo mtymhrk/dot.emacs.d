@@ -9,4 +9,4 @@
   :init
   (global-yascroll-bar-mode 1))
 
-(provide 'config-yascroll)
+

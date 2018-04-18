@@ -21,4 +21,4 @@
       'wl-draft-kill
       'mail-send-hook))
 
-(provide 'config-wanderlust)
+

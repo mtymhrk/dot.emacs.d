@@ -14,4 +14,4 @@
   :config
   (which-key-setup-side-window-bottom))
 
-(provide 'config-which-key)
+

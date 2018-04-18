@@ -25,4 +25,4 @@
       ("q" nil                             "done"         :eixt t))
     (bind-key "m" 'hydra-multiple-cursors/body keymap-ctrl-meta-space)))
 
-(provide 'config-multiple-cursors)
+

@@ -16,4 +16,4 @@
     (add-popwin-special-display-config '("*quickrun*" :noselect t :stick t))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(provide 'config-quickrun)
+

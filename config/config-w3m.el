@@ -13,4 +13,4 @@
 (setq w3m-default-display-inline-images t)
 
 
-(provide 'config-w3m)
+

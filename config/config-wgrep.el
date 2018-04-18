@@ -37,4 +37,4 @@
 ;;; C-c C-k: Discard all changes and exit.
 ;;; C-x C-q: Exit wgrep mode.
 
-(provide 'config-wgrep)
+

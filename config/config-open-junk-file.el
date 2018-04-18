@@ -14,4 +14,4 @@
   (:map keymap-ctrl-meta-space
         ("J" . open-junk-file)))
 
-(provide 'config-open-junk-file)
+

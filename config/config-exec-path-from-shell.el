@@ -36,4 +36,4 @@
   (exec-path-from-shell-initialize))
 
 
-(provide 'config-exec-path-from-shell)
+

@@ -65,4 +65,4 @@
  '(cursor ((t (:background "brown")))))
 
 
-(provide 'config-theme)
+

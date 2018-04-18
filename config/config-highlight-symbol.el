@@ -10,4 +10,4 @@
   :hook
   ((prog-mode . highlight-symbol-mode)))
 
-(provide 'config-highlight-symbol)
+

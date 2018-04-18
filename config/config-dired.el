@@ -19,4 +19,4 @@
   (bind-key "a" 'dired-find-file dired-mode-map)
   (bind-key "e" 'wdired-change-to-wdired-mode dired-mode-map))
 
-(provide 'config-dired)
+

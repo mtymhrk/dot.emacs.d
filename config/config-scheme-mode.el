@@ -105,4 +105,4 @@
   (put 'match 'scheme-indent-function 1))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(provide 'config-scheme-mode)
+

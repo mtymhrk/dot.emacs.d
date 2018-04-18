@@ -50,4 +50,4 @@
   ;; C-x j で skk-mode
   ("C-x C-j" . skk-mode))
 
-(provide 'config-ddskk)
+

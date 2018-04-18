@@ -36,4 +36,4 @@
         ("o g" . helm-grep-my-memo)
         ("o r" . helm-reopen-my-memo)))
 
-(provide 'config-helm-for-my-memo)
+

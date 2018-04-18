@@ -214,4 +214,4 @@ is a kind of temporary one which is not confirmed yet."
 
 ;; (add-hook 'evil-local-mode-hook 'evil-local-mode-hook--add-hli-info)
 
-(provide 'config-evil)
+

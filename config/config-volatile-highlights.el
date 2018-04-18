@@ -15,4 +15,4 @@
   (set-face-background 'vhl/default-face "dark slate blue"))
 
 
-(provide 'config-volatile-highlights)
+

@@ -9,4 +9,4 @@
   :commands fci-mode)
 
 
-(provide 'config-fill-column-indicator)
+

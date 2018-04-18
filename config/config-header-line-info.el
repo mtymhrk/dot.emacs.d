@@ -20,4 +20,4 @@
   ;; キーバインド
   ("M-H" . hli-toggle-header-line-info-mode))
 
-(provide 'config-header-line-info)
+
