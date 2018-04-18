@@ -94,21 +94,17 @@
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; helm バッファを popwin で表示する設定
+;;; helm バッファをフレーム下部にポップアップする設定
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(require 'popwin)
 
-(defvar helm-compilation-window-height-percent 50.0)
+ (add-to-list 'display-buffer-alist
+              `(,(rx bos "*helm" (* not-newline) "*" eos)
+                (display-buffer-in-side-window)
+                (inhibit-same-window . t)
+                (window-height . 0.4)
+                (side . bottom)))
 
-(defun helm-display-function--popwin (buf)
-  (if helm-full-frame
-      (switch-to-buffer buf)
-    (popwin:popup-buffer buf
-                         :height (/ helm-compilation-window-height-percent
-                                    100.0))))
-
-(setq helm-display-function 'helm-display-function--popwin)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
