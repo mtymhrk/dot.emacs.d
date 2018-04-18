@@ -127,7 +127,8 @@
              ;; After multi-tty was merged; in server.el r1.131 or later, it
              ;; returns only client-record.
              (t
-              x)))))
+              x)))
+      x))
   (advice-add 'server-visit-files :around #'mod-elscreen:server-visit-files))
 
 
