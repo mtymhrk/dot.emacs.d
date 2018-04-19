@@ -72,7 +72,7 @@
     "config-multiple-cursors"
     "config-bm"
     "config-fill-column-indicator"
-
+    "config-selected"
     ;; "config-extend-zap-to-char"
     ;; "config-point-stack"
     "config-display-line-info"
