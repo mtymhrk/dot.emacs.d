@@ -13,6 +13,10 @@
 
   (add-hook 'scheme-mode-hook #'my-hook-scheme-mode--0)
 
+  (use-package smartparens
+    :hook
+    ((scheme-mode . smartparens-strict-mode)))
+
   (use-package fill-column-indicator
     :init
     (defun my-hook-scheme-mode--fci ()

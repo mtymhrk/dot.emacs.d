@@ -12,6 +12,10 @@
 
   (add-hook 'emacs-lisp-mode-hook #'my-hook-emacs-lisp-mode--0)
 
+  (use-package smartparens
+    :hook
+    ((emacs-lisp-mode . smartparens-strict-mode)))
+
   (use-package flycheck
     :hook
     ((emacs-lisp-mode . flycheck-mode)))

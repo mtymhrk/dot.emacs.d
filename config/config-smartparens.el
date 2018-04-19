@@ -6,14 +6,12 @@
 (eval-when-compile (require 'use-package))
 
 (use-package smartparens
-  :commands smartparens-strict-mode
+  :commands smartparens-global-mode smartparens-mode smartparens-strict-mode
+  :init
+  (smartparens-global-mode)
   :custom
   ;; カッコが自動挿入された際に、ハイライトを行わない
   (sp-highlight-pair-overlay nil)
-  :hook
-  ((emacs-lisp-mode . smartparens-strict-mode)
-   (scheme-mode . smartparens-strict-mode)
-   (list-mode . smartparens-strict-mode))
   :config
   (use-package smartparens-config)
   (sp-use-paredit-bindings)
