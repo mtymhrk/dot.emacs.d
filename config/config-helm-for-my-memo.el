@@ -10,6 +10,7 @@
   :config
   ;; org-mode と open-junk-file の設定の後にロードされる必要がある
   (use-package org-install)
+  (use-package org-capture)
   (use-package open-junk-file)
 
   (setq helm-for-my-memo:memo-items
