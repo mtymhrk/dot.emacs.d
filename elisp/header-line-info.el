@@ -38,6 +38,7 @@
     perl-mode
     ruby-mode
     python-mode
+    rust-mode
     text-mode)
   ""
   :group 'header-line-info
