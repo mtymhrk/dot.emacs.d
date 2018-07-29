@@ -31,6 +31,8 @@
 
 (use-package org-capture
   :config
+  (use-package org-install)
+
   ;; メモ用のファイル名を作成する関数
   (setq my-org-capture-journal-dir (concat org-directory "journal/"))
   (setq my-org-capture-note-dir (concat org-directory "note/"))
