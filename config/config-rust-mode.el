@@ -26,6 +26,12 @@
   ;; racerの補完サポートを使う
   (use-package company
     :hook
-    ((racer-mode . company-mode))))
+    ((racer-mode . company-mode)))
 
-
+  (use-package fill-column-indicator
+    :init
+    (defun my-hook-rust-mode-common--fci ()
+      (setq fill-column 80)
+      (fci-mode 1))
+    :hook
+    ((rust-mode . my-hook-rust-mode-common--fci))))
