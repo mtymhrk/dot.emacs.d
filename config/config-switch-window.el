@@ -10,7 +10,6 @@
 
 (use-package switch-window
   :custom
-  (switch-window-increase 14)
   (switch-window-shortcut-style 'qwerty)
   (switch-window-qwerty-shortcuts '("j" "k" "l" ";" "i" "o" "a" "s" "d" "f" "w" "e"))
   :bind
@@ -23,6 +22,7 @@
         ("C-l" . switch-window-mvborder-right)
         ("C-b" . balance-windows))
   :config
+  (set-face-attribute 'switch-window-label nil :height 10.0)
   (cl-loop for key in switch-window-qwerty-shortcuts
            do (bind-key key nil switch-window-extra-map)))
 
