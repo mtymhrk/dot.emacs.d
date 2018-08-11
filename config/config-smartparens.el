@@ -7,6 +7,7 @@
 
 (use-package smartparens
   :commands smartparens-global-mode smartparens-mode smartparens-strict-mode
+  :delight
   :init
   (smartparens-global-mode)
   :custom

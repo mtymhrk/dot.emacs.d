@@ -30,6 +30,7 @@
 
     ;; Minor-modes and Utilities
     "config-exec-path-from-shell"
+    "config-eldoc"
     "config-whitespace"
     ;;"config-smartrep"
     "config-hydra"
@@ -102,8 +103,6 @@
 
     ;; Input Method
     "config-ddskk"
-
-    "config-clean-mode-line"
 ))
 
 (defun my-load-init-config-files (file-list)

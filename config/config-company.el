@@ -6,6 +6,7 @@
 
 (use-package company
   :commands company-mode global-company-mode
+  :delight
   :custom
   (company-idle-delay nil)
   (company-minimum-prefix-length 2)

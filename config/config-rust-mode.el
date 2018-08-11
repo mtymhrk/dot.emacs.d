@@ -7,6 +7,11 @@
 (use-package rust-mode
   :commands rust-mode
   :config
+
+  (use-package racer
+    :commands racer-mode
+    :delight)
+
   ;; rust-modeでrust-format-on-saveをtにすると自動でrustfmtが走る
   (setq-default rust-format-on-save t)
 

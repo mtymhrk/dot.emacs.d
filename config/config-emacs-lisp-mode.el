@@ -6,6 +6,7 @@
 
 (use-package elisp-mode
   :commands emacs-lisp-mode
+  :delight emacs-lisp-mode "ELisp"
   :config
   (defun my-hook-emacs-lisp-mode--0 ()
     (setq indent-tabs-mode nil))
@@ -27,7 +28,6 @@
       (fci-mode 1))
     :hook
     ((emacs-lisp-mode . my-hook-emacs-lisp-mode--fci))))
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 

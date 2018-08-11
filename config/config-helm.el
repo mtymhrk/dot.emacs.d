@@ -8,6 +8,7 @@
 
 (use-package helm ; helm-map を参照するには helm.el のロードが必要
   :defer t
+  :delight
   :config
 
   ;; helm-scroll-other-window のスクロール量を 1 行に設定

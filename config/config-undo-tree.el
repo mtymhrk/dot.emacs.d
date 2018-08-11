@@ -21,6 +21,7 @@
 (eval-when-compile (require 'use-package))
 
 (use-package undo-tree
+  :delight
   :commands undo-tree-mode global-undo-tree-mode
   :config
   (use-package mod-popwin

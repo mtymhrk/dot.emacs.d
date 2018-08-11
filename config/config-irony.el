@@ -6,6 +6,7 @@
 
 (use-package irony
   :commands irony-mode
+  :delight
   :hook
   ((c++-mode . irony-mode)
    (c-mode . irony-mode)

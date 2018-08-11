@@ -40,6 +40,7 @@
   ;; ruby-block
   ;;  キーワード end に対応する行をハイライトする
   (use-package ruby-block
+    :delight
     :config
     ;; これを行っていないと ruby-mode 以外でも ruby-block minor-mode が有効に
     ;; なってしまう

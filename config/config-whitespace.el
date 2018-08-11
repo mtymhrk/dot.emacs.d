@@ -6,6 +6,8 @@
 (eval-when-compile (require 'use-package))
 
 (use-package whitespace
+  :delight whitespace
+  :delight global-whitespace-mode
   :config
   ;; whitespace-mode の対象を trailing blank とタブとスペースに設定。
   ;; face による可視化機能を有効化
@@ -52,6 +54,7 @@
 ;;;   http://homepage3.nifty.com/satomii/software/jaspace.el
 (use-package jaspace
   :disabled
+  :delight
   :config
   (setq jaspace-modes (append jaspace-modes
                               (list 'php-mode

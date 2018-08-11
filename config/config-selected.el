@@ -6,6 +6,7 @@
 
 (use-package selected
   :commands selected-minor-mode selected-global-mode
+  :delight selected-minor-mode
   :init
   (setq my:selected-keymap (make-sparse-keymap))
   (selected-global-mode)

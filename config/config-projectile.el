@@ -5,6 +5,7 @@
 (eval-when-compile (require 'use-package))
 
 (use-package projectile
+  :delight
   :config
   (setq  projectile-completion-system 'helm))
 

@@ -7,6 +7,7 @@
 
 (use-package smart-tab
   :commands smart-tab-mode global-smart-tab-mode
+  :delight
   :custom
   (smart-tab-completion-functions-alist ())
   (smart-tab-user-provided-completion-function #'my-smart-tab-completion-func)

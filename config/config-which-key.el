@@ -6,6 +6,7 @@
 
 (use-package which-key
   :commands which-key-mode
+  :delight
   :init
   (which-key-mode 1)
   :custom

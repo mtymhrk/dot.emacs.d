@@ -6,6 +6,7 @@
 (eval-when-compile (require 'use-package))
 
 (use-package yasnippet
+  :delight yas-minor-mode
   :config
   ;; snippet のディレクトリを追加
   (push  (concat user-emacs-directory "yasnippet-snippets") yas-snippet-dirs)

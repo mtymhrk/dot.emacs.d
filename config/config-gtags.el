@@ -7,6 +7,7 @@
 (eval-when-compile (require 'use-package))
 
 (use-package gtags
+  :delight
   :bind
   (:map gtags-mode-map
         ("M-t" . gtags-find-tag)
@@ -21,6 +22,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (use-package helm-gtags
+  :delight
   :custom
   (helm-gtags-path-style 'relative)
   (helm-gtags-ignore-case t)

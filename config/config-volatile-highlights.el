@@ -8,6 +8,7 @@
 
 (use-package volatile-highlights
   :commands volatile-highlights-mode
+  :delight
   :init
   (volatile-highlights-mode)
   :config

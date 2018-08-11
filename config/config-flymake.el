@@ -5,6 +5,7 @@
 (eval-when-compile (require 'use-package))
 
 (use-package flymake
+  :delight
   :defer t
   :config
   ;; flymake の行表示の色を設定
