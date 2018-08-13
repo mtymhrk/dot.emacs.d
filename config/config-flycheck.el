@@ -9,7 +9,7 @@
   :commands flycheck-mode
   :custom
   ;; mode-line での flycheck の情報表示を無効に
-  (flycheck-mode-line "")
+  ;; (flycheck-mode-line "")
   ;; カーソル位置のエラー情報をエコーエリアに表示しない
   (flycheck-display-errors-function nil)
 

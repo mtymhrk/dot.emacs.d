@@ -77,7 +77,7 @@
     ;; "config-extend-zap-to-char"
     ;; "config-point-stack"
     "config-display-line-info"
-    "config-header-line-info"
+    ;; "config-header-line-info"
 
     ;; Major-modes
     "config-text-mode"

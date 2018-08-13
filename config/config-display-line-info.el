@@ -7,9 +7,9 @@
 (use-package display-line-info
   :init
   ;; mode-line に whic-func による関数名表示を行わない
-  (require 'which-func)
-  (setq orig-which-func-format which-func-format)
-  (setq which-func-format "")
+  ;; (require 'which-func)
+  ;; (setq orig-which-func-format which-func-format)
+  ;; (setq which-func-format "")
   :config
   ;; キーバンド
   :bind
