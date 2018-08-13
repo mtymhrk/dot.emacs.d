@@ -27,6 +27,7 @@
 (add-to-list 'load-path (concat user-emacs-directory "elisp/ddskk/lisp"))
 
 (use-package skk-autoloads
+  :delight (context-skk-mode "" context-skk)
   :init
   ;; あらかじめ require しておかないとうまく動かないので、必ず実施されるよう
   ;; init に記載しておく
