@@ -9,10 +9,10 @@
   ;; yasnippet 展開中は flymake、flycheck を無効にする
   ;;
 
-  (make-variable-frame-local 'mod-yasnippet:flymake-active-p)
+  (make-variable-buffer-local 'mod-yasnippet:flymake-active-p)
   (setq-default mod-yasnippet:flymake-active-p nil)
 
-  (make-variable-frame-local 'mod-yasnippet:flycheck-active-p)
+  (make-variable-buffer-local 'mod-yasnippet:flycheck-active-p)
   (setq-default mod-yasnippet:flycheck-active-p nil)
 
   (defun yas-before-expand-snippet-hook--deactivate-flymake ()
