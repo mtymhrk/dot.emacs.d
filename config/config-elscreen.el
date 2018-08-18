@@ -6,13 +6,13 @@
 (eval-when-compile (require 'use-package))
 
 (use-package elscreen
-  :config
+  :custom
   ;; タブを表示しない
-  (setq elscreen-display-tab nil)
-
-  ;; (setq elscreen-tab-width 12)
-  ;; (setq elscreen-tab-display-kill-screen nil)
-
+  (elscreen-display-tab nil)
+  ;; elscreen-map をバインドしない
+  (elscreen-prefix-key "")
+  :config
+  (define-key keymap-ctrl-meta-space (kbd "t") elscreen-map)
   ;; elscreen を有効化
   (elscreen-start))
 
@@ -32,7 +32,7 @@
 
 (use-package helm-elscreen
   :bind (:map elscreen-map
-              ("C-z" . helm-elscreen)))
+              ("t" . helm-elscreen)))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
