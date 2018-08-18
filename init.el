@@ -90,7 +90,6 @@
     "config-rust-mode"
     "config-gdb"
     "config-view-mode"
-    "config-vc-mode"
     "config-info"
     "config-woman"
     ;; "config-wanderlust"
