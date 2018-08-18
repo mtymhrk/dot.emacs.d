@@ -25,12 +25,12 @@
 
 (when skk-use-color-cursor
   ;;; カーソル色を変えてみる
-  (setq skk-cursor-hiragana-color "DodgerBlue"
-        skk-cursor-katakana-color "LimeGreen"
+  (setq skk-cursor-hiragana-color "Orange3"
+        skk-cursor-katakana-color "SpringGreen3"
         skk-cursor-abbrev-color "red"
-        skk-cursor-jisx0208-latin-color "red"
+        skk-cursor-jisx0208-latin-color "firebrick3"
         skk-cursor-jisx0201-color "purple"
-        skk-cursor-latin-color "Yellow3"))
+        skk-cursor-latin-color "Tomato3"))
 
 ;;; 変換候補一覧と注釈 (annotation) を GUI ぽく表示する
 (setq skk-show-tooltip t)
