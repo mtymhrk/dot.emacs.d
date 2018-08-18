@@ -36,6 +36,7 @@
     "config-hydra"
     "config-helm"
     ;; "config-zlc"
+    "config-eyebrowse"
     "config-recentf"
     "config-compile"
     "config-irony"
