@@ -2,7 +2,13 @@
 ;;; theme
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(eval-when-compile (require 'use-package))
 
-(require 'doom-themes)
+(use-package doom-themes
+  :config
+  (load-theme 'doom-one t))
 
-(load-theme 'doom-one t)
+(use-package doom-modeline
+  :defer t
+  :hook
+  (after-init . doom-modeline-init))
