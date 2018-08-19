@@ -30,6 +30,7 @@
 (use-package hydra
   :config
   (defhydra hydra-undo ()
+    ("C-z" undo-tree-undo "undo")
     ("SPC" undo-tree-undo "undo")
     ("C-SPC" undo-tree-redo "redo")
     ("t" undo-tree-visualize "tree")
