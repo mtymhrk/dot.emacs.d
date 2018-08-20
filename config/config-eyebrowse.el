@@ -32,4 +32,4 @@
     ("7" eyebrowse-switch-to-window-config-7 "switch to 7")
     ("8" eyebrowse-switch-to-window-config-8 "switch to 8")
     ("9" eyebrowse-switch-to-window-config-9 "switch to 9"))
-  (bind-key "t" 'hydra-eyebrowse/body keymap-ctrl-meta-space))
+  (bind-key "w" 'hydra-eyebrowse/body keymap-ctrl-meta-space))
