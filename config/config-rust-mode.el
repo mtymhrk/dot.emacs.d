@@ -13,7 +13,7 @@
     :delight)
 
   ;; rust-modeでrust-format-on-saveをtにすると自動でrustfmtが走る
-  (setq-default rust-format-on-save t)
+  (setq-default rust-format-on-save nil)
 
   ;; rustのファイルを編集するときにracerを起動する
   (add-hook 'rust-mode-hook #'racer-mode)
