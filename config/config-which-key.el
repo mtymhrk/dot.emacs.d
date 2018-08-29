@@ -10,7 +10,7 @@
   :init
   (which-key-mode 1)
   :custom
-  (which-key-idle-delay 0.3)
+  (which-key-idle-delay 0.2)
   (which-key-show-transient-maps nil)
   :config
   (which-key-setup-side-window-bottom))
