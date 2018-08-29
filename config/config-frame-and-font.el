@@ -71,7 +71,8 @@
      ((string-match "helblindi" (system-name))
       (split-window-horizontally-n 2))
      ((string-match "amber" (system-name))
-      (split-window-horizontally-n 2)))))
+      (split-window-horizontally-n 2)))
+    (balance-windows)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; 起動時点でフレームを最大化し、ウィンドウを分割する
