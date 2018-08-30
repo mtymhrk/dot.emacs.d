@@ -14,8 +14,8 @@
   :config
   (helm-projectile-on)
   :bind
-  (:map mod-helm:command-keymap
-        ("p" . helm-projectile)))
+  (:map keymap-ctrl-meta-space
+        ("C-p" . helm-projectile)))
 
 (projectile-global-mode)
 

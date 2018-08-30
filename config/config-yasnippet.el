@@ -27,8 +27,8 @@
   (setq helm-c-yas-space-match-any-greedy t)
   (setq helm-c-yas-display-key-on-candidate t)
   :bind
-  (:map mod-helm:command-keymap
-        ("s" . helm-c-yas-complete)))
+  (:map keymap-ctrl-meta-space
+        ("C-S" . helm-c-yas-complete)))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

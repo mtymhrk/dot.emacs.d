@@ -51,7 +51,7 @@
 
    :hook
    ((flymake-mode . (lambda ()
-                      (bind-key "`" 'helm-flymake mod-helm:command-keymap)))))
+                      (bind-key "C-`" 'helm-flymake keymap-ctrl-meta-space)))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

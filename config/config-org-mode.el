@@ -118,8 +118,8 @@
   ("C-c o c" . org-capture)
   ("C-c o a" . org-agenda)
   (:map keymap-ctrl-meta-space
-        ("C-o c" . org-capture)
-        ("C-o a" . org-agenda)))
+        ("o c" . org-capture)
+        ("o a" . org-agenda)))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

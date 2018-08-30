@@ -12,6 +12,6 @@
                                       "%Y.%m.%d-%H.%M.%S."))
   :bind
   (:map keymap-ctrl-meta-space
-        ("J" . open-junk-file)))
+        ("C-j" . open-junk-file)))
 
 

@@ -44,7 +44,7 @@
     :commands helm-flycheck
     :hook
     ((flycheck-mode . (lambda ()
-                        (bind-key "`" 'helm-flycheck mod-helm:command-keymap))))))
+                        (bind-key "C-`" 'helm-flycheck keymap-ctrl-meta-space))))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

@@ -50,8 +50,8 @@
   (bind-key "C-c o" 'helm-quit-and-exec-ag helm-ag-map)
 
   :bind
-  (:map mod-helm:command-keymap
-        ("g" . helm-do-ag)))
+  (:map keymap-ctrl-meta-space
+        ("C-g" . helm-do-ag)))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

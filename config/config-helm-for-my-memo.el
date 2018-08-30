@@ -34,7 +34,7 @@
            dir   ,(list org-directory my-open-junk-file-base-dir)          "*.*")))
   :bind
   (:map keymap-ctrl-meta-space
-        ("C-o g" . helm-grep-my-memo)
-        ("C-o r" . helm-reopen-my-memo)))
+        ("o g" . helm-grep-my-memo)
+        ("o r" . helm-reopen-my-memo)))
 
 
