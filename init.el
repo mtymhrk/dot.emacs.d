@@ -79,6 +79,8 @@
     "config-display-line-info"
     ;; "config-header-line-info"
 
+    "config-lsp-mode"
+
     ;; Major-modes
     "config-text-mode"
     "config-org-mode"
