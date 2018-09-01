@@ -9,7 +9,7 @@
   :bind
   (:map keymap-ctrl-meta-space
         ("c C-i" . completion-at-point)
-        ("c ." . xref-find-definition)
+        ("c ." . xref-find-definitions)
         ("c ?" . xref-find-references)
         ("c x" . lsp-rename))
 
@@ -22,5 +22,5 @@
 
   (use-package company-lsp
     :config
-    (push 'company-lsp company-backends))
+    (push 'company-lsp  company-backends))
   )

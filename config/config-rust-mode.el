@@ -8,10 +8,6 @@
   :commands rust-mode
   :config
 
-  (use-package racer
-    :commands racer-mode
-    :delight)
-
   ;; rust-modeでrust-format-on-saveをtにすると自動でrustfmtが走る
   (setq-default rust-format-on-save nil)
 
@@ -22,23 +18,24 @@
     :hook
     ((rust-mode . flycheck-mode)))
 
-  ;; rustのファイルを編集するときにracerを起動する
-  (add-hook 'rust-mode-hook #'racer-mode)
-
-  ;; racerのeldocサポートを使う
-  (add-hook 'racer-mode-hook #'eldoc-mode)
-
-  ;; racerの補完サポートを使う
-  (use-package company
-    :hook
-    ((racer-mode . company-mode)))
-
-  ;; ;; Rust Language Server
-  ;; (use-package lsp-rust
+  ;; ;; Racer - code completion for Rust
+  ;; (use-package racer
+  ;;   :commands racer-mode
+  ;;   :delight
   ;;   :hook
-  ;;   ((rust-mode . lsp-rust-enable))
-  ;;   :custom
-  ;;   (lsp-rust-rls-command  '("rustup" "run" "nightly" "rls")))
+  ;;   ;; rustのファイルを編集するときにracerを起動する
+  ;;   ((rust-mode . racer-mode)
+  ;;    ;; racerのeldocサポートを使う
+  ;;    (racer-mode . eldoc-mode)
+  ;;    ;; ;; racerの補完サポートを使う
+  ;;    (racer-mode . company-mode)))
+
+  ;; Rust Language Server
+  (use-package lsp-rust
+    :hook
+    ((rust-mode . lsp-rust-enable))
+    :custom
+    (lsp-rust-rls-command  '("rustup" "run" "nightly" "rls")))
 
   (use-package fill-column-indicator
     :init
