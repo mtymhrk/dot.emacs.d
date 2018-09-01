@@ -50,7 +50,6 @@
     "config-yasnippet"
     "config-open-junk-file"
     "config-counsel"
-    ;; "config-ido"
     ;; "config-anything"
     ;; "config-auto-complete"
     "config-company"
