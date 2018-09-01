@@ -49,6 +49,6 @@
   (goto-char mod-isearch:isearch-end))
 
 (define-key isearch-mode-map (kbd "C-j")
-  'mod-iserach:exit-and-move-to-isearch-end)
+  #'mod-isearch:exit-and-move-to-isearch-end)
 
 (provide 'mod-isearch)
