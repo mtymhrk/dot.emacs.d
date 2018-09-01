@@ -48,7 +48,7 @@
   (add-hook 'skk-load-hook 'my-hook-skk-load--0)
 
   :bind
-  ;; C-x j で skk-mode
-  ("C-x C-j" . skk-mode))
+  ;; C-\ で skk-mode
+  ("C-\\" . skk-mode))
 
 
