@@ -40,6 +40,9 @@
   ;; shell コマンドの output をポップアップで表示
   (mod-popwin:add-display-config '("*Shell Command Output*" :noselect t :stick t))
 
+  ;; apropos をポップアップで表示
+  (mod-popwin:add-display-config '(apropos-mode :noselect nil :stick t))
+
   ;; TODO: delte
   (defalias 'add-popwin-special-display-config
     'mod-popwin:add-display-config)
