@@ -20,7 +20,9 @@
   (use-package hydra
     :config
     (defhydra hydra-eyebrowse ()
-      ("c" eyebrowse-create-window-config "create")
+"Window Configuration
+>"
+      ("c" eyebrowse-create-window-config "create" :exit t)
       ("k" eyebrowse-close-window-config "delete")
       ("p" eyebrowse-prev-window-config "prev")
       ("n" eyebrowse-next-window-config "next")
@@ -35,5 +37,6 @@
       ("6" eyebrowse-switch-to-window-config-6 "switch to 6")
       ("7" eyebrowse-switch-to-window-config-7 "switch to 7")
       ("8" eyebrowse-switch-to-window-config-8 "switch to 8")
-      ("9" eyebrowse-switch-to-window-config-9 "switch to 9"))
+      ("9" eyebrowse-switch-to-window-config-9 "switch to 9")
+      ("q" nil "quit" :exit t))
     (bind-key "w" 'hydra-eyebrowse/body keymap-ctrl-meta-space)))
