@@ -13,6 +13,11 @@
     :init
     (add-hook 'lsp-after-open-hook #'lsp-enable-imenu))
 
+  (use-package lsp-ui
+    :config
+    :hook
+    ((lsp-mode . lsp-ui-mode)))
+
   (use-package company-lsp
     :config
     (push 'company-lsp  company-backends))

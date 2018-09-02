@@ -14,7 +14,9 @@
   ;; rustのファイルを編集するときにflycheckを起動する
   (use-package flycheck
     :config
-    (add-hook 'flycheck-mode-hook #'flycheck-rust-setup)
+    ;; lsp-mode の flycheck 設定を使用するため、flycheck-rust-setup は hook に追
+    ;; 加しない
+    ;; (add-hook 'flycheck-mode-hook #'flycheck-rust-setup)
     :hook
     ((rust-mode . flycheck-mode)))
 
