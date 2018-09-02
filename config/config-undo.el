@@ -30,10 +30,12 @@
 (use-package hydra
   :config
   (defhydra hydra-undo ()
+"Undo
+>"
     ("C-z" undo-tree-undo "undo")
     ("SPC" undo-tree-undo "undo")
     ("C-SPC" undo-tree-redo "redo")
-    ("t" undo-tree-visualize "tree")
-    ("w" winner-undo "window-undo")
-    ("C-w" winner-redo "window-redo"))
+    ("t" undo-tree-visualize "tree" :exit t)
+    ("w" winner-undo "window undo")
+    ("C-w" winner-redo "window redo"))
   (bind-key "C-z" 'hydra-undo/body))
