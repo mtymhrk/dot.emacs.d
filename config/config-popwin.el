@@ -52,6 +52,8 @@
   (use-package hydra
     :config
     (defhydra hydra-popwin ()
+"Popup Window
+>"
       ("p"          mod-popwin:repopup-window       "cycle"        )
       ("q"          popwin:close-popup-window       "close"        )
       ("j"          mod-popwin:scroll-up            "scroll-up"    )
