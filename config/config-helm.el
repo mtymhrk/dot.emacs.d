@@ -74,7 +74,7 @@
     ("M-y" . helm-show-kill-ring)
     ;; ("C-;" . helm-for-files)
     (:map keymap-ctrl-meta-space
-          ("C-;"   . mod-helm:filelist)
+          ("C-;"   . mod-helm:for-files)
           ("C-'"   . mod-helm:move-in-buffer)
           ("C-M-;" . helm-resume)
           ("C-M-s" . helm-regexp)

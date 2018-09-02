@@ -97,18 +97,16 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; helm-filelist
 
-(require 'helm-filelist)
 (require 'helm-files)
 (require 'helm-for-files)
 
-(defun mod-helm:filelist ()
+(defun mod-helm:for-files ()
   (interactive)
   (let ((helm-ff-transformer-show-only-basename nil))
-    (helm-other-buffer  `(helm-source-buffers-list
+    (helm-other-buffer  '(helm-source-buffers-list
                           helm-source-recentf
                           helm-source-file-cache
-                          helm-source-files-in-current-dir
-                          ,(helm-source-filelist))
-                        "*helm filelist+*")))
+                          helm-source-files-in-current-dir)
+                        "*helm for files*")))
 
 (provide 'mod-helm)
