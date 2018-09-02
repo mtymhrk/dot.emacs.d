@@ -10,6 +10,8 @@
   (use-package hydra
     :config
     (defhydra hydra-multiple-cursors ()
+"Multiple Cursors
+>"
       ("n" mc/mark-next-like-this          "next"                )
       ("p" mc/mark-previous-like-this      "prev"                )
       ("m" mc/mark-more-like-this-extended "more"                )
