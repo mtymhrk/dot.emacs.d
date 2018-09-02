@@ -6,13 +6,6 @@
 
 (use-package lsp-mode
   :commands lsp-mode
-  :bind
-  (:map keymap-ctrl-meta-space
-        ("c C-i" . completion-at-point)
-        ("c ." . xref-find-definitions)
-        ("c ?" . xref-find-references)
-        ("c x" . lsp-rename))
-
   :config
 
   (use-package lsp-imenu
@@ -23,4 +16,17 @@
   (use-package company-lsp
     :config
     (push 'company-lsp  company-backends))
+
+  (use-package hydra
+    :config
+    (defhydra hydra-lsp (:hint nil)
+      "LSP"
+      ("C-i" completion-at-point   "completion"        :exit t)
+      ("."   xref-find-definitions "find definitions"  :exit t)
+      ("?"   xref-find-references  "find references"   :exit t)
+      (","   xref-pop-marker-stack "pop marker"               )
+      ("x"   lsp-rename            "rename"            :exit t))
+    (bind-key "c" 'hydra-lsp/body keymap-ctrl-meta-space))
   )
+
+
