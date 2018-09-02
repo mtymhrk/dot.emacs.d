@@ -221,7 +221,7 @@
 (global-set-key (kbd "C-;") keymap-ctrl-meta-space)
 
 (defvar keymap-for-manuals (make-sparse-keymap))
-(define-key keymap-ctrl-meta-space (kbd "m") keymap-for-manuals)
+(define-key keymap-ctrl-meta-space (kbd "d") keymap-for-manuals)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; 雑多なコマンド定義
