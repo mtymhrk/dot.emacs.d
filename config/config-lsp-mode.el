@@ -15,6 +15,8 @@
 
   (use-package lsp-ui
     :config
+    :custom
+    (lsp-ui-peek-always-show t)
     :hook
     ((lsp-mode . lsp-ui-mode)))
 
@@ -25,12 +27,15 @@
   (use-package hydra
     :config
     (defhydra hydra-lsp (:hint nil)
-      "LSP"
-      ("C-i" completion-at-point   "completion"        :exit t)
-      ("."   xref-find-definitions "find definitions"  :exit t)
-      ("?"   xref-find-references  "find references"   :exit t)
-      (","   xref-pop-marker-stack "pop marker"               )
-      ("x"   lsp-rename            "rename"            :exit t))
+"Code Navigation
+>"
+      ("C-i" completion-at-point          "completion"        :exit t)
+      ("."   lsp-ui-peek-find-definitions "peek definitions"  :exit t)
+      ("/"   lsp-ui-peek-find-references  "peek references"   :exit t)
+      (","   xref-pop-marker-stack        "pop marker"               )
+      ("x"   lsp-rename                   "rename"            :exit t)
+      ("M-." xref-find-definitions        "find definitions"  :exit t)
+      ("M-?" xref-find-references         "find references"   :exit t))
     (bind-key "c" 'hydra-lsp/body keymap-ctrl-meta-space))
   )
 
