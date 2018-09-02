@@ -12,6 +12,8 @@
   (use-package hydra
     :config
     (defhydra hydra-bm ()
+"Bookmark
+>"
       ("n" bm-next                      "next"              )
       ("p" bm-previous                  "previous"          )
       ("b" bm-toggle                    "bookmark"          )
