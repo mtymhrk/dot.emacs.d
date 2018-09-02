@@ -21,6 +21,19 @@
   (add-hook 'c-mode-common-hook #'my-hook-c-mode-common--0)
   (add-hook 'c-mode-common-hook #'my-hook-c-mode-common--ff-find-other-file)
 
+  (use-package cquery
+    :commands my-cquery-enable
+    :config
+    (setq cquery-executable "cquery")
+
+    (defun my-cquery-enable ()
+      (condition-case nil
+          (lsp-cquery-enable)
+        (user-error nil)))
+    :hook
+    ((c-mode . my-cquery-enable)
+     (c++-mode . my-cquery-enable)))
+
   (use-package flycheck
     :hook
     ((c-mode-common . flycheck-mode)))

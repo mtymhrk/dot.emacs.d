@@ -37,7 +37,7 @@
     "config-eyebrowse"
     "config-recentf"
     "config-compile"
-    "config-irony"
+    ;; "config-irony"
     "config-flymake"
     "config-flycheck"
     "config-auto-save-buffers"
