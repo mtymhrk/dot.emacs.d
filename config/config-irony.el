@@ -7,6 +7,12 @@
 (use-package irony
   :commands irony-mode
   :delight
+
+  :config
+  (use-package flycheck-irony
+    :hook
+    ((flycheck-mode . flycheck-irony-setup)))
+
   :hook
   ((c++-mode . irony-mode)
    (c-mode . irony-mode)

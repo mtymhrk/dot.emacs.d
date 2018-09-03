@@ -29,13 +29,6 @@
   ;;      (add-hook 'flycheck-mode-hook
   ;;                'flycheck-mode-hook--remove-after-save-hook)))
 
-
-  ;; flycheck-irony
-  (use-package flycheck-irony
-    :hook
-    ((flycheck-mode . flycheck-irony-setup)))
-
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; helm for flycheck
 
