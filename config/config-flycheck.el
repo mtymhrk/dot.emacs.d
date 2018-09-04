@@ -11,7 +11,11 @@
   ;; mode-line での flycheck の情報表示を無効に
   ;; (flycheck-mode-line "")
   ;; カーソル位置のエラー情報をエコーエリアに表示しない
-  (flycheck-display-errors-function nil)
+  ;; (flycheck-display-errors-function nil)
+  ;; カーソル位置のエラーを表示するまでの時間
+  ;; 手動表示のみしたいが、できないので大きな時間を設定して自動表示させないよう
+  ;; にする
+  (flycheck-display-errors-delay 10000.0)
 
   :config
   ;; 無効化する checker の設定
@@ -20,6 +24,10 @@
                 (cons 'emacs-lisp-checkdoc
                       (default-value 'flycheck-disabled-checkers)))
 
+
+  (use-package flycheck-popup-tip
+    :hook
+    ((flycheck-mode . flycheck-popup-tip-mode)))
 
   ;; (eval-after-load 'config-auto-save-buffers
   ;;   '(progn
