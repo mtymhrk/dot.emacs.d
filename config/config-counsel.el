@@ -4,6 +4,7 @@
 
 (use-package ivy
   :commands ivy-mode
+  :delight
   :init
   (ivy-mode 1)
   :custom
