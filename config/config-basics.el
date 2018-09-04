@@ -223,6 +223,10 @@
 (defvar keymap-for-manuals (make-sparse-keymap))
 (define-key keymap-ctrl-meta-space (kbd "d") keymap-for-manuals)
 
+(defvar keymap-for-code-navigation (make-sparse-keymap))
+(define-key keymap-ctrl-meta-space (kbd "c") keymap-for-code-navigation)
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; 雑多なコマンド定義
 

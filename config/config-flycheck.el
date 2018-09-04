@@ -29,16 +29,37 @@
   ;;      (add-hook 'flycheck-mode-hook
   ;;                'flycheck-mode-hook--remove-after-save-hook)))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; helm for flycheck
+  (use-package mod-popwin
+    :config
+    ;; エラーリストをポップアップで表示
+    (mod-popwin:add-display-config '(flycheck-error-list-mode :noselect t :stick t)))
 
+  ;; helm for flycheck
   (use-package helm-flycheck
-    :after (mod-helm)
-    :commands helm-flycheck
-    :hook
-    ((flycheck-mode . (lambda ()
-                        (bind-key "C-`" 'helm-flycheck keymap-ctrl-meta-space))))))
+    :commands helm-flycheck)
 
+  (use-package hydra
+    :config
+    (defhydra hydra-flycheck ()
+      "
+Flycheck
+"
+      ("n" flycheck-next-error             "next")
+      ("p" flycheck-previous-error         "previous")
+      ("h" flycheck-display-error-at-point "display")
+      ("e" flycheck-explain-error-at-point "explain")
+      ("l" flycheck-list-errors            "list")
+      ("q" nil                             "quit")))
+
+  (bind-keys :map keymap-for-code-navigation
+             ("c" . flycheck-buffer)
+             ("n" . hydra-flycheck/flycheck-next-error)
+             ("p" . hydra-flycheck/flycheck-previous-error)
+             ("h" . hydra-flycheck/flycheck-display-error-at-point)
+             ("e" . hydra-flycheck/flycheck-explain-error-at-point)
+             ("l" . hydra-flycheck/flycheck-list-errors)
+             ("`" . helm-flycheck))
+  )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 

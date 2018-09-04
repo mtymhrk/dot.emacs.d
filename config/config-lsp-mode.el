@@ -26,17 +26,23 @@
 
   (use-package hydra
     :config
-    (defhydra hydra-lsp (:hint nil)
-"Code Navigation
->"
-      ("C-i" completion-at-point          "completion"        :exit t)
-      ("."   lsp-ui-peek-find-definitions "peek definitions"  :exit t)
-      ("/"   lsp-ui-peek-find-references  "peek references"   :exit t)
-      (","   xref-pop-marker-stack        "pop marker"               )
-      ("x"   lsp-rename                   "rename"            :exit t)
-      ("M-." xref-find-definitions        "find definitions"  :exit t)
-      ("M-?" xref-find-references         "find references"   :exit t))
-    (bind-key "c" 'hydra-lsp/body keymap-ctrl-meta-space))
+    (defhydra hydra-xref (:hint nil)
+      "
+xref
+"
+      (","   xref-pop-marker-stack "pop marker")
+      ("M-." xref-find-definitions "find definitions")
+      ("M-?" xref-find-references  "find references")
+      ("q"   nil                   "quit")))
+
+  (bind-keys :map keymap-for-code-navigation
+             ("C-i" . completion-at-point)
+             ("."   . lsp-ui-peek-find-definitions)
+             ("/"   . lsp-ui-peek-find-references)
+             (","   . hydra-xref/xref-pop-marker-stack)
+             ("x"   . lsp-rename)
+             ("M-." . hydra-xref/xref-find-definitions)
+             ("M-/" . hydra-xref/xref-find-references))
   )
 
 
