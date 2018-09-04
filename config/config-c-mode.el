@@ -29,7 +29,7 @@
     (defun my-cquery-enable ()
       (condition-case nil
           (lsp-cquery-enable)
-        (user-error nil)))
+        (error nil)))
     :hook
     ((c-mode . my-cquery-enable)
      (c++-mode . my-cquery-enable)))
