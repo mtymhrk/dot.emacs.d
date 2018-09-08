@@ -68,6 +68,7 @@
     "config-bm"
     "config-fill-column-indicator"
     "config-selected"
+    "config-direx"
     "config-undo"
     "config-display-line-info"
 
