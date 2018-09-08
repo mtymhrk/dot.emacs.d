@@ -21,13 +21,6 @@
                       '("MyricaM M" . "unicode-bmp"))
     (setq my-default-frame-height 43)
     (setq my-default-frame-width 163)) ;; 2 Window を横にならべる場合
-   ((string-match "helblindi" (system-name))
-    (set-frame-font "Inconsolata-9")
-    (set-fontset-font (frame-parameter nil 'font)
-                      'japanese-jisx0208
-                      '("Takaoゴシック" . "unicode-bmp"))
-    (setq my-default-frame-height 65)
-    (setq my-default-frame-width 163)) ;; 2 Window を横にならべる場合
    (t
     (set-frame-font "DejaVu Sans Mono-9")
     (set-fontset-font (frame-parameter nil 'font)
@@ -49,15 +42,11 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; ウィンドウを等分割するコマンド
 
-(defun split-window-horizontally-n (n)
+(defun my-split-window-horizontally-n (n)
   (interactive "nNumber of Windows: ")
-  ;; ww 分割後の個々のウィンドウの幅
-  ;;   (* 3 (- n 1)) を引いているのは Window 境界線を作る毎に finge 等で
-  ;;   幅を 3 使うため。(例えば、3 分割する場合、境界線は 2 つできるので
-  ;;    2 * 3 の 6 を引く)
-  (let ((ww (/ (- (window-width) (* 3 (- n 1))) n)))
-    (dotimes (i (- n 1))
-      (split-window-horizontally (- (window-width) ww)))))
+  (dotimes (i (- n 1))
+    (split-window-horizontally))
+  (balance-windows))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; 自宅デスクトップ PC の場合はウィンドウを 3 分割、Note PC の場合はウィン
@@ -66,13 +55,10 @@
 (defun my-default-window-split ()
   (when (and window-system (one-window-p))
     (cond
-     ((string-match "spinel" (system-name))
-      (split-window-horizontally-n 3))
-     ((string-match "helblindi" (system-name))
-      (split-window-horizontally-n 2))
-     ((string-match "amber" (system-name))
-      (split-window-horizontally-n 2)))
-    (balance-windows)))
+     ((>= (frame-width) 184)
+      (my-split-window-horizontally-n 2))
+     (t
+      ))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; 起動時点でフレームを最大化し、ウィンドウを分割する
