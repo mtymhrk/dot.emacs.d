@@ -4,31 +4,35 @@
 
 (defvar my-default-frame-height nil)
 (defvar my-default-frame-width nil)
+(defvar my-default-frame-font nil)
 
 (when window-system
   (cond
    ((string-match "spinel" (system-name))
-    (set-frame-font "MyricaM M-10.5")
-    (set-fontset-font (frame-parameter nil 'font)
-                      'japanese-jisx0208
-                      '("MyricaM M" . "unicode-bmp"))
+    ;; (set-fontset-font (frame-parameter nil 'font)
+    ;;                   'japanese-jisx0208
+    ;;                   '("MyricaM M" . "unicode-bmp"))
+    (setq my-default-frame-font "MyricaM M-10.5")
     (setq my-default-frame-height 62)
     (setq my-default-frame-width 246))  ;; 3 Window を横にならべる場合
    ((string-match "amber" (system-name))
-    (set-frame-font "MyricaM M-10.5")
-    (set-fontset-font (frame-parameter nil 'font)
-                      'japanese-jisx0208
-                      '("MyricaM M" . "unicode-bmp"))
+    ;; (set-fontset-font (frame-parameter nil 'font)
+    ;;                   'japanese-jisx0208
+    ;;                   '("MyricaM M" . "unicode-bmp"))
+    (setq my-default-frame-font "MyricaM M-10.5")
     (setq my-default-frame-height 43)
     (setq my-default-frame-width 163)) ;; 2 Window を横にならべる場合
    (t
-    (set-frame-font "DejaVu Sans Mono-9")
+    (set-frame-font my-default-frame-font)
     (set-fontset-font (frame-parameter nil 'font)
                       'japanese-jisx0208
                       '("Takaoゴシック" . "unicode-bmp"))
+    (setq my-default-frame-font "DejaVu Sans Mono-9")
     (setq my-default-frame-height 65)
     (setq my-default-frame-width 80))) ;; 1 Window 設定
 
+  (set-frame-font my-default-frame-font)
+  (push `(font . ,my-default-frame-font) initial-frame-alist)
   (push `(height . ,my-default-frame-height) initial-frame-alist)
   (push `(width . ,my-default-frame-width) initial-frame-alist)
   (setq default-frame-alist initial-frame-alist)
