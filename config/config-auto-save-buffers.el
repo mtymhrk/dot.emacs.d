@@ -6,6 +6,7 @@
 
 (use-package auto-save-buffers-enhanced
   :config
+  (setq auto-save-buffers-enhanced-interval 2.0)
   ;; buffer-file-name が空文字列か、拡張子が .gpg のファイルの場合、
   ;; auto-save-buffers を無効にする。
   ;; EasyPG と auto-save-buffers の相性がよくないため、.gpg ファイル
