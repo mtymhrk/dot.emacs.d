@@ -14,9 +14,10 @@
     (add-hook 'lsp-after-open-hook #'lsp-enable-imenu))
 
   (use-package lsp-ui
-    :config
     :custom
     (lsp-ui-peek-always-show t)
+    (lsp-ui-doc-max-width (/ (frame-width) 3))
+    (lsp-ui-doc-max-height (/ (frame-height) 3))
     :hook
     ((lsp-mode . lsp-ui-mode)))
 
