@@ -79,9 +79,11 @@
           ("C-M-;" . helm-resume)
           ("C-M-s" . helm-regexp)
           ("C-o"   . helm-occur)
-          ("C-g"   . helm-do-grep-ag))
+          ("C-s"   . helm-do-grep-ag))
     (:map keymap-for-manuals
           ("a" . helm-apropos)
           ("m" . helm-man-woman)
-          ("i" . helm-info)))
+          ("i" . helm-info))
+    (:map keymap-for-grep
+          ("g" . helm-do-grep-ag)))
 )

@@ -18,9 +18,12 @@
 (use-package helm-ag
   :after (mod-helm)
   :config
+
   ;; デフォルトで検索ディレクトリを入力するよう変更
-  (defalias 'orig-helm-ag (symbol-function 'helm-ag))
-  (defalias 'orig-helm-do-ag (symbol-function 'helm-do-ag))
+  (unless (fboundp 'orig-helm-ag)
+    (defalias 'orig-helm-ag (symbol-function 'helm-ag)))
+  (unless (fboundp 'orig-helm-do-ag)
+    (defalias 'orig-helm-do-ag (symbol-function 'helm-do-ag)))
 
   (defun helm-ag ()
     (interactive)
@@ -50,8 +53,9 @@
   (bind-key "C-c o" 'helm-quit-and-exec-ag helm-ag-map)
 
   :bind
-  (:map keymap-ctrl-meta-space
-        ("C-g" . helm-do-ag)))
+  (:map keymap-for-grep
+        ("g" . helm-do-ag)
+        ("p" . helm-do-ag-project)))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

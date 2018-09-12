@@ -226,6 +226,9 @@
 (defvar keymap-for-code-navigation (make-sparse-keymap))
 (define-key keymap-ctrl-meta-space (kbd "c") keymap-for-code-navigation)
 
+(defvar keymap-for-grep (make-sparse-keymap))
+(define-key keymap-ctrl-meta-space (kbd "g") keymap-for-grep)
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; 雑多なコマンド定義
