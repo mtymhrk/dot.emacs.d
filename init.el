@@ -70,6 +70,7 @@
     "config-selected"
     "config-direx"
     "config-undo"
+    "config-easy-kill"
     "config-display-line-info"
 
     "config-lsp-mode"

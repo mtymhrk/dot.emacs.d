@@ -52,6 +52,6 @@
 ;;; リージョン選択されていない場合は word を kill-ring へコピーする
 (setq ex-kill-region:kill-ring-save-or-do-something
       'ex-kill-region:copy-backward-word)
-(global-set-key (kbd "M-w") 'ex-kill-region:kill-ring-save-or-do-something)
+;; (global-set-key (kbd "M-w") 'ex-kill-region:kill-ring-save-or-do-something)
 
 (provide 'ex-kill-region)
