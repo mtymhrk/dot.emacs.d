@@ -38,6 +38,7 @@ xref
 
   (bind-keys :map keymap-for-code-navigation
              ("C-i" . completion-at-point)
+             ("i"   . lsp-ui-imenu)
              ("."   . lsp-ui-peek-find-definitions)
              ("/"   . lsp-ui-peek-find-references)
              (","   . hydra-xref/xref-pop-marker-stack)
