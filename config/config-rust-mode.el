@@ -9,7 +9,7 @@
   :config
 
   ;; rust-modeでrust-format-on-saveをtにすると自動でrustfmtが走る
-  (setq-default rust-format-on-save nil)
+  (setq-default rust-format-on-save t)
 
   ;; rustのファイルを編集するときにflycheckを起動する
   (use-package flycheck
