@@ -36,8 +36,9 @@
   (use-package lsp-rust
     :hook
     ((rust-mode . lsp-rust-enable))
-    :custom
-    (lsp-rust-rls-command  '("rustup" "run" "nightly" "rls")))
+    ;; :custom
+    ;; (lsp-rust-rls-command  '("rustup" "run" "nightly" "rls"))
+    )
 
   (use-package fill-column-indicator
     :init
