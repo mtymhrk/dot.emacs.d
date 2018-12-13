@@ -91,6 +91,7 @@
     "config-woman"
     "config-dired"
     "config-ag"
+    "config-eww"
 
     ;; for dependency
     "config-helm-for-my-memo"
