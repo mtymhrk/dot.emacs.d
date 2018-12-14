@@ -7,6 +7,8 @@
 
 (use-package view
   :config
+  (require 'mod-view)
+
   (setq view-read-only t)
 
   ;; view-mode キーバインド設定
@@ -50,35 +52,6 @@
     (define-many-keys view-mode-map pager-keybind))
 
   (add-hook 'view-mode-hook 'my-hook-view-mode--keybind)
-
-
-  ;; view-mode 時は背景色を変える
-  (make-face 'view-mode-overlay-face)
-  (set-face-background 'view-mode-overlay-face "#15101a")
-
-  (defvar view-mode-overlay nil)
-  (make-variable-buffer-local 'view-mode-overlay)
-
-  (defun my-hook-view-mode--overlay ()
-    (unless view-mode-overlay ; 何故か hook が複数回呼ばれるので、作成する overlay
-                                        ; を一だけにするためにチェック
-      (setq view-mode-overlay (make-overlay (point-min) (point-max)))
-      (overlay-put view-mode-overlay 'face 'view-mode-overlay-face)))
-
-  (add-hook 'view-mode-hook 'my-hook-view-mode--overlay)
-
-  (defun my-view-mode-delete-overlay (&rest args)
-    (when (and (not view-mode) view-mode-overlay)
-      (delete-overlay view-mode-overlay)
-      (setq view-mode-overlay nil)))
-
-  (advice-add 'view-mode
-              :after 'my-view-mode-delete-overlay)
-
-  ;; (defadvice view-mode (after delete-view-mode-overlay activate)
-  ;;   (when (and (not view-mode) view-mode-overlay)
-  ;;     (delete-overlay view-mode-overlay)
-  ;;     (setq view-mode-overlay nil)))
 
   :bind
   (:map keymap-ctrl-meta-space
