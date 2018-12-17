@@ -28,3 +28,8 @@
         ("C-r" . counsel-minibuffer-history))
   (:map counsel-find-file-map
         ("C-w" . counsel-up-directory)))
+
+(use-package swiper
+  :bind
+  (:map isearch-mode-map
+        ("C-'" . swiper-from-isearch)))

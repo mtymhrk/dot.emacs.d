@@ -7,7 +7,8 @@
 (use-package avy
   :bind
   (:map isearch-mode-map
-        (";" . avy-isearch)))
+        (";" . avy-isearch)
+        ("C-;" . avy-isearch)))
 
 
 
