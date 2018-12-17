@@ -38,6 +38,9 @@
     ((rust-mode . lsp-rust-enable))
     ;; :custom
     ;; (lsp-rust-rls-command  '("rustup" "run" "nightly" "rls"))
+    :config
+    ;; clippy による lint を常に有効にする
+    ;; (lsp-rust-set-config "clippy_preference" "on")
     )
 
   (use-package fill-column-indicator
