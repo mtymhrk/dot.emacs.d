@@ -43,6 +43,7 @@ xref
              ("/"   . lsp-ui-peek-find-references)
              (","   . hydra-xref/xref-pop-marker-stack)
              ("x"   . lsp-rename)
+             ("d"   . lsp-describe-thing-at-point)
              ("M-." . hydra-xref/xref-find-definitions)
              ("M-/" . hydra-xref/xref-find-references))
   )
