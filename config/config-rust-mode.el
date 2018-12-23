@@ -32,16 +32,9 @@
   ;;    ;; ;; racerの補完サポートを使う
   ;;    (racer-mode . company-mode)))
 
-  ;; Rust Language Server
-  (use-package lsp-rust
+  (use-package lsp
     :hook
-    ((rust-mode . lsp-rust-enable))
-    ;; :custom
-    ;; (lsp-rust-rls-command  '("rustup" "run" "nightly" "rls"))
-    :config
-    ;; clippy による lint を常に有効にする
-    ;; (lsp-rust-set-config "clippy_preference" "on")
-    )
+    ((rust-mode . lsp)))
 
   (use-package fill-column-indicator
     :init
