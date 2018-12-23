@@ -20,6 +20,7 @@ elpa/**/*.elc
 bookmarks
 projectile-bookmarks.eld
 .mc-lists.el
+.lsp-session*
 **/.git*
 ido.last
 tramp
