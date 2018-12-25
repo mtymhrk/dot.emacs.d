@@ -6,24 +6,32 @@
 
 (use-package lsp-mode
   :commands lsp-mode
+  :custom
+  ;; flyamke ではなく flycheck を使用する
+  (lsp-prefer-flymake nil)
+
   :config
 
-  (use-package lsp-imenu
-    :commands lsp-enable-imenu
-    :init
-    (add-hook 'lsp-after-open-hook #'lsp-enable-imenu))
+  ;; lsp-auto-configure が t (デフォルト) なら自動的に lsp-ui, lsp-imenu,
+  ;; company-lsp を有効にしてくれるので設定をコメントアウト
+
+  ;; (use-package lsp-imenu
+  ;;   :commands lsp-enable-imenu
+  ;;   :init
+  ;;   (add-hook 'lsp-after-open-hook #'lsp-enable-imenu))
 
   (use-package lsp-ui
     :custom
     (lsp-ui-peek-always-show t)
     (lsp-ui-doc-max-width (/ (frame-width) 3))
     (lsp-ui-doc-max-height (/ (frame-height) 3))
-    :hook
-    ((lsp-mode . lsp-ui-mode)))
+    ;; :hook
+    ;; ((lsp-mode . lsp-ui-mode))
+    )
 
-  (use-package company-lsp
-    :config
-    (push 'company-lsp  company-backends))
+  ;; (use-package company-lsp
+  ;;   :config
+  ;;   (push 'company-lsp  company-backends))
 
   (use-package hydra
     :config
