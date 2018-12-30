@@ -32,7 +32,16 @@
   ;;    ;; ;; racerの補完サポートを使う
   ;;    (racer-mode . company-mode)))
 
-  (use-package lsp
+  (use-package lsp-mode
+    :config
+
+    (use-package mod-lsp-mode
+      :config
+      ;; clippy によるチェックを常に行うよう設定
+      (defun my-rls-after-initialize-fn (workspace)
+        (mod-lsp:rls-set-settings '(("clippy_preference" . "on"))))
+      (mod-lsp:add-after-initialized-hook 'rls 'my-rls-after-initialize-fn))
+
     :hook
     ((rust-mode . lsp)))
 
