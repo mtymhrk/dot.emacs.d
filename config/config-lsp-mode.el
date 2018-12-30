@@ -5,7 +5,7 @@
 (eval-when-compile (require 'use-package))
 
 (use-package lsp-mode
-  :commands lsp-mode
+  :commands lsp
   :custom
   ;; flyamke ではなく flycheck を使用する
   (lsp-prefer-flymake nil)
