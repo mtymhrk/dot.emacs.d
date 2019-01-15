@@ -43,6 +43,14 @@
       (set-frame-height frame my-default-frame-height)
       (set-frame-width frame my-default-frame-width))))
 
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; all-the-icons
+
+(require 'font-lock+)
+(use-package all-the-icons)
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; ウィンドウを等分割するコマンド
 
