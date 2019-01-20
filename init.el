@@ -92,6 +92,7 @@
     "config-dired"
     "config-ag"
     "config-eww"
+    "config-hg"
 
     ;; for dependency
     "config-helm-for-my-memo"
