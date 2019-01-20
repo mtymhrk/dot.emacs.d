@@ -38,7 +38,7 @@
 
 (defun mod-popwin:next-buffer ()
   (if (eq last-command this-command)
-      (incf mod-popwin:seq-store-count)
+      (cl-incf mod-popwin:seq-store-count)
     (setq mod-popwin:seq-store-count 0)
     (setq mod-popwin:buffer-list (mod-popwin:repopup-target-buffer-list)))
   (if (null mod-popwin:buffer-list)
