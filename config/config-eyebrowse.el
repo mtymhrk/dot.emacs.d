@@ -12,6 +12,8 @@
   ;; eyebrowse-mode-map にキーをバインドしない
   (eyebrowse-keymap-prefix "")
   (eyebrowse-new-workspace #'my-eyebrowse-new-workspace-func)
+  ;; doom-mode-line では別途 Window Config 番号が表示されるので eyebrowse での表示は削除
+  (eyebrowse-mode-line-style 'hide)
   :config
   (defun my-eyebrowse-new-workspace-func ()
     (switch-to-buffer "*scratch*")
