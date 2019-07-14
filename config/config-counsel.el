@@ -32,4 +32,6 @@
 (use-package swiper
   :bind
   (:map isearch-mode-map
-        ("C-'" . swiper-from-isearch)))
+        ("C-'" . swiper-from-isearch))
+  (:map keymap-ctrl-meta-space
+        ("C-'" . swiper)))

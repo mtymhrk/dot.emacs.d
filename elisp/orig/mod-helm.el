@@ -5,75 +5,77 @@
 (defvar mod-helm:command-keymap (make-sparse-keymap))
 
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; helm-occur のキーバインド追加
+;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; ;;; helm-occur のキーバインド追加
 
-(with-eval-after-load 'helm-regexp
+;; (with-eval-after-load 'helm-regexp
 
-  ;; helm を終了して occur を起動するコマンド
-  (defun helm-quit-and-exec-occur ()
-    (interactive)
-    (lexical-let ((helm-pattern helm-pattern))
-      (helm-run-after-quit
-       #'(lambda () (occur helm-pattern)))))
+;;   ;; helm を終了して occur を起動するコマンド
+;;   (defun helm-quit-and-exec-occur ()
+;;     (interactive)
+;;     (lexical-let ((helm-pattern helm-pattern))
+;;       (helm-run-after-quit
+;;        #'(lambda () (occur helm-pattern)))))
 
-  (define-key helm-moccur-map (kbd "C-c o") 'helm-quit-and-exec-occur))
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; Buffer 内移動用 helm
-
-(require 'helm-imenu)
-(require 'helm-bookmark)
-(require 'helm-ring)
-(require 'helm-regexp)
-
-;;;
-(defvar mod-helm:source-register-set
-  '((name . "Set Register")
-    (dummy)
-    (no-delay-on-input)
-    (action . point-to-register)))
-
-;;; occur
-(defvar mod-helm:occur-for-move-in-buf-map
-  (let ((map (make-sparse-keymap)))
-    (set-keymap-parent map helm-moccur-map)
-    (define-key map (kbd "C-w") 'backword-kill-word)
-    map))
-
-(defclass mod-helm:source-occur-for-move-in-buf (helm-source-multi-occur)
-  ((keymap :initform  mod-helm:occur-for-move-in-buf-map)
-   (candidate-number-limit :initform 100)))
-
-(defvar mod-helm:source-occur-fmib
-  (helm-make-source "Occur" 'mod-helm:source-occur-for-move-in-buf))
+;;   (require 'helm-occur)
+;;   (define-key helm-occur-map (kbd "C-c o") 'helm-quit-and-exec-occur))
 
 
-(defvar mod-helm:move-in-buffer-sources
-  '(helm-source-imenu
-    mod-helm:source-occur-fmib
-    helm-source-bookmarks
-    helm-source-register
-    helm-source-bookmark-set
-    mod-helm:source-register-set))
+;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; ;;; Buffer 内移動用 helm
 
-(defun mod-helm:preproc-occur (source)
- (let ((bufs (list (buffer-name (current-buffer)))))
-    (helm-attrset 'moccur-buffers bufs source)
-    (helm-set-local-variable 'helm-multi-occur-buffer-list bufs)
-    (helm-set-local-variable
-     'helm-multi-occur-buffer-tick
-     (cl-loop for b in bufs
-              collect (buffer-chars-modified-tick (get-buffer b))))
-    (helm-set-local-variable 'helm-occur--invisible
-                           (null helm-occur-show-buffer-name))))
+;; (require 'helm-imenu)
+;; (require 'helm-bookmark)
+;; (require 'helm-ring)
+;; (require 'helm-occur)
+;; (require 'helm-regexp)
 
-(defun mod-helm:move-in-buffer ()
-  (interactive)
-  (mod-helm:preproc-occur mod-helm:source-occur-fmib)
-  (helm-other-buffer mod-helm:move-in-buffer-sources
-                     "*helm for movement in buffer*"))
+;; ;;;
+;; (defvar mod-helm:source-register-set
+;;   '((name . "Set Register")
+;;     (dummy)
+;;     (no-delay-on-input)
+;;     (action . point-to-register)))
+
+;; ;;; occur
+;; (defvar mod-helm:occur-for-move-in-buf-map
+;;   (let ((map (make-sparse-keymap)))
+;;     (set-keymap-parent map helm-occur-map)
+;;     (define-key map (kbd "C-w") 'backword-kill-word)
+;;     map))
+
+;; (defclass mod-helm:source-occur-for-move-in-buf (helm-source-occur)
+;;   ((keymap :initform  mod-helm:occur-for-move-in-buf-map)
+;;    (candidate-number-limit :initform 100)))
+
+;; (defvar mod-helm:source-occur-fmib
+;;   (helm-make-source "Occur" 'mod-helm:source-occur-for-move-in-buf))
+
+
+;; (defvar mod-helm:move-in-buffer-sources
+;;   '(helm-source-imenu
+;;     mod-helm:source-occur-fmib
+;;     helm-source-bookmarks
+;;     helm-source-register
+;;     helm-source-bookmark-set
+;;     mod-helm:source-register-set))
+
+;; (defun mod-helm:preproc-occur (source)
+;;  (let ((bufs (list (buffer-name (current-buffer)))))
+;;     (helm-attrset 'moccur-buffers bufs source)
+;;     (helm-set-local-variable 'helm-multi-occur-buffer-list bufs)
+;;     (helm-set-local-variable
+;;      'helm-multi-occur-buffer-tick
+;;      (cl-loop for b in bufs
+;;               collect (buffer-chars-modified-tick (get-buffer b))))
+;;     (helm-set-local-variable 'helm-occur--invisible
+;;                            (null helm-occur-show-buffer-name))))
+
+;; (defun mod-helm:move-in-buffer ()
+;;   (interactive)
+;;   (mod-helm:preproc-occur mod-helm:source-occur-fmib)
+;;   (helm-other-buffer mod-helm:move-in-buffer-sources
+;;                      "*helm for movement in buffer*"))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
