@@ -24,7 +24,8 @@
           ;; character ?\xBB at that column followed by a TAB which goes to
           ;; the next TAB column.
           ;; If this is a problem for you, please, comment the line below.
-          (tab-mark ?\t [?\xBB ?\t] [?\\ ?\t])))
+          ;; (tab-mark ?\t [?\xBB ?\t] [?\\ ?\t])
+          ))
 
   (set-face-attribute 'whitespace-trailing nil
                       :foreground "purple"
@@ -39,7 +40,7 @@
                       :underline nil)
 
   (set-face-attribute 'whitespace-tab nil
-                      :foreground "dim gray"
+                      :foreground "purple"
                       :background 'unspecified
                       :strike-through nil
                       :underline t)
