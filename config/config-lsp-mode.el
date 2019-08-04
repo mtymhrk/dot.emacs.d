@@ -36,13 +36,16 @@
   (use-package hydra
     :config
     (defhydra hydra-xref (:hint nil)
-      "
-xref
 "
-      (","   xref-pop-marker-stack "pop marker")
-      ("M-." xref-find-definitions "find definitions")
-      ("M-?" xref-find-references  "find references")
-      ("q"   nil                   "quit")))
+^Find^                     ^Pop^               ^Quit^
+^^^^^^^^-----------------------------------------------------------------
+_M-._: find definitions    _,_: pop            _q_: quit
+_M-/_: find references
+"
+      (","   xref-pop-marker-stack)
+      ("M-." xref-find-definitions)
+      ("M-/" xref-find-references)
+      ("q"   nil)))
 
   (bind-keys :map keymap-for-code-navigation
              ("C-i" . completion-at-point)
