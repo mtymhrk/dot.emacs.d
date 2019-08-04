@@ -16,13 +16,10 @@
   (:map wgrep-mode-map
         ;; C-c C-c で変更を反映
         ("C-c C-c" . wgrep-finish-edit)
-        ;; C-c ESC で変更を破棄
-        ("C-c ESC" . wgrep-abort-changes)
-        ;; wgrep-finish-edit と wgrep-abort-changes にバインドしているキーバインド
+        ;; wgrep-finish-edit をバインドしているキーバインド
         ;; を解除(上記キーバインドをミニバッファに表示させるため)。
         ("C-c C-e" . nil)
-        ("C-x C-s" . nil)
-        ("C-c C-k" . nil))
+        ("C-x C-s" . nil))
   :config
   (with-eval-after-load 'ag
     (require 'wgrep-ag))
