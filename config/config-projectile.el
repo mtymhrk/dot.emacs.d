@@ -9,6 +9,7 @@
   :config
   (projectile-mode +1)
   (bind-key "C-c p" 'projectile-command-map projectile-mode-map)
+  (bind-key "p" 'projectile-command-map keymap-ctrl-meta-space)
   (setq  projectile-completion-system 'ivy))
 
 (use-package helm-projectile
