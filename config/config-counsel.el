@@ -13,6 +13,8 @@
   (enable-recursive-minibuffers t))
 
 (use-package counsel
+  :custom
+  (counsel-yank-pop-separator "\n-------\n")
   :config
 
   ;; ag を起動するディレクトリを常に問うバージョンの counsel-ag
@@ -25,6 +27,7 @@
 
   :bind
   ("C-x C-f" . counsel-find-file)
+  ("M-y" . counsel-yank-pop)
   (:map minibuffer-local-map
         ("C-r" . counsel-minibuffer-history))
   (:map counsel-find-file-map
