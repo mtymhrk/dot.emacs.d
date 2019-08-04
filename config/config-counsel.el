@@ -10,6 +10,7 @@
   :custom
   (ivy-use-virtual-buffers t)
   (ivy-format-functions-alist '((t . ivy-format-function-arrow)))
+  (ivy-height-alist '((swiper . 25)))
   (enable-recursive-minibuffers t))
 
 (use-package counsel
