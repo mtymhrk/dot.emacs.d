@@ -7,7 +7,9 @@
 (use-package projectile
   :delight
   :config
-  (setq  projectile-completion-system 'helm))
+  (projectile-mode +1)
+  (bind-key "C-c p" 'projectile-command-map projectile-mode-map)
+  (setq  projectile-completion-system 'ivy))
 
 (use-package helm-projectile
   :after (mod-helm)
