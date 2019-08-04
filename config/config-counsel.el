@@ -9,6 +9,7 @@
   (ivy-mode 1)
   :custom
   (ivy-use-virtual-buffers t)
+  (ivy-format-functions-alist '((t . ivy-format-function-arrow)))
   (enable-recursive-minibuffers t))
 
 (use-package counsel
