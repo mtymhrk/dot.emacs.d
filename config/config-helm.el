@@ -69,9 +69,6 @@
 
   (use-package mod-helm
     :bind
-    ("M-x" . helm-M-x)
-    ("M-X" . execute-extended-command)
-    ("M-y" . helm-show-kill-ring)
     ;; ("C-;" . helm-for-files)
     (:map keymap-ctrl-meta-space
           ("C-;"   . mod-helm:for-files)

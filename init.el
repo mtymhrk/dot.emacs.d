@@ -49,6 +49,7 @@
     "config-yasnippet"
     "config-open-junk-file"
     "config-counsel"
+    "config-amx"
     "config-company"
     "config-smart-tab"
     "config-sequential-command"
