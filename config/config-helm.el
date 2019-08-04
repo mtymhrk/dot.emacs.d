@@ -80,7 +80,5 @@
     (:map keymap-for-manuals
           ("a" . helm-apropos)
           ("m" . helm-man-woman)
-          ("i" . helm-info))
-    (:map keymap-for-grep
-          ("g" . helm-do-grep-ag)))
+          ("i" . helm-info)))
 )

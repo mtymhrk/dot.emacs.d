@@ -54,7 +54,6 @@
 
   :bind
   (:map keymap-for-grep
-        ("g" . helm-do-ag)
         ("p" . helm-do-ag-project)))
 
 
