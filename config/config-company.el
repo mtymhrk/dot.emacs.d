@@ -11,6 +11,7 @@
   (company-idle-delay nil)
   (company-minimum-prefix-length 2)
   (company-selection-wrap-around t)
+  (company-require-match nil) ; 候補にマッチしない入力をした場合、補完せず終了する
   :bind
   (:map company-mode-map
         ("M-i" . company-complete))
