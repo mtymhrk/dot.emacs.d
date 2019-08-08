@@ -29,31 +29,6 @@
   (push '("^\\(.*\\):\\([0-9]+\\):\\([0-9]+\\): \\(.*\\)$" 1 2 nil 4)
         flymake-err-line-patterns))
 
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; helm for flymake
-
-(use-package helm-flymake
-  :after (mod-helm)
-  :commands helm-flymake
-  :config
-   ;; (set-face-background 'helm-flymake-errline "red4")
-   ;; (set-face-background 'helm-flymake-warnline "midnight blue")
-
-   ;; 元の helm-flymake のソースの recenter 属性の指定に不備があり、ジャン
-   ;; プしたエラー行がウィンドウの一番上に表示されるようになっていたので、
-   ;; ソースを修正
-   (let ((attr (assq 'recenter helm-source-flymake-warning)))
-     (when attr (setcdr attr t)))
-
-   (let ((attr (assq 'recenter helm-source-flymake-error)))
-     (when attr (setcdr attr t)))
-
-   :hook
-   ((flymake-mode . (lambda ()
-                      (bind-key "C-`" 'helm-flymake keymap-ctrl-meta-space)))))
-
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 

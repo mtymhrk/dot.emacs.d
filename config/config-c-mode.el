@@ -32,10 +32,6 @@
     :hook
     ((c-mode-common . flycheck-mode)))
 
-  (use-package helm-gtags
-    :hook
-    ((c-mode-common . helm-gtags-mode)))
-
   (use-package fill-column-indicator
     :init
     (defun my-hook-c-mode-common--fci ()

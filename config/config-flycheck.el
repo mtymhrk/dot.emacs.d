@@ -42,10 +42,6 @@
     ;; エラーリストをポップアップで表示
     (mod-popwin:add-display-config '(flycheck-error-list-mode :noselect t :stick t)))
 
-  ;; helm for flycheck
-  (use-package helm-flycheck
-    :commands helm-flycheck)
-
   (use-package hydra
     :config
     (defhydra hydra-flycheck ()
@@ -65,8 +61,7 @@ Flycheck
              ("p" . hydra-flycheck/flycheck-previous-error)
              ("h" . hydra-flycheck/flycheck-display-error-at-point)
              ("e" . hydra-flycheck/flycheck-explain-error-at-point)
-             ("l" . hydra-flycheck/flycheck-list-errors)
-             ("`" . helm-flycheck))
+             ("l" . hydra-flycheck/flycheck-list-errors))
   )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

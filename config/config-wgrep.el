@@ -22,9 +22,7 @@
         ("C-x C-s" . nil))
   :config
   (with-eval-after-load 'ag
-    (require 'wgrep-ag))
-  (with-eval-after-load 'helm-config
-    (require 'wgrep-helm)))
+    (require 'wgrep-ag)))
 
 ;;; C-c C-e: Apply the changes to file buffers.
 ;;; C-c C-u: All changes are unmarked and ignored.

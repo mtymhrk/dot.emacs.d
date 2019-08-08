@@ -94,7 +94,7 @@
     "config-hg"
 
     ;; for dependency
-    "config-helm-for-my-memo"
+    ;; "config-helm-for-my-memo"
 
     ;; Input Method
     "config-ddskk"

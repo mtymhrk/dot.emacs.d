@@ -17,20 +17,6 @@
 
 (use-package mod-yasnippet)
 
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; helm for yasnippet
-
-(use-package helm-c-yasnippet
-  :after (mod-helm)
-  :config
-  (setq helm-c-yas-space-match-any-greedy t)
-  (setq helm-c-yas-display-key-on-candidate t)
-  :bind
-  (:map keymap-ctrl-meta-space
-        ("C-S" . helm-c-yas-complete)))
-
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; yasnippet 有効化
 

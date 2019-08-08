@@ -67,18 +67,18 @@
 ;;; mod-helm & keybindings
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-  (use-package mod-helm
-    :bind
-    ;; ("C-;" . helm-for-files)
-    (:map keymap-ctrl-meta-space
-          ("C-;"   . mod-helm:for-files)
-          ;; ("C-'"   . mod-helm:move-in-buffer)
-          ("C-M-;" . helm-resume)
-          ("C-M-s" . helm-regexp)
-          ("C-o"   . helm-occur)
-          ("C-s"   . helm-do-grep-ag))
-    (:map keymap-for-manuals
-          ("a" . helm-apropos)
-          ("m" . helm-man-woman)
-          ("i" . helm-info)))
+  ;; (use-package mod-helm
+  ;;   :bind
+  ;;   ;; ("C-;" . helm-for-files)
+  ;;   (:map keymap-ctrl-meta-space
+  ;;         ("C-;"   . mod-helm:for-files)
+  ;;         ;; ("C-'"   . mod-helm:move-in-buffer)
+  ;;         ("C-M-;" . helm-resume)
+  ;;         ("C-M-s" . helm-regexp)
+  ;;         ("C-o"   . helm-occur)
+  ;;         ("C-s"   . helm-do-grep-ag))
+  ;;   (:map keymap-for-manuals
+  ;;         ("a" . helm-apropos)
+  ;;         ("m" . helm-man-woman)
+  ;;         ("i" . helm-info)))
 )
