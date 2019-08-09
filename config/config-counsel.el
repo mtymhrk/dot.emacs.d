@@ -10,7 +10,8 @@
   :custom
   (ivy-use-virtual-buffers t)
   (ivy-format-functions-alist '((t . ivy-format-function-arrow)))
-  (ivy-height-alist '((swiper . 25)))
+  (ivy-height 15)
+  (ivy-height-alist '((swiper . 20)))
   (enable-recursive-minibuffers t)
   :bind
   (:map keymap-ctrl-meta-space
