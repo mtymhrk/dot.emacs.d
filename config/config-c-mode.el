@@ -24,9 +24,15 @@
   (use-package cquery
     :config
     (setq cquery-executable "cquery")
+
+    (defun my-cquery-enable ()
+      (condition-case nil
+          (lsp)
+        (user-error nil)))
+
     :hook
-    ((c-mode . lsp)
-     (c++-mode . lsp)))
+    ((c-mode . my-cquery-enable)
+     (c++-mode . my-cquery-enable)))
 
   (use-package flycheck
     :hook
