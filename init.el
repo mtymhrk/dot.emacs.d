@@ -34,7 +34,6 @@
     "config-whitespace"
     "config-hydra"
     "config-window"
-    "config-helm"
     "config-recentf"
     "config-compile"
     ;; "config-irony"
@@ -92,9 +91,6 @@
     "config-ag"
     "config-eww"
     "config-hg"
-
-    ;; for dependency
-    ;; "config-helm-for-my-memo"
 
     ;; Input Method
     "config-ddskk"
