@@ -12,6 +12,7 @@
   (company-minimum-prefix-length 2)
   (company-selection-wrap-around t)
   (company-require-match nil) ; 候補にマッチしない入力をした場合、補完せず終了する
+  (company-dabbrev-code-everywhere t) ; コメントや文字列でも dabbrev-code の補完を行う
   :bind
   (:map company-mode-map
         ("M-i" . company-complete))
@@ -24,8 +25,9 @@
         ("C-p" . company-select-previous)
         ("C-h" . nil))
   :config
-  (setq-default company-backends
-                '((company-capf company-files company-keywords company-dabbrev-code company-dabbrev))))
+  ;; (setq-default company-backends
+  ;;               '((company-capf company-files company-keywords company-dabbrev-code company-dabbrev)))
+  )
 
 (use-package mod-company)
 
