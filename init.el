@@ -378,10 +378,148 @@
     ((after-init-hook . doom-modeline-init))))
 
 (leaf delight
-  :ensure
+  :ensure t
   :config
   ;; delight で major-mode のモード名表示変更が有効にならない対処
   (setq inhibit-mode-name-delight nil))
+
+(leaf exec-path-from-shell
+  :ensure t
+  :custom
+  ((exec-path-from-shell-variables . '("PATH" "MANPATH" "INFOPATH")))
+  :config
+  ;; NTEmacs 用設定
+  (when (eq system-type 'windows-nt)
+    (defvar my:cygwin-bin-path
+      "D:/lib/gnupack_devel-13.01-2015.05.10/app/cygwin/cygwin/bin/")
+    (setq shell-file-name (concat my:cygwin-bin-path "bash"))
+    (setenv "SHELL" shell-file-name)
+
+    ;; 環境変数 PATH のときのみパスの変換を実行
+    (defun ad-exec-path-from-shell-setenv (orig-fun &rest args)
+      (when (string=  (car args) "PATH")
+        (setf (nth 1 args)
+              (with-temp-buffer
+                (call-process (concat my:cygwin-bin-path "cygpath")
+                              nil '(t nil) nil "-amp" (nth 1 args))
+                (unless (bobp)
+                  (goto-char (point-min))
+                  (buffer-substring-no-properties (point)
+                                                  (line-end-position))))))
+      (apply orig-fun args))
+    (advice-add 'exec-path-from-shell-setenv
+                :around 'ad-exec-path-from-shell-setenv))
+
+  (exec-path-from-shell-initialize))
+
+(leaf eldoc
+  :require t
+  :delight)
+
+(leaf whitespace
+  :delight whitespace
+  :delight global-whitespace-mode
+  :require t
+  :config
+    ;; whitespace-mode の対象を trailing blank とタブとスペースに設定。
+  ;; face による可視化機能を有効化
+  (setq whitespace-style '(face trailing tabs tab-mark spaces space-mark))
+
+  ;;; 対象となるスペースを全角スペースに限定
+  (setq whitespace-space-regexp "\\(　+\\)")
+
+  ;;; 全角スペースとタブを他も文字で表示
+  (setq whitespace-display-mappings
+        '((space-mark ?　 [?□])
+          ;; WARNING: the mapping below has a problem.
+          ;; When a TAB occupies exactly one column, it will display the
+          ;; character ?\xBB at that column followed by a TAB which goes to
+          ;; the next TAB column.
+          ;; If this is a problem for you, please, comment the line below.
+          ;; (tab-mark ?\t [?\xBB ?\t] [?\\ ?\t])
+          ))
+
+  (set-face-attribute 'whitespace-trailing nil
+                      :foreground "purple"
+                      :background 'unspecified
+                      :strike-through nil
+                      :underline t)
+
+  (set-face-attribute 'whitespace-space nil
+                      :foreground "purple"
+                      :background 'unspecified
+                      :strike-through nil
+                      :underline nil)
+
+  (set-face-attribute 'whitespace-tab nil
+                      :foreground "purple"
+                      :background 'unspecified
+                      :strike-through nil
+                      :underline t)
+
+  (setq whitespace-global-modes '(not dired-mode))
+  (global-whitespace-mode 1))
+
+(leaf jaspace
+  :disabled t
+  :delight
+  :require
+  :config
+  (setq jaspace-modes (append jaspace-modes
+                              (list 'php-mode
+                                    'yaml-mode
+                                    'javascript-mode
+                                    'ruby-mode
+                                    'scheme-mode
+                                    'makefile-gmake-mode
+                                    'text-mode
+                                    'fundamental-mode
+                                    'org-mode)))
+  (setq jaspace-alternate-jaspace-string "□")
+  (setq jaspace-highlight-tabs ?\xBB)
+
+  (add-hook 'jaspace-mode-off-hook
+            #'(lambda()
+                (setq show-trailing-whitespace nil)))
+
+  (add-hook 'jaspace-mode-hook
+            #'(lambda()
+                (setq show-trailing-whitespace t)
+                (face-spec-set 'jaspace-highlight-jaspace-face
+                               '((((class color) (background light))
+                                  (:foreground "blue"))
+                                 (t (:foreground "purple"))))
+                (face-spec-set 'jaspace-highlight-tab-face
+                               '((((class color) (background light))
+                                  (:foreground "red"
+                                               :background "unspecified"
+                                               :strike-through nil
+                                               :underline t))
+                                 (t (:foreground "purple"
+                                                 :background "unspecified"
+                                                 :strike-through nil
+                                                 :underline t))))
+                (face-spec-set 'trailing-whitespace
+                               '((((class color) (background light))
+                                  (:foreground "red"
+                                               :background "unspecified"
+                                               :strike-through nil
+                                               :underline t))
+                                 (t (:foreground "purple"
+                                                 :background "unspecified"
+                                                 :strike-through nil
+                                                 :underline t)))))))
+
+(leaf hydra
+  :ensure t)
+
+(leaf *move-error
+  :hydra (hydra-move-error
+          (global-map "M-g")
+          ("n" next-error "next")
+          ("p" previous-error "previous")
+          ("C-n" next-error "next")
+          ("C-p" previous-error "previous")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; 個別設定ファイルのロード
@@ -399,10 +537,10 @@
     ;; "config-theme"
 
     ;; Minor-modes and Utilities
-    "config-exec-path-from-shell"
-    "config-eldoc"
-    "config-whitespace"
-    "config-hydra"
+    ;; "config-exec-path-from-shell"
+    ;; "config-eldoc"
+    ;; "config-whitespace"
+    ;; "config-hydra"
     "config-window"
     "config-recentf"
     "config-compile"
