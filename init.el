@@ -2,16 +2,274 @@
 ;;; init.el
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; emacs -q -lした時に、user-emacs-directoryが変わるように
-(when load-file-name
-  (setq user-emacs-directory (file-name-directory load-file-name)))
+(prog1 "user-emacs-directory"
+  (when load-file-name
+    (setq user-emacs-directory (file-name-directory load-file-name))))
 
-;; Added by Package.el.  This must come before configurations of
-;; installed packages.  Don't delete this line.  If you don't want it,
-;; just comment it out by adding a semicolon to the start of the line.
-;; You may delete these explanatory comments.
-(package-initialize)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; package 設定
 
+(prog1 "package"
+  ;; elisp のインストール場所
+  (setq package-user-dir (concat user-emacs-directory "elpa"))
+
+  ;; package 初期化
+  (package-initialize)
+
+  ;; リポジトリ MELPA を追加
+  (add-to-list 'package-archives
+               '("melpa" . "http://melpa.org/packages/") t))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; leaf のインストールと設定、bind-key のインストール
+
+(prog1 "leaf"
+  (unless (package-installed-p 'leaf)
+    (package-refresh-contents)
+    (package-install 'leaf)))
+
+(leaf leaf-keywords
+  :ensure t
+  :config
+  ;; leaf の hydra サポートを有効にする
+  (leaf hydra :ensure t)
+  (leaf-keywords-init))
+
+(leaf bind-key
+  :ensure t)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; 基礎設定
+(leaf *basics
+  :config
+
+  ;; ロードパス
+  (leaf *load-path
+    :config
+    (add-to-list 'load-path (expand-file-name "elisp" user-emacs-directory))
+    (add-to-list 'load-path (expand-file-name "elisp/orig" user-emacs-directory)))
+
+  ;; ロケール
+  (leaf *locale
+    :config
+    (set-locale-environment))
+
+  ;; 個人設定
+  (leaf *personal
+    :config
+    (setq user-full-name "MOTOYAMA Hiroki")
+    (setq user-mail-address "mtymhrk@zf7.so-net.ne.jp"))
+
+  ;; キーバイド
+  (leaf *keybinding
+    :config
+    ;; C-h を一文字削除、Backspace をヘルプのプレフィクスにする
+    (keyboard-translate ?\C-h ?\C-?)
+    (keyboard-translate ?\C-? ?\C-h)
+
+    ;; 上の記述は terminal 内の emacs では効くが X 上の emacs では効かない。そ
+    ;; のため下の設定も行う
+    (bind-key "<backspace>" 'help-command)
+
+    ;; C-x C-o、Ctrl+TAB でウィンドウを移動
+    (bind-key "C-x C-o" 'other-window)
+    (bind-key "C-<tab>" 'other-window)
+
+    ;; C-c u でカーソルにある URL をブラウザで開く
+    (bind-key "C-c u" 'browse-url-at-point)
+
+    ;; ミニバッファ内で C-w で単語削除
+    (bind-key "C-w" 'backward-kill-word minibuffer-local-completion-map)
+
+    ;; バッファリストをカレントバッファに表示
+    (bind-key "C-x C-b" 'buffer-menu)
+
+    ;; keyboard-escape-quit をより押しやすい位置に
+    ;; (bind-key "C-M-g" 'keyboard-escape-quit)
+
+    ;; M-: (eval-expression) にて tab で補完を行う
+    (bind-key "TAB" 'lisp-complete-symbol read-expression-map)
+
+    ;; just-on-space の代りに cycle-spacing を使う
+    (bind-key "M-SPC" 'cycle-spacing)
+
+    ;; C-Return で rectanble-mark-mode
+    (bind-key "<C-return>" 'rectangle-mark-mode))
+
+  ;; 見た目
+  (leaf *appearance
+    :config
+    ;; 色付けを有効化
+    (global-font-lock-mode t)
+
+    ;; enamcs -nw ではメニューバーを非表示
+    (if window-system
+        (menu-bar-mode 1)
+      (menu-bar-mode 0))
+
+    ;; ツールバーを非表示
+    (tool-bar-mode -1)
+
+    ;; スクロールバーを非表示
+    (scroll-bar-mode -1)
+
+    ;; バッファの境界を fringe に表示
+    (setq-default indicate-buffer-boundaries t)
+    (modify-frame-parameters nil '((left-fringe)))
+
+    ;; カーソルを点滅させない
+    (blink-cursor-mode 0)
+
+    ;; カーソルの行と列の位置を表示
+    (line-number-mode t)
+    (column-number-mode t))
+
+  ;; その他設定
+  (leaf *etc
+    :config
+    ;; *scratch* バッファを emacs-lisp-mode にする
+    (setq initial-major-mode 'emacs-lisp-mode)
+
+    ;; スタートアップメッセージ表示しない
+    (setq inhibit-startup-message t)
+
+    ;; yes or no を y or n に
+    (fset 'yes-or-no-p 'y-or-n-p)
+
+    ;; マウスホイールによるスクロールを有効化
+    (mouse-wheel-mode t)
+    (setq mouse-wheel-follow-mouse t)
+
+    ;; auto-fill を有効にする。デフォルトは 76 文字で折り返し
+    (auto-fill-mode t)
+    (setq-default fill-column 76)
+
+    ;; バッファ末尾に改行コードを追加しない
+    (setq next-line-add-newlines nil)
+
+    ;; ffap を有効にする
+    ;; (ffap-bindings)
+
+    ;; マーク範囲に色をつける
+    (transient-mark-mode t)
+
+    ;; 対応するカッコを強調表示
+    (show-paren-mode t)
+
+    ;; don't create backup file
+    (setq backup-inhibited t)
+
+    ;; 画像ファイルを表示する
+    (auto-image-file-mode t)
+
+    ;; インデントにタブを使わない
+    (setq-default indent-tabs-mode nil)
+
+    ;; yank 時にリージョンを x window の clipboard に送る
+    (setq x-select-enable-clipboard t)
+
+    ;; GC を減らして軽くする(デフォルトの 10 倍)
+    (setq gc-cons-threshold (* 10 gc-cons-threshold))
+
+    ;; ログの記録行数を増やす
+    (setq message-log-max 10000)
+
+    ;; ミニバッファを再帰的に呼び出せるようにする
+    (setq enable-recursive-minibuffers t)
+
+    ;; ダイアログボックスを使わないようにする
+    (setq use-dialog-box nil)
+    (defalias 'message-box 'message)
+
+    ;; 履歴をたくさん保存する
+    (setq history-length 1000)
+
+    ;; キーストロークをエコーエリアに早く表示する
+    (setq echo-keystrokes 0.1)
+
+    ;; 現在位置の関数名を表示する
+    (which-func-mode 1)
+    ;; 全てのメジャーモードに対して which-func-mode を適用する
+    (setq which-func-modes t)
+
+    ;; ミニバッファで入力を取り消しても履歴に残す
+    ;; 誤って取り消して入力が失われるのを防ぐため
+    (defun my:minibuffer-save-history (&rest args)
+        (when (eq (selected-window) (active-minibuffer-window))
+          (add-to-history minibuffer-history-variable (minibuffer-contents))))
+    (advice-add 'abort-recursive-edit :before #'my:minibuffer-save-history)
+
+    ;; 圧縮されたファイルを直接編集可能にする
+    (auto-compression-mode t)
+
+    ;; インクリメンタルサーチの一致部分をすぐにハイライトする
+    (setq lazy-highlight-initial-delay 0)
+
+    ;; 設定ファイルに色付けする
+    (require 'generic-x)
+
+    ;; 開いているファイルが Emacs 外部から変更された場合に自動的にファイルを読み
+    ;; 込む
+    (global-auto-revert-mode)
+
+    ;; electric-indent-mode を無効にする
+    (electric-indent-mode -1))
+
+  (leaf uniquify
+    :require t
+    :config
+    ;; 同じ名前のファイルを開いたときにバッファ名にディレクトリ名を追加する
+    (setq uniquify-buffer-name-style 'post-forward-angle-brackets)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; 独自キーマップ
+(leaf *my:keymaps
+  :config
+  (defvar my:orig-C-M-SPC-command (global-key-binding (kbd "C-M-SPC")))
+
+  (defvar keymap-ctrl-meta-space (make-sparse-keymap))
+  (global-set-key (kbd "C-M-SPC") keymap-ctrl-meta-space)
+  (global-set-key (kbd "C-;") keymap-ctrl-meta-space)
+
+  (defvar keymap-for-manuals (make-sparse-keymap))
+  (define-key keymap-ctrl-meta-space (kbd "d") keymap-for-manuals)
+
+  (defvar keymap-for-code-navigation (make-sparse-keymap))
+  (define-key keymap-ctrl-meta-space (kbd "c") keymap-for-code-navigation)
+
+  (defvar keymap-for-grep (make-sparse-keymap))
+  (define-key keymap-ctrl-meta-space (kbd "g") keymap-for-grep))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; 雑多なコマンド定義
+(leaf *my:commands
+  :config
+  ;; カーソル上の文字のフェイスを表示するコマンド
+  (defun describe-face-at-point ()
+    (interactive)
+    (message "%s" (get-char-property (point) 'face)))
+
+  ;; ~/.emacs.d/elisp 配下の elisp をバイトコンパイルするコマンド
+  (defun my-byte-recompile-elisp-directory ()
+    (interactive)
+    (byte-recompile-directory (concat user-emacs-directory "elisp") 0 t)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; その他基本機能の挙動変更
+
+;; kill-region と kill-ring-save の拡張
+(leaf ex-kill-region
+  :require t)
+
+;; *scratch* バッファを永続化
+(leaf permanent-scratch
+  :require t)
+
+;; isearch の挙動変更
+(leaf mod-isearch
+  :require t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; 個別設定ファイルのロード
@@ -19,7 +277,7 @@
 (defvar my-init-config-dir (concat user-emacs-directory "config/"))
 (defvar my-init-config-file-list
   '(;; Basics
-    "config-basics"
+    ;; "config-basics"
 
     ;; Package System
     "config-package"
