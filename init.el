@@ -254,7 +254,29 @@
   ;; ~/.emacs.d/elisp 配下の elisp をバイトコンパイルするコマンド
   (defun my-byte-recompile-elisp-directory ()
     (interactive)
-    (byte-recompile-directory (concat user-emacs-directory "elisp") 0 t)))
+    (byte-recompile-directory (concat user-emacs-directory "elisp") 0 t))
+
+  ;; package の elisp を再コンパイルするコマンド
+  (defun my-package-recompile (pkg)
+    (unless (package-installed-p pkg)
+      (error "failed to recompile a package: uninstalled package: %s" pkg))
+    (when (package-built-in-p pkg)
+      (error "failed to recompile a package: built-in pacakge: %s" pkg))
+    (let ((desc (cadr (assq pkg package-alist))))
+      ;; async パッケージが導入されていると (helm をインストールすると自動的に
+      ;; インストールされる) デフォルトで helm が非同期にコンパイルされるよう
+      ;; になるが、うまく動かないので async byte compile を抑制してコンパイル
+      ;; を実行する
+      (let ((async-bytecomp-allowed-packages nil))
+        (package--compile desc))
+      ))
+
+  ;; 全ての package の elisp を再コンパイルするコマンド
+  (defun my-package-recompile-all ()
+    (dolist (pkg package-alist)
+      (let* ((name (package-desc-name (cadr pkg))))
+        (unless (package-built-in-p name)
+          (my-package-recompile name))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; その他基本機能の挙動変更
@@ -272,6 +294,15 @@
   :require t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+
+(leaf delight
+  :config
+  ;; delight で major-mode のモード名表示変更が有効にならない対処
+  (setq inhibit-mode-name-delight nil))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; 個別設定ファイルのロード
 
 (defvar my-init-config-dir (concat user-emacs-directory "config/"))
@@ -280,7 +311,7 @@
     ;; "config-basics"
 
     ;; Package System
-    "config-package"
+    ;; "config-package"
 
     ;; Appearance
     "config-frame-and-font"
