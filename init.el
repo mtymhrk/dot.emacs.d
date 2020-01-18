@@ -296,11 +296,92 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 
+(leaf *frame-and-font
+  :when window-system
+  :config
+  (defvar my:default-frame-font nil)
+  (defvar my:default-frame-height nil)
+  (defvar my:default-frame-width nil)
+  (cond
+   ((string-match "spinel" (system-name))
+    (setq my:default-frame-font "MyricaM M-10.5")
+    (setq my:default-frame-height 62)
+    (setq my:default-frame-width 246))
+   ((string-match "amber" (system-name))
+    (setq my:default-frame-font "MyricaM M-10.5")
+    (setq my:default-frame-height 43)
+    (setq my:default-frame-width 163))
+   (t
+    (setq my:default-frame-font "DejaVu Sans Mono-9")
+    (setq my:default-frame-height 65)
+    (setq my:default-frame-width 80))) ;; 1 Window 設定
+
+  (set-frame-font my:default-frame-font)
+  (push `(font . ,my:default-frame-font) initial-frame-alist)
+  (push `(height . ,my:default-frame-height) initial-frame-alist)
+  (push `(width . ,my:default-frame-width) initial-frame-alist)
+  (setq default-frame-alist initial-frame-alist)
+
+  (leaf all-the-icons
+    :init
+    ;; font-lock+ を require しないと all-the-icons が使えない
+    (leaf font-lock+
+      :require t)
+    :require t)
+
+  (leaf *maximize-frame-and-split-window-at-start
+    :config
+    ;; ウィンドウを等分割するコマンド
+    (defun my:split-window-horizontally-n (n)
+      (interactive "nNumber of Windows: ")
+      (dotimes (i (- n 1))
+        (split-window-horizontally))
+      (balance-windows))
+
+    (defun my:default-window-split ()
+      (when (and window-system (one-window-p))
+        (cond
+         ((>= (frame-width) 184)
+          (my:split-window-horizontally-n 2))
+         (t
+          ))))
+
+    ;; 起動時点でフレームを最大化し、ウィンドウを分割する
+    (defun my:after-init-hook--setup-for-frame-and-window ()
+      (modify-frame-parameters (selected-frame) initial-frame-alist)
+      (toggle-frame-maximized)
+      ;; フレームが最大化されるのを待つ
+      ;; (toggle-frame-maximaized 直後にフレームを分割すると等分割されないため)
+      (sleep-for 0.5)
+      (my:default-window-split))
+
+    (add-hook 'after-init-hook 'my:after-init-hook--setup-for-frame-and-window)))
+
+(leaf *theme
+  :config
+  (leaf doom-themes
+    :ensure t
+    :require t
+    :config
+    (load-theme 'doom-dracula t))
+
+  (leaf doom-modeline
+    :ensure t
+    :custom
+    ((doom-modeline-buffer-file-name-style . 'truncate-with-project))
+    :config
+    ;; doom-modeline が eldoc-in-minibuffer-mode を有効にするが、不要なのと、これ
+    ;; を有効にすると eval-expression で C-h が効かなくなるで無効にする
+    (when eldoc-in-minibuffer-mode
+      (eldoc-in-minibuffer-mode -1))
+    :hook
+    ((after-init-hook . doom-modeline-init))))
+
 (leaf delight
+  :ensure
   :config
   ;; delight で major-mode のモード名表示変更が有効にならない対処
   (setq inhibit-mode-name-delight nil))
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; 個別設定ファイルのロード
@@ -314,8 +395,8 @@
     ;; "config-package"
 
     ;; Appearance
-    "config-frame-and-font"
-    "config-theme"
+    ;; "config-frame-and-font"
+    ;; "config-theme"
 
     ;; Minor-modes and Utilities
     "config-exec-path-from-shell"
