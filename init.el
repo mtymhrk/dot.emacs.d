@@ -461,56 +461,6 @@
   (setq whitespace-global-modes '(not dired-mode))
   (global-whitespace-mode 1))
 
-(leaf jaspace
-  :disabled t
-  :delight
-  :require
-  :config
-  (setq jaspace-modes (append jaspace-modes
-                              (list 'php-mode
-                                    'yaml-mode
-                                    'javascript-mode
-                                    'ruby-mode
-                                    'scheme-mode
-                                    'makefile-gmake-mode
-                                    'text-mode
-                                    'fundamental-mode
-                                    'org-mode)))
-  (setq jaspace-alternate-jaspace-string "□")
-  (setq jaspace-highlight-tabs ?\xBB)
-
-  (add-hook 'jaspace-mode-off-hook
-            #'(lambda()
-                (setq show-trailing-whitespace nil)))
-
-  (add-hook 'jaspace-mode-hook
-            #'(lambda()
-                (setq show-trailing-whitespace t)
-                (face-spec-set 'jaspace-highlight-jaspace-face
-                               '((((class color) (background light))
-                                  (:foreground "blue"))
-                                 (t (:foreground "purple"))))
-                (face-spec-set 'jaspace-highlight-tab-face
-                               '((((class color) (background light))
-                                  (:foreground "red"
-                                               :background "unspecified"
-                                               :strike-through nil
-                                               :underline t))
-                                 (t (:foreground "purple"
-                                                 :background "unspecified"
-                                                 :strike-through nil
-                                                 :underline t))))
-                (face-spec-set 'trailing-whitespace
-                               '((((class color) (background light))
-                                  (:foreground "red"
-                                               :background "unspecified"
-                                               :strike-through nil
-                                               :underline t))
-                                 (t (:foreground "purple"
-                                                 :background "unspecified"
-                                                 :strike-through nil
-                                                 :underline t)))))))
-
 (leaf *move-error
   :hydra (hydra-move-error
           (global-map "M-g")
