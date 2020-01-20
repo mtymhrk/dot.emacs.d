@@ -691,6 +691,16 @@ _s_: switch        _e_: eyebrowse
 
 )
 
+(leaf recentf
+  :require t
+  :config
+  (setq recentf-max-saved-items 1000)
+  (setq recentf-exclude '("/TAGS$" "/var/tmp/"))
+
+  (leaf recentf-ext
+    :ensure t
+    :require t))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; 個別設定ファイルのロード
 
@@ -712,7 +722,7 @@ _s_: switch        _e_: eyebrowse
     ;; "config-whitespace"
     ;; "config-hydra"
     ;; "config-window"
-    "config-recentf"
+    ;; "config-recentf"
     "config-compile"
     ;; "config-irony"
     "config-flymake"
