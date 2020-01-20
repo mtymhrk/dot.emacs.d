@@ -637,9 +637,7 @@ _s_: switch        _e_: eyebrowse
       ("C-z" winner-redo)
       ("q" nil :exit t))
     :config
-    (bind-key "w" 'hydra-window/body keymap-ctrl-meta-space))
-
-)
+    (bind-key "w" 'hydra-window/body keymap-ctrl-meta-space)))
 
 (leaf recentf
   :require t
@@ -650,6 +648,104 @@ _s_: switch        _e_: eyebrowse
   (leaf recentf-ext
     :ensure t
     :require t))
+
+(leaf compile
+  :config
+  (setq compile-command "make")
+  (setq compile-history (list "make" "make clean"))
+
+  ;; compilation-mode で ansi color が化けてしまうことへの対処
+  (add-hook 'compilation-mode-hook #'ansi-color-for-comint-mode-on)
+  (add-hook 'compilation-filter
+            #'(lambda ()
+                (let ((start-marker (make-marker))
+                      (end-marker (process-mark (get-buffer-process
+                                                 (current-buffer)))))
+                  (set-marker start-marker (point-min))
+                  (ansi-color-apply-on-region start-marker end-marker))))
+
+  ;; コンパイルプロセスの出力を追ってコンパイルバッファをスクロースする
+  (setq compilation-scroll-output t)
+
+  :bind
+  (mode-specific-map
+   ;; C-c c で compile コマンドを呼び出す
+   ("c" . compile)))
+
+(leaf flymake
+  :delight
+  :require t
+  :config
+  ;; flymake の行表示の色を設定
+  (set-face-attribute 'flymake-errline nil
+                      :background nil
+                      :foreground nil
+                      :underline '(:color "Red1" :style wave)
+                      :inherit nil)
+
+  (set-face-attribute 'flymake-warnline nil
+                      :background nil
+                      :foreground nil
+                      :underline '(:color "DarkOrange" :style wave)
+                      :inherit nil)
+
+  ;; gcc の日本語警告メッセージを警告と判別できるようにする
+  (setq flymake-warning-re "^\\([wW]arning\\|警告\\)")
+
+  ;; C ヘッダファイルにエラーがあった場合にエラー行がうまくパースできず、
+  ;; flymake がエラーになる問題への対処
+  (push '("^\\(.*\\):\\([0-9]+\\):\\([0-9]+\\): \\(.*\\)$" 1 2 nil 4)
+        flymake-err-line-patterns))
+
+(leaf flycheck
+  :commands flycheck-mode
+  :custom
+  ;; mode-line での flycheck の情報表示を無効に
+  ;; (flycheck-mode-line . "")
+  ;; カーソル位置のエラー情報をエコーエリアに表示しない
+  ;; (flycheck-display-errors-function . nil)
+  ;; カーソル位置のエラーを表示するまでの時間
+  ;; 手動表示のみしたいが、できないので大きな時間を設定して自動表示させないよう
+  ;; にする
+  (flycheck-display-errors-delay . 10000.0)
+
+  :hydra
+  (hydra-flycheck ()
+    "
+Flycheck
+"
+    ("n" flycheck-next-error             "next")
+    ("p" flycheck-previous-error         "previous")
+    ("h" flycheck-display-error-at-point "display")
+    ("e" flycheck-explain-error-at-point "explain")
+    ("l" flycheck-list-errors            "list")
+    ("q" nil                             "quit"))
+
+  :config
+  ;; 無効化する checker の設定
+  ;; emacs-lisp-checkdoc を無効化する
+  (setq-default flycheck-disabled-checkers
+                (cons 'emacs-lisp-checkdoc
+                      (default-value 'flycheck-disabled-checkers)))
+
+
+  (leaf flycheck-popup-tip
+    :hook
+    ((flycheck-mode . flycheck-popup-tip-mode)))
+
+  (leaf *popwin
+    :after mod-popwin
+    :config
+    ;; エラーリストをポップアップで表示
+    (mod-popwin:add-display-config '(flycheck-error-list-mode :noselect t :stick t)))
+
+  (bind-keys :map keymap-for-code-navigation
+             ("c" . flycheck-buffer)
+             ("n" . hydra-flycheck/flycheck-next-error)
+             ("p" . hydra-flycheck/flycheck-previous-error)
+             ("h" . hydra-flycheck/flycheck-display-error-at-point)
+             ("e" . hydra-flycheck/flycheck-explain-error-at-point)
+             ("l" . hydra-flycheck/flycheck-list-errors)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; 個別設定ファイルのロード
@@ -673,10 +769,10 @@ _s_: switch        _e_: eyebrowse
     ;; "config-hydra"
     ;; "config-window"
     ;; "config-recentf"
-    "config-compile"
+    ;; "config-compile"
     ;; "config-irony"
-    "config-flymake"
-    "config-flycheck"
+    ;; "config-flymake"
+    ;; "config-flycheck"
     ; "config-auto-save-buffers"
     "config-super-save"
     "config-dmacro"
