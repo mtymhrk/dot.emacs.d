@@ -216,7 +216,10 @@
     (global-auto-revert-mode)
 
     ;; electric-indent-mode を無効にする
-    (electric-indent-mode -1))
+    (electric-indent-mode -1)
+
+    ;; bell を無効化 (visible-bel も使わない)
+    (setq ring-bell-function #'(lambda ())))
 
   (leaf uniquify
     :require t
