@@ -815,7 +815,7 @@ Flycheck
     ;; "config-super-save"
     ;; "config-dmacro"
     ;; "config-migemo"
-    "config-gtags"
+    ;; "config-gtags"
     "config-expand-region"
     "config-yasnippet"
     "config-open-junk-file"
