@@ -750,6 +750,16 @@ Flycheck
              ("e" . hydra-flycheck/flycheck-explain-error-at-point)
              ("l" . hydra-flycheck/flycheck-list-errors)))
 
+(leaf super-save
+  :ensure t
+  :require t
+  :custom
+  (super-save-auto-save-when-idle . t)
+  (super-save-idle-duration . 5)
+  :config
+  (add-to-list 'super-save-triggers 'find-file)
+  (super-save-mode +1))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; 個別設定ファイルのロード
 
@@ -777,7 +787,7 @@ Flycheck
     ;; "config-flymake"
     ;; "config-flycheck"
     ; "config-auto-save-buffers"
-    "config-super-save"
+    ;; "config-super-save"
     "config-dmacro"
     "config-migemo"
     "config-gtags"
