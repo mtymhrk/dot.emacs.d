@@ -785,6 +785,13 @@ Flycheck
 
   (migemo-init))
 
+(leaf expand-region
+  :ensure t
+  :custom
+  (expand-region-contract-fast-key . "R")
+  :config
+  (bind-key "r" 'er/expand-region keymap-ctrl-meta-space))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; 個別設定ファイルのロード
 
@@ -816,7 +823,7 @@ Flycheck
     ;; "config-dmacro"
     ;; "config-migemo"
     ;; "config-gtags"
-    "config-expand-region"
+    ;; "config-expand-region"
     "config-yasnippet"
     "config-open-junk-file"
     "config-counsel"
