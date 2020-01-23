@@ -760,6 +760,12 @@ Flycheck
   (add-to-list 'super-save-triggers 'find-file)
   (super-save-mode +1))
 
+(leaf dmacro
+  :init
+  (defconst *dmacro-key* "\C-t" "繰返し指定キー")
+  :bind
+  ("C-t" . dmacro-exec))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; 個別設定ファイルのロード
 
@@ -788,7 +794,7 @@ Flycheck
     ;; "config-flycheck"
     ; "config-auto-save-buffers"
     ;; "config-super-save"
-    "config-dmacro"
+    ;; "config-dmacro"
     "config-migemo"
     "config-gtags"
     "config-expand-region"
