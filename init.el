@@ -792,6 +792,21 @@ Flycheck
   :config
   (bind-key "r" 'er/expand-region keymap-ctrl-meta-space))
 
+(leaf yasnippet
+  :delight yas-minor-mode
+  :require t
+  :config
+  ;; snippet のディレクトリを追加
+  (push  (concat user-emacs-directory "yasnippet-snippets") yas-snippet-dirs)
+
+  ;; スニペットの候補が複数あった場合、ドロップダウンのプロンプトを出さないよ
+  ;; うにする。
+  (setq yas-prompt-functions '(yas-completing-prompt yas-no-prompt))
+
+  (leaf mod-yasnippet)
+
+  (yas/global-mode 1))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; 個別設定ファイルのロード
 
@@ -824,7 +839,7 @@ Flycheck
     ;; "config-migemo"
     ;; "config-gtags"
     ;; "config-expand-region"
-    "config-yasnippet"
+    ;; "config-yasnippet"
     "config-open-junk-file"
     "config-counsel"
     "config-amx"
