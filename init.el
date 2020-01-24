@@ -807,6 +807,15 @@ Flycheck
 
   (yas/global-mode 1))
 
+(leaf open-junk-file
+  :config
+  (defvar my:open-junk-file-base-dir "~/memo/junk/")
+  ;; junk ファイル名フーマット
+  (setq open-junk-file-format (concat my:open-junk-file-base-dir
+                                      "%Y.%m.%d-%H.%M.%S."))
+
+  (bind-key "C-j" 'open-junk-file keymap-ctrl-meta-space))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; 個別設定ファイルのロード
 
@@ -840,7 +849,7 @@ Flycheck
     ;; "config-gtags"
     ;; "config-expand-region"
     ;; "config-yasnippet"
-    "config-open-junk-file"
+    ;; "config-open-junk-file"
     "config-counsel"
     "config-amx"
     "config-company"
