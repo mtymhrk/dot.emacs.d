@@ -816,6 +816,57 @@ Flycheck
 
   (bind-key "C-j" 'open-junk-file keymap-ctrl-meta-space))
 
+(leaf ivy
+  :commands ivy-mode
+  :delight
+  :init
+  (ivy-mode 1)
+  :custom
+  (ivy-use-virtual-buffers . t)
+  (ivy-format-functions-alist . '((t . ivy-format-function-arrow)))
+  (ivy-height . 15)
+  (ivy-height-alist . '((swiper . 20)))
+  (enable-recursive-minibuffers . t)
+  :bind
+  (:keymap-ctrl-meta-space
+   ("C-;" . ivy-switch-buffer)
+   ("C-M-;" . ivy-resume)))
+
+(leaf counsel
+  :custom
+  (counsel-yank-pop-separator . "\n-------\n")
+  :config
+  (leaf mod-counsel)
+
+  ;; find-file 中に C-w でディレクトリを 1 つ削除する
+  (bind-key "C-w" 'counsel-up-directory counsel-find-file-map)
+  (bind-key "C-w" 'ivy-backward-delete-char ivy-minibuffer-map)
+
+  ;; grep/agの検索結果のファイルを C-z で参照する (デフォルトで C-M-m や  C-l にもバインドされている)
+  (bind-key "C-z" 'ivy-call-and-recenter counsel-grep-map)
+  (bind-key "C-z" 'ivy-call-and-recenter counsel-ag-map)
+
+  :bind
+  ("C-x C-f" . counsel-find-file)
+  ("M-y" . counsel-yank-pop)
+  (:minibuffer-local-map
+   ("C-r" . counsel-minibuffer-history))
+  (:keymap-for-grep
+   ("g" . mod-counsel:counsel-ag))
+  (:keymap-ctrl-meta-space
+   ("C-'" . counsel-imenu)
+   ("o g" . mod-counsel:counsel-grep-my-memo)
+   ("o r" . mod-counsel:counsel-open-my-memo))
+  (:keymap-for-manuals
+     ("a" . counsel-apropos)))
+
+(leaf swiper
+  :bind
+  (:isearch-mode-map
+   ("C-'" . swiper-from-isearch))
+  (:keymap-ctrl-meta-space
+   ("C-o" . swiper)))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; 個別設定ファイルのロード
 
@@ -850,7 +901,7 @@ Flycheck
     ;; "config-expand-region"
     ;; "config-yasnippet"
     ;; "config-open-junk-file"
-    "config-counsel"
+    ;; "config-counsel"
     "config-amx"
     "config-company"
     "config-smart-tab"
