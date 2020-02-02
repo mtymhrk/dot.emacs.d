@@ -872,6 +872,41 @@ Flycheck
   ("M-x" . amx)
   ("M-X" . execute-extended-command))
 
+(leaf company
+  :delight
+  :custom
+  (company-idle-delay . nil)
+  (company-minimum-prefix-length . 2)
+  (company-selection-wrap-around . t)
+  (company-require-match . nil) ; 候補にマッチしない入力をした場合、補完せず終了する
+  (company-dabbrev-code-everywhere . t) ; コメントや文字列でも dabbrev-code の補完を行う
+  :bind
+  (:company-mode-map
+   ("M-i" . company-complete))
+  (:company-active-map
+   ("M-n" . company-select-next)
+   ("M-p" . company-select-previous)
+   ("M-i" . company-complete-common)
+   ("M-m" . company-complete-selection)
+   ("C-n" . company-select-next)
+   ("C-p" . company-select-previous)
+   ("C-h" . nil))
+  :config
+  (leaf mod-company)
+
+  ;; (setq-default company-backends
+  ;;               '((company-capf company-files company-keywords company-dabbrev-code company-dabbrev)))
+
+  (global-company-mode)
+
+  (leaf company-irony
+    :config
+    (add-to-list 'company-backends 'company-irony))
+
+  (leaf company-quickhelp
+    :config
+    (company-quickhelp-mode)))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; 個別設定ファイルのロード
 
@@ -908,7 +943,7 @@ Flycheck
     ;; "config-open-junk-file"
     ;; "config-counsel"
     ;; "config-amx"
-    "config-company"
+    ;; "config-company"
     "config-smart-tab"
     "config-sequential-command"
     "config-avy"
