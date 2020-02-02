@@ -867,6 +867,11 @@ Flycheck
   (:keymap-ctrl-meta-space
    ("C-o" . swiper)))
 
+(leaf amx
+  :bind
+  ("M-x" . amx)
+  ("M-X" . execute-extended-command))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; 個別設定ファイルのロード
 
@@ -902,7 +907,7 @@ Flycheck
     ;; "config-yasnippet"
     ;; "config-open-junk-file"
     ;; "config-counsel"
-    "config-amx"
+    ;; "config-amx"
     "config-company"
     "config-smart-tab"
     "config-sequential-command"
