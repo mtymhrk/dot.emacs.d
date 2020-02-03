@@ -890,10 +890,9 @@ Flycheck
    ("M-m" . company-complete-selection)
    ("C-n" . company-select-next)
    ("C-p" . company-select-previous)
+   ("TAB" . company-complete-common-or-cycle)
    ("C-h" . nil))
   :config
-  (leaf mod-company)
-
   ;; (setq-default company-backends
   ;;               '((company-capf company-files company-keywords company-dabbrev-code company-dabbrev)))
 
