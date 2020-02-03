@@ -803,7 +803,7 @@ Flycheck
   ;; うにする。
   (setq yas-prompt-functions '(yas-completing-prompt yas-no-prompt))
 
-  (leaf mod-yasnippet)
+  (leaf mod-yasnippet :require t)
 
   (yas/global-mode 1))
 
@@ -836,7 +836,7 @@ Flycheck
   :custom
   (counsel-yank-pop-separator . "\n-------\n")
   :config
-  (leaf mod-counsel)
+  (leaf mod-counsel :require t)
 
   ;; find-file 中に C-w でディレクトリを 1 つ削除する
   (bind-key "C-w" 'counsel-up-directory counsel-find-file-map)
