@@ -965,6 +965,22 @@ Flycheck
    (";" . avy-isearch)
    ("C-;" . avy-isearch)))
 
+(leaf projectile
+  :delight
+  :leaf-defer nil
+  :config
+  (setq  projectile-completion-system 'ivy)
+  (projectile-mode +1)
+  :bind
+  (:projectile-mode-map
+   ("C-c p" . projectile-command-map))
+  (:keymap-ctrl-meta-space
+   :package my:keymaps
+   ("p" . projectile-command-map)
+   ("C-p" . projectile-find-file)))
+
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; 個別設定ファイルのロード
 
@@ -1005,7 +1021,7 @@ Flycheck
     ;; "config-smart-tab"
     ;; "config-sequential-command"
     ;; "config-avy"
-    "config-projectile"
+    ;; "config-projectile"
     "config-quickrun"
     "config-anzu"
     "config-which-key"
