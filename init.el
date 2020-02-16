@@ -244,7 +244,9 @@
   (define-key keymap-ctrl-meta-space (kbd "c") keymap-for-code-navigation)
 
   (defvar keymap-for-grep (make-sparse-keymap))
-  (define-key keymap-ctrl-meta-space (kbd "g") keymap-for-grep))
+  (define-key keymap-ctrl-meta-space (kbd "g") keymap-for-grep)
+
+  (provide 'my:keymaps))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; 雑多なコマンド定義
@@ -498,24 +500,23 @@
 
   (leaf eyebrowse
     :ensure t
-    :init
-    (eyebrowse-mode 1)
+    :require t
     :custom
     ;; eyebrowse-mode-map にキーをバインドしない
     (eyebrowse-keymap-prefix . "")
     (eyebrowse-new-workspace . #'my-eyebrowse-new-workspace-func)
     ;; doom-mode-line では別途 Window Config 番号が表示されるので eyebrowse での表示は削除
     (eyebrowse-mode-line-style . 'hide)
+
     :config
     (defun my:eyebrowse-new-workspace-func ()
       (switch-to-buffer "*scratch*")
-      (my:default-window-split)))
+      (my:default-window-split))
+    (eyebrowse-mode 1))
 
   (leaf popwin
     :ensure t
-    :commands popwin-mode
-    :init
-    (popwin-mode 1)
+    :require t
     :config
     (leaf mod-popwin :require t)
     ;; ポップアップウィンドウの高さ (フレームに対する割合で指定)
@@ -547,11 +548,14 @@
     (mod-popwin:add-display-config '("*Shell Command Output*" :noselect t :stick t))
 
     ;; apropos をポップアップで表示
-    (mod-popwin:add-display-config '(apropos-mode :noselect nil :stick t)))
+    (mod-popwin:add-display-config '(apropos-mode :noselect nil :stick t))
+
+    (popwin-mode 1))
 
   (leaf winner
     :ensure t
-    :init
+    :require t
+    :config
     (winner-mode))
 
   (leaf *keybindings
@@ -653,6 +657,7 @@ _s_: switch        _e_: eyebrowse
     :require t))
 
 (leaf compile
+  :leaf-defer nil
   :config
   (setq compile-command "make")
   (setq compile-history (list "make" "make clean"))
@@ -734,7 +739,7 @@ Flycheck
 
   (leaf flycheck-popup-tip
     :hook
-    ((flycheck-mode . flycheck-popup-tip-mode)))
+    ((flycheck-mode-hook . flycheck-popup-tip-mode)))
 
   (leaf *popwin
     :after mod-popwin
@@ -761,8 +766,10 @@ Flycheck
   (super-save-mode +1))
 
 (leaf dmacro
+  :leaf-defer t
   :init
   (defconst *dmacro-key* "\C-t" "繰返し指定キー")
+  :require t
   :bind
   ("C-t" . dmacro-exec))
 
@@ -817,18 +824,22 @@ Flycheck
   (bind-key "C-j" 'open-junk-file keymap-ctrl-meta-space))
 
 (leaf ivy
-  :commands ivy-mode
   :delight
-  :init
-  (ivy-mode 1)
+  :leaf-defer nil
+  :require t
   :custom
   (ivy-use-virtual-buffers . t)
   (ivy-format-functions-alist . '((t . ivy-format-function-arrow)))
   (ivy-height . 15)
   (ivy-height-alist . '((swiper . 20)))
   (enable-recursive-minibuffers . t)
+
+  :config
+  (ivy-mode 1)
+
   :bind
   (:keymap-ctrl-meta-space
+   :package my:keymaps
    ("C-;" . ivy-switch-buffer)
    ("C-M-;" . ivy-resume)))
 
@@ -852,19 +863,24 @@ Flycheck
   (:minibuffer-local-map
    ("C-r" . counsel-minibuffer-history))
   (:keymap-for-grep
+   :package my:keymaps
    ("g" . mod-counsel:counsel-ag))
   (:keymap-ctrl-meta-space
+   :package my:keymaps
    ("C-'" . counsel-imenu)
    ("o g" . mod-counsel:counsel-grep-my-memo)
    ("o r" . mod-counsel:counsel-open-my-memo))
   (:keymap-for-manuals
+   :package my:keymaps
      ("a" . counsel-apropos)))
 
 (leaf swiper
   :bind
   (:isearch-mode-map
+   :package isearch
    ("C-'" . swiper-from-isearch))
   (:keymap-ctrl-meta-space
+   :package my:keymaps
    ("C-o" . swiper)))
 
 (leaf amx
@@ -874,6 +890,8 @@ Flycheck
 
 (leaf company
   :delight
+  :leaf-defer nil
+  :require t
   :custom
   (company-idle-delay . nil)
   (company-minimum-prefix-length . 2)
