@@ -927,6 +927,38 @@ Flycheck
     :config
     (company-quickhelp-mode)))
 
+(leaf sequential-command-config
+  :config
+  (defun my:seq-aux-upcase-backword-word ()
+    (interactive)
+    (upcase-word (- 1)))
+
+  (defun my:seq-aux-capitalize-backword-word ()
+    (interactive)
+    (capitalize-word (- 1)))
+
+  (defun my:seq-aux-downcase-backword-word ()
+    (interactive)
+    (downcase-word (- 1)))
+
+  ;; 直前の word を upper case -> capitalize -> lower case に変換する
+  (define-sequential-command my:seq-upcase-capitalize-downcase-backword-word
+    my:seq-aux-upcase-backword-word
+    my:seq-aux-capitalize-backword-word
+    my:seq-aux-downcase-backword-word)
+
+  ;; sequential-command-config に含まれる seq-home に back-to-indentiation
+  ;; を加えたバージョンを定義
+  (define-sequential-command my:seq-home2
+    back-to-indentation beginning-of-line beginning-of-buffer seq-return)
+
+  :bind
+  ("C-a" . seq-home)
+  ("M-m" . my:seq-home2)
+  ("C-e" . seq-end)
+  ("M-U" . my:seq-upcase-capitalize-downcase-backword-word))
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; 個別設定ファイルのロード
 
@@ -965,7 +997,7 @@ Flycheck
     ;; "config-amx"
     ;; "config-company"
     ;; "config-smart-tab"
-    "config-sequential-command"
+    ;; "config-sequential-command"
     "config-avy"
     "config-projectile"
     "config-quickrun"
