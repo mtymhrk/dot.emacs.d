@@ -958,6 +958,12 @@ Flycheck
   ("C-e" . seq-end)
   ("M-U" . my:seq-upcase-capitalize-downcase-backword-word))
 
+(leaf avy
+  :bind
+  (:isearch-mode-map
+   :package isearch
+   (";" . avy-isearch)
+   ("C-;" . avy-isearch)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; 個別設定ファイルのロード
@@ -998,7 +1004,7 @@ Flycheck
     ;; "config-company"
     ;; "config-smart-tab"
     ;; "config-sequential-command"
-    "config-avy"
+    ;; "config-avy"
     "config-projectile"
     "config-quickrun"
     "config-anzu"
