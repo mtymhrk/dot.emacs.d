@@ -900,7 +900,9 @@ Flycheck
   (company-dabbrev-code-everywhere . t) ; コメントや文字列でも dabbrev-code の補完を行う
   :bind
   (:company-mode-map
-   ("M-i" . company-complete))
+   ("M-i" . company-complete)
+   ("<tab>" . company-indent-or-complete-common)
+   ("TAB" . company-indent-or-complete-common))
   (:company-active-map
    ("M-n" . company-select-next)
    ("M-p" . company-select-previous)
@@ -908,6 +910,7 @@ Flycheck
    ("M-m" . company-complete-selection)
    ("C-n" . company-select-next)
    ("C-p" . company-select-previous)
+   ("<tab>" . company-complete-common-or-cycle)
    ("TAB" . company-complete-common-or-cycle)
    ("C-h" . nil))
   :config
@@ -961,7 +964,7 @@ Flycheck
     ;; "config-counsel"
     ;; "config-amx"
     ;; "config-company"
-    "config-smart-tab"
+    ;; "config-smart-tab"
     "config-sequential-command"
     "config-avy"
     "config-projectile"
