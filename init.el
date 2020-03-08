@@ -1068,6 +1068,13 @@ Flycheck
    ("C-<" . sp-splice-sexp-killing-backward)
    ("C->" . sp-splice-sexp-killing-forward)))
 
+(leaf yascroll
+  :leaf-defer nil
+  :ensure t
+  :require t
+  :config
+  (global-yascroll-bar-mode 1))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; 個別設定ファイルのロード
 
@@ -1117,7 +1124,7 @@ Flycheck
     ;; "config-beacon"
     ;; "config-revbufs"
     ;; "config-smartparens"
-    "config-yascroll"
+    ;; "config-yascroll"
     "config-wgrep"
     "config-multiple-cursors"
     "config-bm"
