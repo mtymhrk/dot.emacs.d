@@ -1075,6 +1075,28 @@ Flycheck
   :config
   (global-yascroll-bar-mode 1))
 
+(leaf wgrep
+  :ensure t
+  :custom
+  ;; wgrep-mode 有効化キーの変更
+  (wgrep-enable-key . "e")
+  ;; 編集終了後にバッファーを自動的に保存しない
+  (wgrep-auto-save-buffer . nil)
+  ;; readonly ファイルは変更を反映しない
+  (wgrep-change-readonly-file . nil)
+  :bind
+  (:wgrep-mode-map
+   ;; C-c C-c で変更を反映
+   ("C-c C-c" . wgrep-finish-edit)
+   ;; wgrep-finish-edit をバインドしているキーバインド
+   ;; を解除(上記キーバインドをミニバッファに表示させるため)。
+   ("C-c C-e" . nil)
+   ("C-x C-s" . nil))
+  :config
+  (leaf wgrep-ag
+    :after ag
+    :require t))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; 個別設定ファイルのロード
 
@@ -1125,7 +1147,7 @@ Flycheck
     ;; "config-revbufs"
     ;; "config-smartparens"
     ;; "config-yascroll"
-    "config-wgrep"
+    ;; "config-wgrep"
     "config-multiple-cursors"
     "config-bm"
     "config-fill-column-indicator"
