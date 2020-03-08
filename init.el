@@ -1039,6 +1039,13 @@ Flycheck
   :hook
   ((prog-mode-hook . highlight-symbol-mode)))
 
+(leaf beacon
+  :leaf-defer nil
+  :ensure t
+  :require t
+  :config
+  (beacon-mode 1))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; 個別設定ファイルのロード
 
@@ -1085,7 +1092,7 @@ Flycheck
     ;; "config-which-key"
     ;; "config-volatile-highlights"
     ;; "config-highlight-symbol"
-    "config-beacon"
+    ;; "config-beacon"
     "config-revbufs"
     "config-smartparens"
     "config-yascroll"
