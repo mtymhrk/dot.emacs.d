@@ -1050,6 +1050,24 @@ Flycheck
   :leaf-defer nil
   :require t)
 
+(leaf smartparens
+  :leaf-defer nil
+  :ensure t
+  :require t
+  :commands smartparens-global-mode smartparens-mode smartparens-strict-mode
+  :delight
+  :custom
+  ;; カッコが自動挿入された際に、ハイライトを行わない
+  (sp-highlight-pair-overlay . nil)
+  :config
+  (leaf smartparens-config :require t)
+  (sp-use-paredit-bindings)
+  (smartparens-global-mode)
+  :bind
+  (:smartparens-mode-map
+   ("C-<" . sp-splice-sexp-killing-backward)
+   ("C->" . sp-splice-sexp-killing-forward)))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; 個別設定ファイルのロード
 
@@ -1098,7 +1116,7 @@ Flycheck
     ;; "config-highlight-symbol"
     ;; "config-beacon"
     ;; "config-revbufs"
-    "config-smartparens"
+    ;; "config-smartparens"
     "config-yascroll"
     "config-wgrep"
     "config-multiple-cursors"
