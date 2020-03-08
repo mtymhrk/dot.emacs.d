@@ -979,7 +979,21 @@ Flycheck
    ("p" . projectile-command-map)
    ("C-p" . projectile-find-file)))
 
-
+(leaf anzu
+  :leaf-defer nil
+  :ensure t
+  :require t
+  :custom
+  (anzu-mode-lighter . "")
+  (anzu-deactivate-region . t)
+  (anzu-search-threshold . 1000)
+  (anzu-use-mnigemo . t)
+  (anzu-replace-to-string-separator . "")
+  :config
+  (global-anzu-mode +1)
+  :bind
+  ("M-%" . anzu-query-replace)
+  ("C-M-%" . anzu-query-replace-regexp))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; 個別設定ファイルのロード
@@ -1023,7 +1037,7 @@ Flycheck
     ;; "config-avy"
     ;; "config-projectile"
     ;; "config-quickrun"
-    "config-anzu"
+    ;; "config-anzu"
     "config-which-key"
     "config-volatile-highlights"
     "config-highlight-symbol"
