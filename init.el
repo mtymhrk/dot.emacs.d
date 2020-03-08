@@ -1046,6 +1046,10 @@ Flycheck
   :config
   (beacon-mode 1))
 
+(leaf revbufs
+  :leaf-defer nil
+  :require t)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; 個別設定ファイルのロード
 
@@ -1093,7 +1097,7 @@ Flycheck
     ;; "config-volatile-highlights"
     ;; "config-highlight-symbol"
     ;; "config-beacon"
-    "config-revbufs"
+    ;; "config-revbufs"
     "config-smartparens"
     "config-yascroll"
     "config-wgrep"
