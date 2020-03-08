@@ -1021,6 +1021,16 @@ Flycheck
   (which-key-setup-side-window-bottom)
   (which-key-mode 1))
 
+(leaf volatile-highlights
+  :delight
+  :leaf-defer nil
+  :ensure t
+  :require t
+  :config
+  ;; ハイライト時の face 設定
+  (set-face-background 'vhl/default-face "dark slate blue")
+  (volatile-highlights-mode))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; 個別設定ファイルのロード
 
@@ -1065,7 +1075,7 @@ Flycheck
     ;; "config-quickrun"
     ;; "config-anzu"
     ;; "config-which-key"
-    "config-volatile-highlights"
+    ;; "config-volatile-highlights"
     "config-highlight-symbol"
     "config-beacon"
     "config-revbufs"
