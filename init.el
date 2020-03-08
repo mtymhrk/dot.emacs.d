@@ -1031,6 +1031,14 @@ Flycheck
   (set-face-background 'vhl/default-face "dark slate blue")
   (volatile-highlights-mode))
 
+(leaf highlight-symbol
+  :delight
+  :ensure t
+  :custom
+  (highlight-symbol-idle-delay . 1.0)
+  :hook
+  ((prog-mode-hook . highlight-symbol-mode)))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; 個別設定ファイルのロード
 
@@ -1076,7 +1084,7 @@ Flycheck
     ;; "config-anzu"
     ;; "config-which-key"
     ;; "config-volatile-highlights"
-    "config-highlight-symbol"
+    ;; "config-highlight-symbol"
     "config-beacon"
     "config-revbufs"
     "config-smartparens"
