@@ -1022,7 +1022,7 @@ Flycheck
     ;; "config-sequential-command"
     ;; "config-avy"
     ;; "config-projectile"
-    "config-quickrun"
+    ;; "config-quickrun"
     "config-anzu"
     "config-which-key"
     "config-volatile-highlights"
