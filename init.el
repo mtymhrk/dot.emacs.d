@@ -1009,6 +1009,18 @@ Flycheck
   ("M-%" . anzu-query-replace)
   ("C-M-%" . anzu-query-replace-regexp))
 
+(leaf which-key
+  :delight
+  :leaf-defer nil
+  :ensure t
+  :require t
+  :custom
+  (which-key-idle-delay . 0.2)
+  (which-key-show-transient-maps . nil)
+  :config
+  (which-key-setup-side-window-bottom)
+  (which-key-mode 1))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; 個別設定ファイルのロード
 
@@ -1052,7 +1064,7 @@ Flycheck
     ;; "config-projectile"
     ;; "config-quickrun"
     ;; "config-anzu"
-    "config-which-key"
+    ;; "config-which-key"
     "config-volatile-highlights"
     "config-highlight-symbol"
     "config-beacon"
