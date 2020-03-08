@@ -553,7 +553,6 @@
     (popwin-mode 1))
 
   (leaf winner
-    :ensure t
     :require t
     :config
     (winner-mode))
@@ -707,6 +706,7 @@ _s_: switch        _e_: eyebrowse
 
 (leaf flycheck
   :commands flycheck-mode
+  :ensure t
   :custom
   ;; mode-line での flycheck の情報表示を無効に
   ;; (flycheck-mode-line . "")
@@ -800,6 +800,7 @@ Flycheck
   (bind-key "r" 'er/expand-region keymap-ctrl-meta-space))
 
 (leaf yasnippet
+  :ensure t
   :delight yas-minor-mode
   :require t
   :config
@@ -815,6 +816,7 @@ Flycheck
   (yas/global-mode 1))
 
 (leaf open-junk-file
+  :ensure t
   :config
   (defvar my:open-junk-file-base-dir "~/memo/junk/")
   ;; junk ファイル名フーマット
@@ -825,6 +827,7 @@ Flycheck
 
 (leaf ivy
   :delight
+  :ensure t
   :leaf-defer nil
   :require t
   :custom
@@ -844,6 +847,7 @@ Flycheck
    ("C-M-;" . ivy-resume)))
 
 (leaf counsel
+  :ensure t
   :custom
   (counsel-yank-pop-separator . "\n-------\n")
   :config
@@ -875,6 +879,7 @@ Flycheck
      ("a" . counsel-apropos)))
 
 (leaf swiper
+  :ensure t
   :bind
   (:isearch-mode-map
    :package isearch
@@ -884,12 +889,14 @@ Flycheck
    ("C-o" . swiper)))
 
 (leaf amx
+  :ensure t
   :bind
   ("M-x" . amx)
   ("M-X" . execute-extended-command))
 
 (leaf company
   :delight
+  :ensure t
   :leaf-defer nil
   :require t
   :custom
@@ -920,15 +927,20 @@ Flycheck
   (global-company-mode)
 
   (leaf company-irony
+    :ensure t
     :config
     (add-to-list 'company-backends 'company-irony))
 
   (leaf company-quickhelp
+    :ensure t
     :config
     (company-quickhelp-mode)))
 
-(leaf sequential-command-config
+(leaf sequential-command
+  :ensure t
   :config
+  (require 'sequential-command-config)
+
   (defun my:seq-aux-upcase-backword-word ()
     (interactive)
     (upcase-word (- 1)))
@@ -959,6 +971,7 @@ Flycheck
   ("M-U" . my:seq-upcase-capitalize-downcase-backword-word))
 
 (leaf avy
+  :ensure t
   :bind
   (:isearch-mode-map
    :package isearch
@@ -968,6 +981,7 @@ Flycheck
 (leaf projectile
   :delight
   :leaf-defer nil
+  :ensure t
   :config
   (setq  projectile-completion-system 'ivy)
   (projectile-mode +1)
