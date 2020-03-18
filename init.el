@@ -310,15 +310,21 @@
   (defvar my:default-frame-width nil)
   (cond
    ((string-match "spinel" (system-name))
-    (setq my:default-frame-font "MyricaM M-10.5")
+    (create-fontset-from-ascii-font "MyricaM M-10.5" nil "my:fontset")
+    (set-fontset-font "fontset-my:fontset" 'unicode "MyricaM M-10.5" nil 'append)
+    (setq my:default-frame-font "fontset-my:fontset")
     (setq my:default-frame-height 62)
     (setq my:default-frame-width 246))
    ((string-match "amber" (system-name))
-    (setq my:default-frame-font "MyricaM M-10.5")
+    (create-fontset-from-ascii-font "MyricaM M-10.5" nil "my:fontset")
+    (set-fontset-font "fontset-my:fontset" 'unicode "MyricaM M-10.5" nil 'append)
+    (setq my:default-frame-font "fontset-my:fontset")
     (setq my:default-frame-height 43)
     (setq my:default-frame-width 163))
    (t
-    (setq my:default-frame-font "DejaVu Sans Mono-9")
+    (create-fontset-from-ascii-font "MyricaM M-10.5" nil "my:fontset")
+    (set-fontset-font "fontset-my:fontset" 'unicode "MyricaM M-10.5" nil 'append)
+    (setq my:default-frame-font "fontset-my:fontset")
     (setq my:default-frame-height 65)
     (setq my:default-frame-width 80))) ;; 1 Window 設定
 
