@@ -1159,6 +1159,22 @@ _p_: prev     _D_: remove all
   :config
   (leaf mod-fill-column-indicator :require t))
 
+(leaf selected
+  :ensure t
+  :leaf-defer nil
+  :delight selected-minor-mode
+  :require t
+  :init
+  (setq my:selected-keymap (make-sparse-keymap))
+  :bind
+  (:my:selected-keymap
+   ("q" . selected-off)
+   ("u" . upcase-region)
+   ("d" . downcase-region))
+  :config
+  (bind-key "s" my:selected-keymap selected-keymap)
+  (selected-global-mode))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; 個別設定ファイルのロード
@@ -1214,7 +1230,7 @@ _p_: prev     _D_: remove all
     ;; "config-multiple-cursors"
     ;; "config-bm"
     ;; "config-fill-column-indicator"
-    "config-selected"
+    ;; "config-selected"
     "config-direx"
     "config-dumb-jump"
     "config-undo"
