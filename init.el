@@ -1210,6 +1210,40 @@ _p_: prev     _D_: remove all
 
 (leaf dumb-jump :ensure t)
 
+(leaf *undo
+  :config
+  (leaf winner
+    :config
+    (winner-mode))
+
+  (leaf undo-tree
+    :ensure t
+    :leaf-defer nil
+    :require t
+    :delight
+    :config
+    (global-undo-tree-mode)
+
+    (leaf *popwin
+      :after mod-popwin
+      :config
+      (mod-popwin:add-display-config
+       `(,undo-tree-visualizer-buffer-name :height 0.45 :position bottom :stick t))))
+
+  (leaf *hydra
+    :hydra
+    (hydra-undo ()
+                "Undo
+>"
+                ("C-z" undo-tree-undo "undo")
+                ("SPC" undo-tree-undo "undo")
+                ("C-SPC" undo-tree-redo "redo")
+                ("t" undo-tree-visualize "tree" :exit t)
+                ("w" winner-undo "window undo")
+                ("C-w" winner-redo "window redo"))
+    :config
+    (bind-key "C-z" 'hydra-undo/body)))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; 個別設定ファイルのロード
 
@@ -1267,7 +1301,7 @@ _p_: prev     _D_: remove all
     ;; "config-selected"
     ;; "config-direx"
     ;; "config-dumb-jump"
-    "config-undo"
+    ;; "config-undo"
     "config-easy-kill"
     "config-display-line-info"
 
