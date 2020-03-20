@@ -1208,6 +1208,7 @@ _p_: prev     _D_: remove all
     (mod-popwin:add-display-config
      '(direx:direx-mode :position left :width 40 :dedicated t))))
 
+(leaf dumb-jump :ensure t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; 個別設定ファイルのロード
@@ -1265,7 +1266,7 @@ _p_: prev     _D_: remove all
     ;; "config-fill-column-indicator"
     ;; "config-selected"
     ;; "config-direx"
-    "config-dumb-jump"
+    ;; "config-dumb-jump"
     "config-undo"
     "config-easy-kill"
     "config-display-line-info"
