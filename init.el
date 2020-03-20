@@ -1154,6 +1154,11 @@ _p_: prev     _D_: remove all
    :package my:keymaps
    ("b" . hydra-bm/body)))
 
+(leaf fill-column-indicator
+  :ensure t
+  :config
+  (leaf mod-fill-column-indicator :require t))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; 個別設定ファイルのロード
@@ -1208,7 +1213,7 @@ _p_: prev     _D_: remove all
     ;; "config-wgrep"
     ;; "config-multiple-cursors"
     ;; "config-bm"
-    "config-fill-column-indicator"
+    ;; "config-fill-column-indicator"
     "config-selected"
     "config-direx"
     "config-dumb-jump"
