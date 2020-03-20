@@ -1132,7 +1132,30 @@ _m_: more      ^ ^            ^ ^            ^ ^             _O_: reverse region
    :package my:keymaps
    ("m" . hydra-multiple-cursors/body)))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(leaf bm
+  :ensure t
+  :custom
+  (bm-in-lifo-order . t)
+  :hydra
+  (hydra-bm (:hint nil)
+    "
+^Move^        ^Mark              ^Quit^
+^^^^^^^^-----------------------------------
+_n_: next     _b_: toggle        _q_: quit
+_p_: prev     _D_: remove all
+"
+    ("n" bm-next)
+    ("p" bm-previous)
+    ("b" bm-toggle)
+    ("D" bm-remove-all-current-buffer)
+    ("q" nil :exit t))
+  :bind
+  (:keymap-ctrl-meta-space
+   :package my:keymaps
+   ("b" . hydra-bm/body)))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; 個別設定ファイルのロード
 
 (defvar my-init-config-dir (concat user-emacs-directory "config/"))
@@ -1184,7 +1207,7 @@ _m_: more      ^ ^            ^ ^            ^ ^             _O_: reverse region
     ;; "config-yascroll"
     ;; "config-wgrep"
     ;; "config-multiple-cursors"
-    "config-bm"
+    ;; "config-bm"
     "config-fill-column-indicator"
     "config-selected"
     "config-direx"
