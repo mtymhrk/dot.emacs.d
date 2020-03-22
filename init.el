@@ -1253,6 +1253,47 @@ _p_: prev     _D_: remove all
   (:easy-kill-base-map
    ("C-w" . easy-kill-region)))
 
+(leaf lsp-mode
+  :ensure t
+  :custom
+  ;; flyamke ではなく flycheck を使用する
+  (lsp-prefer-flymake . nil)
+
+  :config
+  (leaf lsp-ui
+    :ensure t
+    :custom
+    (lsp-ui-peek-always-show . t)
+    (lsp-ui-doc-enable . nil))
+
+  :hydra
+  (hydra-xref (:hint nil)
+              "
+^Find^                     ^Pop^               ^Quit^
+^^^^^^^^-----------------------------------------------------------------
+_M-._: find definitions    _,_: pop            _q_: quit
+_M-/_: find references
+"
+              (","   xref-pop-marker-stack)
+              ("M-." xref-find-definitions)
+              ("M-/" xref-find-references)
+              ("q"   nil))
+
+  :bind
+  (:keymap-for-code-navigation
+   :package my:keymaps
+   ("C-i" . completion-at-point)
+   ("i"   . lsp-ui-imenu)
+   ("."   . lsp-ui-peek-find-definitions)
+   ("/"   . lsp-ui-peek-find-references)
+   (","   . hydra-xref/xref-pop-marker-stack)
+   ("x"   . lsp-rename)
+   ("d"   . lsp-describe-thing-at-point)
+   ("D"   . lsp-ui-doc-show)
+   ("M-D" . lsp-ui-doc-hide)
+   ("M-." . hydra-xref/xref-find-definitions)
+   ("M-/" . hydra-xref/xref-find-references)))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; 個別設定ファイルのロード
 
@@ -1312,9 +1353,9 @@ _p_: prev     _D_: remove all
     ;; "config-dumb-jump"
     ;; "config-undo"
     ;; "config-easy-kill"
-    "config-display-line-info"
+    ;; "config-display-line-info"
 
-    "config-lsp-mode"
+    ;; "config-lsp-mode"
 
     ;; Major-modes
     "config-text-mode"
