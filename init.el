@@ -1244,6 +1244,15 @@ _p_: prev     _D_: remove all
     :config
     (bind-key "C-z" 'hydra-undo/body)))
 
+(leaf easy-kill
+  :ensure t
+  :bind
+  ("M-w" . easy-kill)
+  ;; C-w に別のコマンドをバインドしているのが原因でキーバインドが正しくされない
+  ;; ため、キーバインドを修正する
+  (:easy-kill-base-map
+   ("C-w" . easy-kill-region)))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; 個別設定ファイルのロード
 
@@ -1302,7 +1311,7 @@ _p_: prev     _D_: remove all
     ;; "config-direx"
     ;; "config-dumb-jump"
     ;; "config-undo"
-    "config-easy-kill"
+    ;; "config-easy-kill"
     "config-display-line-info"
 
     "config-lsp-mode"
