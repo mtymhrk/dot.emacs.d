@@ -1266,6 +1266,12 @@ _p_: prev     _D_: remove all
     (lsp-ui-peek-always-show . t)
     (lsp-ui-doc-enable . nil))
 
+  (leaf *popwin
+    :after mod-popwin
+    :config
+    ;; lsp-describe-thing-at-point の表示を popup で出す
+    (mod-popwin:add-display-config '("*lsp-help*" :noselect t :stick t)))
+
   :hydra
   (hydra-xref (:hint nil)
               "
