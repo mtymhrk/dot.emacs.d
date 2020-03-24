@@ -1300,6 +1300,10 @@ _M-/_: find references
    ("M-." . hydra-xref/xref-find-definitions)
    ("M-/" . hydra-xref/xref-find-references)))
 
+(leaf text-mode
+  :hook
+  ((text-mode-hook . turn-on-auto-fill)))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; 個別設定ファイルのロード
 
@@ -1364,7 +1368,7 @@ _M-/_: find references
     ;; "config-lsp-mode"
 
     ;; Major-modes
-    "config-text-mode"
+    ;; "config-text-mode"
     "config-org-mode"
     "config-c-mode"
     "config-sh-mode"
