@@ -1304,6 +1304,121 @@ _M-/_: find references
   :hook
   ((text-mode-hook . turn-on-auto-fill)))
 
+(leaf *org
+  :config
+  (leaf org-install
+    :config
+    (setq org-startup-truncated nil)
+    (setq org-return-follows-link t)
+    (add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
+    (setq org-directory "~/memo/org/")
+    (setq org-default-notes-file (concat org-directory "agenda.org"))
+
+    ;; org-mode で書き換えられたくないキーバインドの書き換えを回避
+    (defun my:hook-func-org-mode ()
+      (define-key org-mode-map (kbd "C-<tab>") nil)
+      (define-key org-mode-map (kbd "C-a") nil)
+      (define-key org-mode-map (kbd "C-e") nil)
+      (define-key org-mode-map (kbd "C-'") nil))
+
+    ;; ファイルを開いたとき見出しを折り畳まない
+    (setq org-startup-folded 'nofold)
+    :hook
+    ((org-mode-hook . my:hook-func-org-mode)))
+
+  (leaf org-capture
+    :config
+    (leaf org-install :require t)
+
+    ;; メモ用のファイル名を作成する関数
+    (setq my:org-capture-journal-dir (concat org-directory "journal/"))
+    (setq my:org-capture-note-dir (concat org-directory "note/"))
+    (setq my:org-capture-cheatsheet-dir (concat org-directory "cheatsheet/"))
+
+    (defun my:create-journal-file-name ()
+      (unless (file-exists-p my:org-capture-journal-dir)
+        (make-directory my:org-capture-journal-dir))
+      (concat my:org-capture-journal-dir
+              (format-time-string "%Y.%m.%d-%H.%M.%S.org")))
+
+    (defun my:create-note-file-name ()
+      (unless (file-exists-p my:org-capture-note-dir)
+        (make-directory my:org-capture-note-dir))
+      (concat my:org-capture-note-dir
+              (format-time-string "%Y.%m.%d-%H.%M.%S.org")))
+
+    (defun my:create-cheatsheet-file-name ()
+      (unless (file-exists-p my:org-capture-cheatsheet-dir)
+        (make-directory my:org-capture-cheatsheet-dir))
+      (concat my:org-capture-cheatsheet-dir
+              (format-time-string "%Y.%m.%d-%H.%M.%S.org")))
+
+    (setq org-capture-templates
+          '(("t" "Todo" entry
+             (file+headline "todo.org" "Inbox")
+             "** TODO %?\n   %i\n   %a\n   %t")
+            ("j" "Journal" entry
+             (file my:create-journal-file-name)
+             "* %?\n[%T]\n")
+            ("n" "Note" entry
+             (file my:create-note-file-name)
+             "* %?\n[%T]\n")
+            ("c" "Cheatsheet" entry
+             (file my:create-cheatsheet-file-name)
+             "* %?\n[%T]\n")
+            ("i" "Idea" entry
+             (file+headline "ideas.org" "New Ideas")
+             "** %?\n   %i\n   %a\n   %t")
+            ("b" "Bookmark" entry
+             (file+headline "bookmarks.org" "Bookmarks")
+             "** %?\n   %i\n   %a\n   %t")))
+
+;;;  %[pathname] insert the contents of the file given by `pathname'.
+;;;  %(sexp)     evaluate elisp `(sexp)' and replace with the result.
+;;;  %<...>      the result of format-time-string on the ... format specification.
+;;;  %t          time stamp, date only.
+;;;  %T          time stamp with date and time.
+;;;  %u, %U      like the above, but inactive time stamps.
+;;;  %a          annotation, normally the link created with `org-store-link'.
+;;;  %i          initial content, copied from the active region.  If %i is
+;;;              indented, the entire inserted text will be indented as well.
+;;;  %A          like %a, but prompt for the description part.
+;;;  %c          current kill ring head.
+;;;  %x          content of the X clipboard.
+;;;  %k          title of currently clocked task.
+;;;  %K          link to currently clocked task.
+;;;  %n          user name (taken from `user-full-name').
+;;;  %f          file visited by current buffer when org-capture was called.
+;;;  %F          full path of the file or directory visited by current buffer.
+;;;  %:keyword   specific information for certain link types, see below.
+;;;  %^g         prompt for tags, with completion on tags in target file.
+;;;  %^G         prompt for tags, with completion on all tags in all agenda files.
+;;;  %^t         like %t, but prompt for date.  Similarly %^T, %^u, %^U.
+;;;              You may define a prompt like %^{Please specify birthday.
+;;;  %^C         interactive selection of which kill or clip to use.
+;;;  %^L         like %^C, but insert as link.
+;;;  %^{prop}p   prompt the user for a value for property `prop'.
+;;;  %^{prompt}  prompt the user for a string and replace this sequence with it.
+;;;              A default value and a completion table ca be specified like this:
+;;;              %^{prompt|default|completion2|completion3|...}.
+;;;  %?          After completing the template, position cursor here.
+
+    ;; org-agenda
+    (setq org-agenda-files
+          (list org-directory my:org-capture-journal-dir my:org-capture-note-dir))
+
+    ;; todo
+    (setq org-todo-keywords
+          '((sequence "TODO(t)" "WAIT(w@/!)" "|" "DONE(d!)" "CANCELED(c@)")))
+
+    :bind
+    ("C-c o c" . org-capture)
+    ("C-c o a" . org-agenda)
+    (:keymap-ctrl-meta-space
+     :package my:keymaps
+     ("o c" . org-capture)
+     ("o a" . org-agenda))))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; 個別設定ファイルのロード
 
@@ -1369,7 +1484,7 @@ _M-/_: find references
 
     ;; Major-modes
     ;; "config-text-mode"
-    "config-org-mode"
+    ;; "config-org-mode"
     "config-c-mode"
     "config-sh-mode"
     "config-scheme-mode"
