@@ -1419,6 +1419,48 @@ _M-/_: find references
      ("o c" . org-capture)
      ("o a" . org-agenda))))
 
+(leaf cc-mode
+  :hook
+  (c-mode-common-hook . my:hook-c-mode-common--0)
+  (c-mode-common-hook . my:hook-c-mode-common--ff-find-other-file)
+  :config
+  (defun my:hook-c-mode-common--0 ()
+    (show-paren-mode t)
+    (setq indent-tabs-mode nil))
+
+  (defun my:hook-c-mode-common--ff-find-other-file ()
+    (cond ((eq major-mode 'c-mode)
+           (define-key c-mode-map (kbd "C-c .") 'ff-find-other-file))
+          ((eq major-mode 'c++-mode)
+           (define-key c++-mode-map (kbd "C-c .") 'ff-find-other-file))))
+
+  (leaf cquery
+    :config
+    (setq cquery-executable "cquery")
+
+    (defun my:cquery-enable ()
+      (condition-case nil
+          (lsp)
+        (user-error nil)))
+
+    :hook
+    (c-mode-hook . my:cquery-enable)
+    (c++-mode-hook . my:cquery-enable))
+
+  (leaf flycheck
+    :hook
+    (c-mode-common-hook . flycheck-mode))
+
+  (leaf *fill-column-indicator
+    :after fill-column-indicator
+    :config
+    (defun my:hook-c-mode-common--fci ()
+      (setq fill-column 80)
+      (fci-mode 1))
+    ;; :hook keyward を使うと *fill-column-indicator を autoload する設定をして
+    ;; しまうので :config 内で add-hook する
+    (add-hook 'c-mode-common-hook #'my:hook-c-mode-common--fci)))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; 個別設定ファイルのロード
 
@@ -1485,7 +1527,7 @@ _M-/_: find references
     ;; Major-modes
     ;; "config-text-mode"
     ;; "config-org-mode"
-    "config-c-mode"
+    ;; "config-c-mode"
     "config-sh-mode"
     "config-scheme-mode"
     "config-ruby-mode"
