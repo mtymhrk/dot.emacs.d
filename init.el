@@ -1757,6 +1757,32 @@ _M-/_: find references
    :package my:keymaps
    ("C-v" . view-mode)))
 
+(leaf info
+  :config
+  ;; Info-directory-list の初期設定は環境変数 INFOPATH を元に行われるが、
+  ;; exec-path-from-shell による INFOPATH の設定よりも前に Info-directory-list
+  ;; が 初期設定されるため、Info-directory-list を未初期化 (nil を設定) するこ
+  ;; とで、もう一度初期設定を行なわせる
+  (setq Info-directory-list nil))
+
+(leaf woman
+  :config
+  (setq woman-use-own-frame nil)
+
+  (leaf *popwin
+    :after mod-popwin
+    :config
+    ;; popwin for Woman-mode
+    (mod-popwin:add-display-config
+     '("^\\*WoMan" :regexp t :noselect t :stick t))
+    ;; popwin for Man-mode
+    (mod-popwin:add-display-config
+     '(Man-mode :noselect t :stick t)))
+  :bind
+  (:keymap-for-manuals
+   :package my:keymaps
+   ("m" . woman)))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; 個別設定ファイルのロード
 
@@ -1831,8 +1857,8 @@ _M-/_: find references
     ;; "config-rust-mode"
     ;; "config-gdb"
     ;; "config-view-mode"
-    "config-info"
-    "config-woman"
+    ;; "config-info"
+    ;; "config-woman"
     "config-dired"
     "config-ag"
     "config-eww"
