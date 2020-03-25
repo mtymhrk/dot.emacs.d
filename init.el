@@ -1649,6 +1649,47 @@ _M-/_: find references
     :hook
     (emacs-lisp-mode-hook . my:hook-emacs-lisp-mode--fci)))
 
+(leaf rust-mode
+  :ensure t
+  :config
+  ;; rust-modeでrust-format-on-saveをtにすると自動でrustfmtが走る
+  (setq-default rust-format-on-save t)
+
+  ;; rustのファイルを編集するときにflycheckを起動する
+  (leaf flycheck
+    :hook
+    ;; lsp-mode の flycheck 設定を使用するため、flycheck-rust-setup は hook に追
+    ;; 加しない
+    ;; (add-hook 'flycheck-mode-hook #'flycheck-rust-setup)
+    (rust-mode-hook . flycheck-mode))
+
+  ;; ;; Racer - code completion for Rust
+  ;; (use-package racer
+  ;;   :commands racer-mode
+  ;;   :delight
+  ;;   :hook
+  ;;   ;; rustのファイルを編集するときにracerを起動する
+  ;;   ((rust-mode . racer-mode)
+  ;;    ;; racerのeldocサポートを使う
+  ;;    (racer-mode . eldoc-mode)
+  ;;    ;; ;; racerの補完サポートを使う
+  ;;    (racer-mode . company-mode)))
+
+  (leaf lsp-mode
+    :custom
+    ;; clippy によるチェックを常に行うよう設定
+    (lsp-rust-clippy-preference . "on")
+    :hook
+    (rust-mode-hook . lsp))
+
+  (leaf fill-column-indicator
+    :config
+    (defun my:hook-rust-mode-common--fci ()
+      (setq fill-column 80)
+      (fci-mode 1))
+    :hook
+    (rust-mode-hook . my:hook-rust-mode-common--fci)))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; 個別設定ファイルのロード
 
@@ -1720,7 +1761,7 @@ _M-/_: find references
     ;; "config-scheme-mode"
     ;; "config-ruby-mode"
     ;; "config-emacs-lisp-mode"
-    "config-rust-mode"
+    ;; "config-rust-mode"
     "config-gdb"
     "config-view-mode"
     "config-info"
