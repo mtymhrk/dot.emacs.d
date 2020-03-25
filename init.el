@@ -1583,6 +1583,52 @@ _M-/_: find references
 
   (put 'match 'scheme-indent-function 1))
 
+(leaf ruby-mode
+  :config
+  (leaf flycheck
+    :hook
+    (ruby-mode-hook . flycheck-mode))
+
+  (leaf fill-column-indicator
+    :config
+    (defun my:hook-ruby-mode--fci ()
+      (setq fill-column 80)
+      (fci-mode 1))
+    :hook
+    (ruby-mode-hook . my:hook-ruby-mode--fci))
+
+  ;; Emacs 24.4 用設定
+  ;; ruby-mode-set-encoding の実装と auto-save-buffers の相性が悪いらしいので
+  ;; その対処。ruby-insert-encoding-magic-comment を nil にしただけでは解決し
+  ;; ない
+  ;; (when (version<= "24.4" emacs-version)
+  ;;   (defun ruby-mode-set-encoding ()))
+
+  ;; inf-ruby
+  (leaf inf-ruby
+    :ensure t
+    :hook
+    (ruby-mode-hook . inf-ruby-minor-mode))
+
+  ;; ruby-block
+  ;;  キーワード end に対応する行をハイライトする
+  (leaf ruby-block
+    :ensure t
+    :delight
+    :config
+    ;; これを行っていないと ruby-mode 以外でも ruby-block minor-mode が有効に
+    ;; なってしまう
+    (setq-default ruby-block-mode nil)
+    ;; end に対応する行をミニバッファに表示し、かつオーバレイする
+    (setq ruby-block-highlight-toggle t))
+
+
+  (leaf *popwin
+    :after mod-popwin
+    :config
+    (mod-popwin:add-display-config
+     '(inf-ruby-mode :height 0.45 :position bottom :stick t))))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; 個別設定ファイルのロード
 
@@ -1652,7 +1698,7 @@ _M-/_: find references
     ;; "config-c-mode"
     ;; "config-sh-mode"
     ;; "config-scheme-mode"
-    "config-ruby-mode"
+    ;; "config-ruby-mode"
     "config-emacs-lisp-mode"
     "config-rust-mode"
     "config-gdb"
