@@ -1451,15 +1451,13 @@ _M-/_: find references
     :hook
     (c-mode-common-hook . flycheck-mode))
 
-  (leaf *fill-column-indicator
-    :after fill-column-indicator
+  (leaf fill-column-indicator
     :config
     (defun my:hook-c-mode-common--fci ()
       (setq fill-column 80)
       (fci-mode 1))
-    ;; :hook keyward を使うと *fill-column-indicator を autoload する設定をして
-    ;; しまうので :config 内で add-hook する
-    (add-hook 'c-mode-common-hook #'my:hook-c-mode-common--fci)))
+    :hook
+    (c-mode-common-hook . my:hook-c-mode-common--fci)))
 
 (leaf sh-script
   :hook
@@ -1469,15 +1467,13 @@ _M-/_: find references
     (setq sh-basic-offset 2) ; インデント幅の設定
     (setq sh-indentation 2)) ; インデント幅の設定
 
-  (leaf *fill-column-indicator
-    :after fill-column-indicator
+  (leaf fill-column-indicator
     :config
     (defun my:hook-sh-mode--fci ()
       (setq fill-column 80)
       (fci-mode 1))
-    ;; :hook keyward を使うと *fill-column-indicator を autoload する設定をして
-    ;; しまうので :config 内で add-hook する
-    (add-hook 'sh-mode-hook #'my:hook-sh-mode--fci)))
+    :hook
+    (sh-mode-hook . my:hook-sh-mode--fci)))
 
 (use-package scheme
   :hook
