@@ -1690,6 +1690,19 @@ _M-/_: find references
     :hook
     (rust-mode-hook . my:hook-rust-mode-common--fci)))
 
+(leaf gud
+  :config
+  ;; 有用なバッファを開くモード
+  (setq gdb-many-windows t)
+  ;; I/O バッファを表示
+  (setq gdb-use-separate-io-buffer t)
+  ;; t にすると mini buffer に値が表示される
+  (setq gud-tooltip-echo-area nil)
+
+  :hook
+  ;; 変数の上にマウスカーソルを置くと値を表示
+  (gdb-mode-hook . gud-tooltip-mode))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; 個別設定ファイルのロード
 
@@ -1762,7 +1775,7 @@ _M-/_: find references
     ;; "config-ruby-mode"
     ;; "config-emacs-lisp-mode"
     ;; "config-rust-mode"
-    "config-gdb"
+    ;; "config-gdb"
     "config-view-mode"
     "config-info"
     "config-woman"
