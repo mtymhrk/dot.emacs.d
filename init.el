@@ -1625,6 +1625,30 @@ _M-/_: find references
     (mod-popwin:add-display-config
      '(inf-ruby-mode :height 0.45 :position bottom :stick t))))
 
+(leaf elisp-mode
+  :delight (emacs-lisp-mode "ELisp" :major)
+  :hook
+  (emacs-lisp-mode-hook . my:hook-emacs-lisp-mode--0)
+  :config
+  (defun my:hook-emacs-lisp-mode--0 ()
+    (setq indent-tabs-mode nil))
+
+  (leaf smartparens
+    :hook
+    (emacs-lisp-mode-hook . smartparens-strict-mode))
+
+  (leaf flycheck
+    :hook
+    (emacs-lisp-mode-hook . flycheck-mode))
+
+  (leaf fill-column-indicator
+    :config
+    (defun my:hook-emacs-lisp-mode--fci ()
+      (setq fill-column 80)
+      (fci-mode 1))
+    :hook
+    (emacs-lisp-mode-hook . my:hook-emacs-lisp-mode--fci)))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; 個別設定ファイルのロード
 
@@ -1695,7 +1719,7 @@ _M-/_: find references
     ;; "config-sh-mode"
     ;; "config-scheme-mode"
     ;; "config-ruby-mode"
-    "config-emacs-lisp-mode"
+    ;; "config-emacs-lisp-mode"
     "config-rust-mode"
     "config-gdb"
     "config-view-mode"
