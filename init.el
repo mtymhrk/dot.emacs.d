@@ -1703,6 +1703,60 @@ _M-/_: find references
   ;; 変数の上にマウスカーソルを置くと値を表示
   (gdb-mode-hook . gud-tooltip-mode))
 
+(leaf view
+  :config
+  (leaf mod-view :require t)
+
+  (setq view-read-only t)
+
+  ;; view-mode キーバインド設定
+  (defvar pager-keybind
+    `( ;; vi-like
+      ("h" . backward-char)
+      ("l" . forward-char)
+      ("j" . next-line)
+      ("k" . previous-line)
+      (";" . gene-word)
+      ("b" . scroll-down)
+      (" " . scroll-up)
+      ("i" . view-mode) ; view-mode から脱出
+      ;; w3m-like
+      ("m" . gene-word)
+      ("w" . forward-word)
+      ("e" . backward-word)
+      ("(" . point-undo)
+      (")" . point-redo)
+      ("J" . ,(lambda () (interactive) (scroll-up 1)))
+      ("K" . ,(lambda () (interactive) (scroll-down 1)))
+      ;; bm-easy
+      ("." . bm-toggle)
+      ("[" . bm-previous)
+      ("]" . bm-next)
+      ;; langhelp-like
+      ("c" . scroll-other-window-down)
+      ("v" . scroll-other-window)
+      ))
+
+  (defun my:define-many-keys (keymap key-table &optional includes)
+    (let (key cmd)
+      (dolist (key-cmd key-table)
+        (setq key (car key-cmd)
+              cmd (cdr key-cmd))
+        (if (or (not includes) (member key includes))
+            (define-key keymap key cmd))))
+    keymap)
+
+  (defun my:hook-view-mode--keybind ()
+    (my:define-many-keys view-mode-map pager-keybind))
+
+  :hook
+  (view-mode-hook . my:hook-view-mode--keybind)
+
+  :bind
+  (:keymap-ctrl-meta-space
+   :package my:keymaps
+   ("C-v" . view-mode)))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; 個別設定ファイルのロード
 
@@ -1776,7 +1830,7 @@ _M-/_: find references
     ;; "config-emacs-lisp-mode"
     ;; "config-rust-mode"
     ;; "config-gdb"
-    "config-view-mode"
+    ;; "config-view-mode"
     "config-info"
     "config-woman"
     "config-dired"
