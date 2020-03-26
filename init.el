@@ -1833,6 +1833,30 @@ _M-/_: find references
 (leaf ahg
   :ensure t)
 
+(leaf *skk
+  :config
+  (add-to-list 'load-path (concat user-emacs-directory "elisp/ddskk/lisp"))
+
+  ;; あらかじめ require しておかないとうまく動かない
+  (require 'skk-autoloads)
+
+  (setq skk-user-directory (concat user-emacs-directory "ddskk/"))
+  ;; チュートリアルの場所設定
+  (setq skk-tut-file "~/.emacs.d/elisp/ddskk/etc/SKK.tut")
+
+  (defun my:hook-skk-load--0 ()
+    ;; コメント行を抜けたら ascii にする
+    ;; (require 'context-skk)
+    ;; C-M-j でアンドゥ確定
+    (bind-key "C-M-j" 'skk-undo-kakutei skk-j-mode-map))
+
+  (add-hook 'skk-load-hook 'my:hook-skk-load--0)
+
+  (leaf skk
+    :bind
+    ;; C-\ で skk-mode
+    ("C-\\" . skk-mode)))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; 個別設定ファイルのロード
 
@@ -1915,7 +1939,7 @@ _M-/_: find references
     ;; "config-hg"
 
     ;; Input Method
-    "config-ddskk"
+    ;; "config-ddskk"
 ))
 
 (defun my-load-init-config-files (file-list)
