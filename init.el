@@ -1783,6 +1783,27 @@ _M-/_: find references
    :package my:keymaps
    ("m" . woman)))
 
+(leaf dired
+  :config
+  (leaf dired-x :require t)
+
+  (leaf wdired
+    :bind
+    (:dired-mode-map
+     :package dired
+     ("e" . wdired-change-to-wdired-mode)))
+
+  (load "sorter")
+
+  ;; dired-find-alternate-file コマンドを有効化
+  (put 'dired-find-alternate-file 'disabled nil)
+  :bind
+  (:dired-mode-map
+   ;; C-m で新規バッファを作成せずにディレクトリ/ファイルを開く
+   ("C-m" . dired-find-alternate-file)
+   ;; a で新規バッファを作成してディレクトリ/ファイルを開く
+   ("a" . dired-find-file)))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; 個別設定ファイルのロード
 
@@ -1859,7 +1880,7 @@ _M-/_: find references
     ;; "config-view-mode"
     ;; "config-info"
     ;; "config-woman"
-    "config-dired"
+    ;; "config-dired"
     "config-ag"
     "config-eww"
     "config-hg"
