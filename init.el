@@ -1804,6 +1804,16 @@ _M-/_: find references
    ;; a で新規バッファを作成してディレクトリ/ファイルを開く
    ("a" . dired-find-file)))
 
+(leaf ag
+  :ensure t
+  :config
+
+  ;; popwin for ag
+  (leaf *popwin
+    :after mod-popwin
+    :config
+    (mod-popwin:add-display-config '(ag-mode :noselect t :stick t))))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; 個別設定ファイルのロード
 
@@ -1881,7 +1891,7 @@ _M-/_: find references
     ;; "config-info"
     ;; "config-woman"
     ;; "config-dired"
-    "config-ag"
+    ;; "config-ag"
     "config-eww"
     "config-hg"
 
