@@ -1830,6 +1830,9 @@ _M-/_: find references
    ("<" . eww-back-url)
    (">" . eww-forward-url)))
 
+(leaf ahg
+  :ensure t)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; 個別設定ファイルのロード
 
@@ -1909,7 +1912,7 @@ _M-/_: find references
     ;; "config-dired"
     ;; "config-ag"
     ;; "config-eww"
-    "config-hg"
+    ;; "config-hg"
 
     ;; Input Method
     "config-ddskk"
