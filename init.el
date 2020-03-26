@@ -1842,7 +1842,7 @@ _M-/_: find references
 
   (setq skk-user-directory (concat user-emacs-directory "ddskk/"))
   ;; チュートリアルの場所設定
-  (setq skk-tut-file "~/.emacs.d/elisp/ddskk/etc/SKK.tut")
+  (setq skk-tut-file (concat user-emacs-directory "elisp/ddskk/etc/SKK.tut"))
 
   (defun my:hook-skk-load--0 ()
     ;; コメント行を抜けたら ascii にする
