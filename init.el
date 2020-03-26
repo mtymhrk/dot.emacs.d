@@ -1814,6 +1814,22 @@ _M-/_: find references
     :config
     (mod-popwin:add-display-config '(ag-mode :noselect t :stick t))))
 
+(leaf eww
+  :config
+  (leaf mod-eww :require t)
+  (setq eww-search-prefix "https://www.google.co.jp/search?q=")
+  :bind
+  (:eww-mode-map
+   ("h" . backword-char)
+   ("j" . next-line)
+   ("k" . previous-line)
+   ("l" . forward-char)
+   ("n" . scroll-up)
+   ("p" . scroll-down)
+   ("r" . eww-reload)
+   ("<" . eww-back-url)
+   (">" . eww-forward-url)))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; 個別設定ファイルのロード
 
@@ -1892,7 +1908,7 @@ _M-/_: find references
     ;; "config-woman"
     ;; "config-dired"
     ;; "config-ag"
-    "config-eww"
+    ;; "config-eww"
     "config-hg"
 
     ;; Input Method
