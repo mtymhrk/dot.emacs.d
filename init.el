@@ -1861,9 +1861,30 @@ _M-/_: find references
   (add-hook 'skk-load-hook 'my:hook-skk-load--0)
 
   (leaf skk
-    :bind
-    ;; C-\ で skk-mode
-    ("C-\\" . skk-mode)))
+    :config
+    ;; Emacs の input method を ddskk にする
+    ;; "C-\" で skk-mode を on にできる
+    (setq default-input-method "japanese-skk")
+
+    (leaf *isearch
+      :config
+      ;; Isearch setting.
+      (defun my:skk-isearch-setup-maybe ()
+        (require 'skk-vars)
+        (when (or (eq skk-isearch-mode-enable 'always)
+                  (and (boundp 'skk-mode)
+                       skk-mode
+                       skk-isearch-mode-enable))
+          (skk-isearch-mode-setup)))
+
+      (defun my:skk-isearch-cleanup-maybe ()
+        (require 'skk-vars)
+        (when (and (featurep 'skk-isearch)
+                   skk-isearch-mode-enable)
+          (skk-isearch-mode-cleanup)))
+
+      (add-hook 'isearch-mode-hook #'my:skk-isearch-setup-maybe)
+      (add-hook 'isearch-mode-end-hook #'my:skk-isearch-cleanup-maybe))))
 
 (leaf *custom-file
   :config
