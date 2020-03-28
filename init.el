@@ -20,7 +20,15 @@
 
   ;; リポジトリ MELPA を追加
   (add-to-list 'package-archives
-               '("melpa" . "http://melpa.org/packages/") t))
+               '("melpa stable" . "https://stable.melpa.org/packages/") t)
+  (add-to-list 'package-archives
+               '("melpa" . "http://melpa.org/packages/") t)
+
+  ;; melpa stable を優先
+  (setq package-archive-priorities
+        '(("melpa stable" . 10)
+          ("gnu"          . 5)
+          ("melpa"        . 0))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; leaf のインストールと設定、bind-key のインストール
