@@ -1051,7 +1051,8 @@ Flycheck
   :custom
   (highlight-symbol-idle-delay . 1.0)
   :hook
-  ((prog-mode-hook . highlight-symbol-mode)))
+  ;; (prog-mode-hook . highlight-symbol-mode)
+  )
 
 (leaf beacon
   :leaf-defer nil
