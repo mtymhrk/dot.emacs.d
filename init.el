@@ -747,7 +747,6 @@ Flycheck
 "
     ("n" flycheck-next-error             "next")
     ("p" flycheck-previous-error         "previous")
-    ("h" flycheck-display-error-at-point "display")
     ("e" flycheck-explain-error-at-point "explain")
     ("l" flycheck-list-errors            "list")
     ("q" nil                             "quit"))
@@ -774,7 +773,6 @@ Flycheck
              ("c" . flycheck-buffer)
              ("n" . hydra-flycheck/flycheck-next-error)
              ("p" . hydra-flycheck/flycheck-previous-error)
-             ("h" . hydra-flycheck/flycheck-display-error-at-point)
              ("e" . hydra-flycheck/flycheck-explain-error-at-point)
              ("l" . hydra-flycheck/flycheck-list-errors)))
 
@@ -1059,9 +1057,10 @@ Flycheck
   :ensure t
   :custom
   (highlight-symbol-idle-delay . 1.0)
-  :hook
-  ;; (prog-mode-hook . highlight-symbol-mode)
-  )
+  :bind
+  (:keymap-for-code-navigation
+   :package my:keymaps
+   ("h" . highlight-symbol)))
 
 (leaf beacon
   :leaf-defer nil
