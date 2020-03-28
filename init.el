@@ -266,12 +266,12 @@
     (message "%s" (get-char-property (point) 'face)))
 
   ;; ~/.emacs.d/elisp 配下の elisp をバイトコンパイルするコマンド
-  (defun my-byte-recompile-elisp-directory ()
+  (defun my:byte-recompile-elisp-directory ()
     (interactive)
     (byte-recompile-directory (concat user-emacs-directory "elisp") 0 t))
 
   ;; package の elisp を再コンパイルするコマンド
-  (defun my-package-recompile (pkg)
+  (defun my:package-recompile (pkg)
     (unless (package-installed-p pkg)
       (error "failed to recompile a package: uninstalled package: %s" pkg))
     (when (package-built-in-p pkg)
@@ -286,18 +286,27 @@
       ))
 
   ;; 全ての package の elisp を再コンパイルするコマンド
-  (defun my-package-recompile-all ()
+  (defun my:package-recompile-all ()
     (dolist (pkg package-alist)
       (let* ((name (package-desc-name (cadr pkg))))
         (unless (package-built-in-p name)
-          (my-package-recompile name))))))
+          (my:package-recompile name)))))
+
+  ;; リージョンが有効でない場合に kill-region を実行した場合は後ろの単語をkillす
+  ;; る
+  (defun my:advice-kill-region (orig-fun &rest args)
+    (if (and (called-interactively-p 'any)
+             (not (region-active-p)))
+        (backward-kill-word 1)
+      (apply orig-fun args)))
+  (advice-add 'kill-region :around 'my:advice-kill-region))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; その他基本機能の挙動変更
 
 ;; kill-region と kill-ring-save の拡張
-(leaf ex-kill-region
-  :require t)
+;; (leaf ex-kill-region
+;;   :require t)
 
 ;; *scratch* バッファを永続化
 (leaf permanent-scratch
@@ -1069,7 +1078,6 @@ Flycheck
   :leaf-defer nil
   :ensure t
   :require t
-  :commands smartparens-global-mode smartparens-mode smartparens-strict-mode
   :delight
   :custom
   ;; カッコが自動挿入された際に、ハイライトを行わない
@@ -1078,6 +1086,16 @@ Flycheck
   (leaf smartparens-config :require t)
   (sp-use-paredit-bindings)
   (smartparens-global-mode)
+
+  ;; リージョンが有効でない場合に sp-kill-region を実行した場合は後ろの単語を
+  ;; killする
+  (defun my:advice-sp-kill-region (orig-fun &rest args)
+    (if (and (called-interactively-p 'any)
+             (not (region-active-p)))
+        (sp-backward-kill-word 1)
+      (apply orig-fun args)))
+  (advice-add 'sp-kill-region :around 'my:advice-sp-kill-region)
+
   :bind
   (:smartparens-mode-map
    ("C-<" . sp-splice-sexp-killing-backward)
@@ -1256,11 +1274,7 @@ _p_: prev     _D_: remove all
 (leaf easy-kill
   :ensure t
   :bind
-  ("M-w" . easy-kill)
-  ;; C-w に別のコマンドをバインドしているのが原因でキーバインドが正しくされない
-  ;; ため、キーバインドを修正する
-  (:easy-kill-base-map
-   ("C-w" . easy-kill-region)))
+  ("M-w" . easy-kill))
 
 (leaf lsp-mode
   :ensure t
