@@ -99,7 +99,7 @@
     ;; (bind-key "C-M-g" 'keyboard-escape-quit)
 
     ;; M-: (eval-expression) にて tab で補完を行う
-    (bind-key "TAB" 'lisp-complete-symbol read-expression-map)
+    (bind-key "TAB" 'completion-at-point read-expression-map)
 
     ;; just-on-space の代りに cycle-spacing を使う
     (bind-key "M-SPC" 'cycle-spacing)
