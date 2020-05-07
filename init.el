@@ -926,6 +926,7 @@ Flycheck
   (company-selection-wrap-around . t)
   (company-require-match . nil) ; 候補にマッチしない入力をした場合、補完せず終了する
   (company-dabbrev-code-everywhere . t) ; コメントや文字列でも dabbrev-code の補完を行う
+  (company-global-modes . (not org-mode))
   :bind
   (:company-mode-map
    ("M-i" . company-complete)
