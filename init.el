@@ -787,10 +787,10 @@ Flycheck
   (super-save-mode +1))
 
 (leaf dmacro
-  :leaf-defer t
+  :leaf-defer nil
   :init
   (defconst *dmacro-key* "\C-t" "繰返し指定キー")
-  :require t
+  (load "dmacro")
   :bind
   ("C-t" . dmacro-exec))
 
