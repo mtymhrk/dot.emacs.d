@@ -469,21 +469,25 @@
           ))
 
   (set-face-attribute 'whitespace-trailing nil
-                      :foreground "purple"
+                      :foreground "magenta"
                       :background 'unspecified
                       :strike-through nil
+                      :inherit nil ; trailing-whitespace face を継承しない
+                      :weight 'bold
                       :underline t)
 
   (set-face-attribute 'whitespace-space nil
-                      :foreground "purple"
+                      :foreground "magenta"
                       :background 'unspecified
                       :strike-through nil
+                      :weight 'bold
                       :underline nil)
 
   (set-face-attribute 'whitespace-tab nil
-                      :foreground "purple"
+                      :foreground "Dodgerblue1"
                       :background 'unspecified
                       :strike-through nil
+                      :weight 'bold
                       :underline t)
 
   (setq whitespace-global-modes '(not dired-mode))
