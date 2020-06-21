@@ -764,11 +764,6 @@ Flycheck
                       (default-value 'flycheck-disabled-checkers)))
 
 
-  (leaf flycheck-popup-tip
-    :ensure t
-    :hook
-    ((flycheck-mode-hook . flycheck-popup-tip-mode)))
-
   (leaf *popwin
     :after mod-popwin
     :config
