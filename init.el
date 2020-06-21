@@ -25,10 +25,11 @@
                '("melpa" . "http://melpa.org/packages/") t)
 
   ;; melpa stable を優先
-  (setq package-archive-priorities
-        '(("melpa stable" . 10)
-          ("gnu"          . 5)
-          ("melpa"        . 0))))
+  ;; (setq package-archive-priorities
+  ;;       '(("melpa stable" . 10)
+  ;;         ("gnu"          . 5)
+  ;;         ("melpa"        . 0)))
+  )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; leaf のインストールと設定、bind-key のインストール
@@ -764,6 +765,7 @@ Flycheck
 
 
   (leaf flycheck-popup-tip
+    :ensure t
     :hook
     ((flycheck-mode-hook . flycheck-popup-tip-mode)))
 
