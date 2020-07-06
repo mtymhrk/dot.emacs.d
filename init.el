@@ -949,11 +949,6 @@ Flycheck
 
   (global-company-mode)
 
-  (leaf company-irony
-    :ensure t
-    :config
-    (add-to-list 'company-backends 'company-irony))
-
   (leaf company-quickhelp
     :ensure t
     :config
