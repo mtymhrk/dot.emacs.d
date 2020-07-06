@@ -1675,10 +1675,12 @@ _M-/_: find references
 
 (leaf rust-mode
   :ensure t
-  :config
+  :custom
   ;; rust-modeでrust-format-on-saveをtにすると自動でrustfmtが走る
-  (setq-default rust-format-on-save t)
+  (rust-format-on-save . t)
+  (rust-format-show-buffer . nil)
 
+  :config
   ;; rustのファイルを編集するときにflycheckを起動する
   (leaf flycheck
     :hook
