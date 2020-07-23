@@ -1672,7 +1672,7 @@ _M-/_: find references
   :ensure t
   :custom
   ;; rust-modeでrust-format-on-saveをtにすると自動でrustfmtが走る
-  (rust-format-on-save . t)
+  ;; (rust-format-on-save . t)
   (rust-format-show-buffer . nil)
 
   :config
