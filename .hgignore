@@ -13,10 +13,7 @@ auto-save-list/*
 var/*
 url/*
 elisp/**/*.elc
-elpa/archives/*
-elpa/*.txt
-elpa/gnupg/*
-elpa/**/*.elc
+elpa/*
 bookmarks
 projectile-bookmarks.eld
 .mc-lists.el
@@ -29,3 +26,4 @@ recentf~
 custom.el
 irony/bin/
 amx-items
+backups
