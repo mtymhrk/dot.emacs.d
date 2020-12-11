@@ -238,22 +238,50 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 独自キーマップ
+(leaf which-key
+  :delight
+  :leaf-defer nil
+  :ensure t
+  :require t
+  :custom
+  (which-key-idle-delay . 0.2)
+  (which-key-show-transient-maps . nil)
+  :config
+  (which-key-setup-side-window-bottom)
+  (which-key-mode 1))
+
 (leaf *my:keymaps
   :config
+  (defun my:bind-key (key value replacement &optional keymap)
+    (bind-key key value keymap)
+    (when (require 'which-key nil t)
+      (if keymap
+          (which-key-add-keymap-based-replacements keymap key (cons replacement value))
+        (which-key-add-key-based-replacements key replacement))))
+
   (defvar my:orig-C-M-SPC-command (global-key-binding (kbd "C-M-SPC")))
 
-  (defvar keymap-ctrl-meta-space (make-sparse-keymap))
-  (global-set-key (kbd "C-M-SPC") keymap-ctrl-meta-space)
-  (global-set-key (kbd "C-;") keymap-ctrl-meta-space)
+  (global-set-key (kbd "C-M-SPC") mode-specific-map)
 
   (defvar keymap-for-manuals (make-sparse-keymap))
-  (define-key keymap-ctrl-meta-space (kbd "d") keymap-for-manuals)
+  (my:bind-key "d" keymap-for-manuals "Manuals" mode-specific-map)
 
   (defvar keymap-for-code-navigation (make-sparse-keymap))
-  (define-key keymap-ctrl-meta-space (kbd "c") keymap-for-code-navigation)
+  (my:bind-key "c" keymap-for-code-navigation "CodeNavi" mode-specific-map)
 
-  (defvar keymap-for-grep (make-sparse-keymap))
-  (define-key keymap-ctrl-meta-space (kbd "g") keymap-for-grep)
+  (defvar keymap-for-memo (make-sparse-keymap))
+  (my:bind-key "n" keymap-for-memo "Note" mode-specific-map)
+
+  (defvar keymap-for-file (make-sparse-keymap))
+  (my:bind-key "f" keymap-for-file "File" mode-specific-map)
+
+  (defvar keymap-for-buffer (make-sparse-keymap))
+  (my:bind-key "b" keymap-for-buffer "Buffer" mode-specific-map)
+  (my:bind-key "k" 'kill-buffer "kill" keymap-for-buffer)
+  (my:bind-key "l" 'buffer-menu "menu" keymap-for-buffer)
+
+  (defvar keymap-for-search (make-sparse-keymap))
+  (my:bind-key "s" keymap-for-search "Search" mode-specific-map)
 
   (provide 'my:keymaps))
 
@@ -314,8 +342,13 @@
   :require t)
 
 ;; isearch の挙動変更
-(leaf mod-isearch
-  :require t)
+(leaf *isearch
+  :config
+  (leaf mod-isearch
+    :require t)
+
+  (my:bind-key "i" 'isearch-forward "isearch" keymap-for-search)
+  (my:bind-key "I" 'isearch-forward-regexp "re/isearch" keymap-for-search))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -495,12 +528,17 @@
   (global-whitespace-mode 1))
 
 (leaf *move-error
-  :hydra (hydra-move-error
-          (global-map "M-g")
+  :hydra (hydra-move-error ()
           ("n" next-error "next")
           ("p" previous-error "previous")
-          ("C-n" next-error "next")
-          ("C-p" previous-error "previous")))
+          ("M-n" next-error "next")
+          ("M-p" previous-error "previous")
+          ("q" nil "quit"))
+  :config
+  (my:bind-key "M-g n" 'hydra-move-error/next-error "error/next")
+  (my:bind-key "M-g p" 'hydra-move-error/previous-error "error/prev")
+  (my:bind-key "M-g M-n" 'hydra-move-error/next-error "error/next")
+  (my:bind-key "M-g M-p" 'hydra-move-error/previous-error "error/prev"))
 
 (leaf *window
   :config
@@ -621,7 +659,7 @@ _o_: select        _h_  : right
     (hydra-eyebrowse
      (:hint nil)
 "
-^Create^           ^Swit^           ^Quit^
+^Create^           ^Switch^          ^Quit^
 ^^^^^^^^-------------------------------------------------------
 _c_  : create      _p_  : prev       _ESC_: Window
 _k_  : close       _n_  : next       _q_  : quit
@@ -651,17 +689,21 @@ _k_  : close       _n_  : next       _q_  : quit
     (hydra-window
      (:hint nil)
 "
-^Division^         ^eyebrowse^          ^Popwin^          ^Undo^                   ^Quit^
+^Division^         ^Move^           ^Eyebrowse^          ^Popwin^          ^Undo^                   ^Quit^
 ^^^^^^^^-----------------------------------------------------------------------------------------
-_h_: horizon       _c_: create          _p_: popwin       _z_  : winner-undo       _q_: quit
-_v_: vertical      _k_: close           ^ ^               _C-z_: winner-redo
-_d_: delete        _._: switch
-_s_: switch        _e_: eyebrowse
+_h_: horizon       _C-n_: down      _c_: create          _p_: popwin       _z_  : winner-undo       _q_: quit
+_v_: vertical      _C-p_: up        _k_: close           ^ ^               _C-z_: winner-redo
+_d_: delete        _C-f_: right     _._: switch
+_s_: switch        _C-b_: left      _e_: eyebrowse
 "
       ("h" split-window-below)
       ("v" split-window-right)
       ("d" switch-window-then-delete)
       ("s" switch-window)
+      ("C-n" windmove-down)
+      ("C-p" windmove-up)
+      ("C-f" windmove-right)
+      ("C-b" windmove-left)
       ("c" eyebrowse-create-window-config :exit t)
       ("k" hydra-eyebrowse/eyebrowse-close-window-config :exit t)
       ("." hydra-eyebrowse/eyebrowse-switch-to-window-config :exit t)
@@ -671,13 +713,13 @@ _s_: switch        _e_: eyebrowse
       ("C-z" winner-redo)
       ("q" nil :exit t))
     :config
-    (bind-key "w" 'hydra-window/body keymap-ctrl-meta-space)))
+    (my:bind-key "w" 'hydra-window/body "Window" mode-specific-map)))
 
 (leaf recentf
   :require t
   :config
   (setq recentf-max-saved-items 1000)
-  (setq recentf-exclude '("/TAGS$" "/var/tmp/"))
+  (setq recentf-exclude '("/TAGS$" "/var/tmp/" "recentf" "bookmarks"))
 
   (leaf recentf-ext
     :ensure t
@@ -703,9 +745,10 @@ _s_: switch        _e_: eyebrowse
   (setq compilation-scroll-output t)
 
   :bind
-  (mode-specific-map
-   ;; C-c c で compile コマンドを呼び出す
-   ("c" . compile)))
+  ;; (mode-specific-map
+  ;;  ;; C-c c で compile コマンドを呼び出す
+  ;;  ("c" . compile))
+  )
 
 (leaf flymake
   :delight
@@ -744,17 +787,29 @@ _s_: switch        _e_: eyebrowse
   ;; 手動表示のみしたいが、できないので大きな時間を設定して自動表示させないよう
   ;; にする
   (flycheck-display-errors-delay . 10000.0)
+  (flycheck-keymap-prefix . "")
 
   :hydra
-  (hydra-flycheck ()
+  (hydra-flycheck (:hint nil)
     "
-Flycheck
+^Move^         ^At Point^        ^Checker^               ^Quit^
+^^^^^^^^--------------------------------------------------------------------------------
+_n_: next      _e_: explain      _l_: list              _q_: quit
+_p_: prev      _C-w_: copy       _c_: check
+^ ^            ^ ^               _C_: clear
+^ ^            ^ ^               _?_: describe
+^ ^            ^ ^               _x_: disable
 "
-    ("n" flycheck-next-error             "next")
-    ("p" flycheck-previous-error         "previous")
-    ("e" flycheck-explain-error-at-point "explain")
-    ("l" flycheck-list-errors            "list")
-    ("q" nil                             "quit"))
+    ("n"   flycheck-next-error)
+    ("p"   flycheck-previous-error)
+    ("e"   flycheck-explain-error-at-point)
+    ("C-w" flycheck-copy-errors-as-kill)
+    ("l"   flycheck-list-errors)
+    ("c"   flycheck-buffer)
+    ("C"   flycheck-clear)
+    ("?"   flycheck-describe)
+    ("x"   flycheck-disable-checker)
+    ("q"   nil))
 
   :config
   ;; 無効化する checker の設定
@@ -770,12 +825,7 @@ Flycheck
     ;; エラーリストをポップアップで表示
     (mod-popwin:add-display-config '(flycheck-error-list-mode :noselect t :stick t)))
 
-  (bind-keys :map keymap-for-code-navigation
-             ("c" . flycheck-buffer)
-             ("n" . hydra-flycheck/flycheck-next-error)
-             ("p" . hydra-flycheck/flycheck-previous-error)
-             ("e" . hydra-flycheck/flycheck-explain-error-at-point)
-             ("l" . hydra-flycheck/flycheck-list-errors)))
+  (my:bind-key "c" 'hydra-flycheck/body "flycheck" keymap-for-code-navigation))
 
 (leaf super-save
   :ensure t
@@ -818,8 +868,8 @@ Flycheck
   :ensure t
   :custom
   (expand-region-contract-fast-key . "R")
-  :config
-  (bind-key "r" 'er/expand-region keymap-ctrl-meta-space))
+  :init
+  (my:bind-key "r" 'er/expand-region "expand-region" mode-specific-map))
 
 (leaf yasnippet
   :ensure t
@@ -839,13 +889,14 @@ Flycheck
 
 (leaf open-junk-file
   :ensure t
+  :init
+  (my:bind-key "j" 'open-junk-file "open-junk-file" keymap-for-memo)
+
   :config
   (defvar my:open-junk-file-base-dir "~/memo/junk/")
   ;; junk ファイル名フーマット
   (setq open-junk-file-format (concat my:open-junk-file-base-dir
-                                      "%Y.%m.%d-%H.%M.%S."))
-
-  (bind-key "C-j" 'open-junk-file keymap-ctrl-meta-space))
+                                      "%Y.%m.%d-%H.%M.%S.")))
 
 (leaf ivy
   :delight
@@ -858,20 +909,25 @@ Flycheck
   (ivy-height . 15)
   (ivy-height-alist . '((swiper . 20)))
   (enable-recursive-minibuffers . t)
+  :init
+  (my:bind-key ";" 'ivy-switch-buffer "switch-buffer"  mode-specific-map)
+  (my:bind-key "." 'ivy-resume "ivy-resume" mode-specific-map)
+  (my:bind-key "b" 'ivy-switch-buffer "switch-buffer" keymap-for-buffer)
 
   :config
-  (ivy-mode 1)
-
-  :bind
-  (:keymap-ctrl-meta-space
-   :package my:keymaps
-   ("C-;" . ivy-switch-buffer)
-   ("C-M-;" . ivy-resume)))
+  (ivy-mode 1))
 
 (leaf counsel
   :ensure t
   :custom
   (counsel-yank-pop-separator . "\n-------\n")
+  :init
+  (my:bind-key "g" 'mod-counsel:counsel-ag "ag" keymap-for-search)
+  (my:bind-key "i" 'counsel-imenu "imenu" keymap-for-buffer)
+  (my:bind-key "g" 'mod-counsel:counsel-grep-my-memo "grep memo" keymap-for-memo)
+  (my:bind-key "r" 'mod-counsel:counsel-open-my-memo "open memo" keymap-for-memo)
+  (my:bind-key "a" 'counsel-apropos "apropos" keymap-for-manuals)
+
   :config
   (leaf mod-counsel :require t)
 
@@ -887,28 +943,18 @@ Flycheck
   ("C-x C-f" . counsel-find-file)
   ("M-y" . counsel-yank-pop)
   (:minibuffer-local-map
-   ("C-r" . counsel-minibuffer-history))
-  (:keymap-for-grep
-   :package my:keymaps
-   ("g" . mod-counsel:counsel-ag))
-  (:keymap-ctrl-meta-space
-   :package my:keymaps
-   ("C-'" . counsel-imenu)
-   ("o g" . mod-counsel:counsel-grep-my-memo)
-   ("o r" . mod-counsel:counsel-open-my-memo))
-  (:keymap-for-manuals
-   :package my:keymaps
-     ("a" . counsel-apropos)))
+   ("C-r" . counsel-minibuffer-history)))
 
 (leaf swiper
   :ensure t
+  :init
+  (my:bind-key "o" 'swiper "swiper" keymap-for-search)
+  (my:bind-key "o" 'swiper "swiper" keymap-for-buffer)
+
   :bind
   (:isearch-mode-map
    :package isearch
-   ("C-'" . swiper-from-isearch))
-  (:keymap-ctrl-meta-space
-   :package my:keymaps
-   ("C-o" . swiper)))
+   ("C-'" . swiper-from-isearch)))
 
 (leaf amx
   :ensure t
@@ -999,17 +1045,13 @@ Flycheck
 (leaf projectile
   :delight
   :leaf-defer nil
+  :require t
   :ensure t
   :config
   (setq  projectile-completion-system 'ivy)
   (projectile-mode +1)
-  :bind
-  (:projectile-mode-map
-   ("C-c p" . projectile-command-map))
-  (:keymap-ctrl-meta-space
-   :package my:keymaps
-   ("p" . projectile-command-map)
-   ("C-p" . projectile-find-file)))
+  (my:bind-key "p" 'projectile-command-map "Projectile" mode-specific-map)
+  (my:bind-key "p" 'projectile-find-file "projectile" keymap-for-file))
 
 (leaf anzu
   :leaf-defer nil
@@ -1023,21 +1065,11 @@ Flycheck
   (anzu-replace-to-string-separator . "")
   :config
   (global-anzu-mode +1)
+  (my:bind-key "r" 'anzu-query-replace "replace" keymap-for-search)
+  (my:bind-key "R" 'anzu-query-replace-regexp "re/replace" keymap-for-search)
   :bind
   ("M-%" . anzu-query-replace)
   ("C-M-%" . anzu-query-replace-regexp))
-
-(leaf which-key
-  :delight
-  :leaf-defer nil
-  :ensure t
-  :require t
-  :custom
-  (which-key-idle-delay . 0.2)
-  (which-key-show-transient-maps . nil)
-  :config
-  (which-key-setup-side-window-bottom)
-  (which-key-mode 1))
 
 (leaf volatile-highlights
   :delight
@@ -1128,6 +1160,9 @@ Flycheck
 
 (leaf multiple-cursors
   :ensure t
+  :init
+  (my:bind-key "m" 'hydra-multiple-cursors/body "multiple-cursors" mode-specific-map)
+
   :hydra
   (hydra-multiple-cursors (:hint nil)
     "
@@ -1149,11 +1184,7 @@ _m_: more      ^ ^            ^ ^            ^ ^             _O_: reverse region
     ("i" mc/insert-numbers)
     ("o" mc/sort-regions)
     ("O" mc/reverse-regions)
-    ("q" nil :eixt t))
-  :bind
-  (:keymap-ctrl-meta-space
-   :package my:keymaps
-   ("m" . hydra-multiple-cursors/body)))
+    ("q" nil :eixt t)))
 
 (leaf bm
   :ensure t
@@ -1172,10 +1203,8 @@ _p_: prev     _D_: remove all
     ("b" bm-toggle)
     ("D" bm-remove-all-current-buffer)
     ("q" nil :exit t))
-  :bind
-  (:keymap-ctrl-meta-space
-   :package my:keymaps
-   ("b" . hydra-bm/body)))
+  :config
+  (my:bind-key "m" 'hydra-bm/body "bookmarks" keymap-for-buffer))
 
 (leaf fill-column-indicator
   :ensure t
@@ -1291,6 +1320,19 @@ _p_: prev     _D_: remove all
     ;; lsp-describe-thing-at-point の表示を popup で出す
     (mod-popwin:add-display-config '("*lsp-help*" :noselect t :stick t)))
 
+  (let ((keymap keymap-for-code-navigation))
+    (my:bind-key "C-i" 'completion-at-point "completion" keymap)
+    (my:bind-key "i" 'lsp-ui-imenu "imenu" keymap)
+    (my:bind-key "." 'lsp-ui-peek-find-defeinitions "peek-definitions" keymap)
+    (my:bind-key "/" 'lsp-ui-peek-find-references "peek-references" keymap)
+    (my:bind-key "," 'hydra-xref/xref-pop-marker-stack "pop-marker-stack" keymap)
+    (my:bind-key "x" 'lsp-rename "rename" keymap)
+    (my:bind-key "d" 'lsp-describe-thing-at-point "describe" keymap)
+    (my:bind-key "D" 'lsp-ui-doc-show "show-documents" keymap)
+    (my:bind-key "M-D" 'lsp-ui-doc-hide "hide-documents" keymap)
+    (my:bind-key "M-." 'hydra-xref/xref-find-definitions "find-definitions" keymap)
+    (my:bind-key "M-/" 'hydra-xref/xref-find-references "find-references" keymap))
+
   :hydra
   (hydra-xref (:hint nil)
               "
@@ -1302,22 +1344,7 @@ _M-/_: find references
               (","   xref-pop-marker-stack)
               ("M-." xref-find-definitions)
               ("M-/" xref-find-references)
-              ("q"   nil))
-
-  :bind
-  (:keymap-for-code-navigation
-   :package my:keymaps
-   ("C-i" . completion-at-point)
-   ("i"   . lsp-ui-imenu)
-   ("."   . lsp-ui-peek-find-definitions)
-   ("/"   . lsp-ui-peek-find-references)
-   (","   . hydra-xref/xref-pop-marker-stack)
-   ("x"   . lsp-rename)
-   ("d"   . lsp-describe-thing-at-point)
-   ("D"   . lsp-ui-doc-show)
-   ("M-D" . lsp-ui-doc-hide)
-   ("M-." . hydra-xref/xref-find-definitions)
-   ("M-/" . hydra-xref/xref-find-references)))
+              ("q"   nil)))
 
 (leaf text-mode
   :hook
@@ -1346,6 +1373,10 @@ _M-/_: find references
     ((org-mode-hook . my:hook-func-org-mode)))
 
   (leaf org-capture
+    :init
+    (my:bind-key "c" 'org-capture "capture" keymap-for-memo)
+    (my:bind-key "a" 'org-agenda "agenda" keymap-for-memo)
+
     :config
     (leaf org-install :require t)
 
@@ -1428,15 +1459,7 @@ _M-/_: find references
 
     ;; todo
     (setq org-todo-keywords
-          '((sequence "TODO(t)" "WAIT(w@/!)" "|" "DONE(d!)" "CANCELED(c@)")))
-
-    :bind
-    ("C-c o c" . org-capture)
-    ("C-c o a" . org-agenda)
-    (:keymap-ctrl-meta-space
-     :package my:keymaps
-     ("o c" . org-capture)
-     ("o a" . org-agenda))))
+          '((sequence "TODO(t)" "WAIT(w@/!)" "|" "DONE(d!)" "CANCELED(c@)")))))
 
 (leaf cc-mode
   :hook
@@ -1725,6 +1748,9 @@ _M-/_: find references
   (gdb-mode-hook . gud-tooltip-mode))
 
 (leaf view
+  :init
+  (my:bind-key "v" 'view-mode "view-mode" keymap-for-buffer)
+
   :config
   (leaf mod-view :require t)
 
@@ -1771,12 +1797,7 @@ _M-/_: find references
     (my:define-many-keys view-mode-map pager-keybind))
 
   :hook
-  (view-mode-hook . my:hook-view-mode--keybind)
-
-  :bind
-  (:keymap-ctrl-meta-space
-   :package my:keymaps
-   ("C-v" . view-mode)))
+  (view-mode-hook . my:hook-view-mode--keybind))
 
 (leaf info
   :config
