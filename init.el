@@ -540,6 +540,65 @@
   (my:bind-key "M-g M-n" 'hydra-move-error/next-error "error/next")
   (my:bind-key "M-g M-p" 'hydra-move-error/previous-error "error/prev"))
 
+(leaf tab-bar
+  :custom
+  ;; タブが 2 つ以上になると tab-bar-mode を有効にしてタブを表示し、
+  ;; タブが 1 つだけになると tab-bar-mode を無効にしてタブを消す
+  (tab-bar-show . 1)
+  ;; タブの名称の前に連番を表示する
+  (tab-bar-tab-hints . t)
+
+  :config
+  ;; tab-bar-mode と tab-bar-history-mode を有効にした後、tab-bar-mode を無効に
+  ;; する。tab-bar-show を 1 に設定しているのでタブを作成すると自動的に
+  ;; tab-bar-mode が有効になるので tab-bar-mode を最初から有効にしておく必要はな
+  ;; い。しかし、tab-bar-mode を有効な状態で tab-bar-history-mode を有効にしない
+  ;; と tab-bar-hisotry-mode が表示されない。それを回避するために一旦
+  ;; tab-bar-mode を有効にしている
+  (tab-bar-mode +1)
+  (tab-bar-history-mode +1)
+  (tab-bar-mode -1)
+
+  (defun my:tab-move-right ()
+    (interactive)
+    (tab-move +1))
+
+  (defun my:tab-move-left ()
+    (interactive)
+    (tab-move -1))
+
+  (defun my:tab-next-right ()
+    (interactive)
+    (tab-next +1))
+
+  (defun my:tab-next-left ()
+    (interactive)
+    (tab-next -1))
+
+  (my:bind-key "t" 'hydra-tab-bar/body "tab" mode-specific-map)
+
+  :hydra
+  (hydra-tab-bar
+   (:hint nil)
+"
+^Tab^           ^Select^        ^Move^           ^History^           ^Quit^
+^^^^^^^^--------------------------------------------------------------------
+_t_: new        _n_: next       _M-n_: right     _z_: back         _q_: quit
+_k_: close      _p_: prev       _M-p_: left      _Z_: forward
+_r_: rename     _s_: select
+"
+   ("t" tab-new)
+   ("k" tab-close)
+   ("r" tab-rename)
+   ("n" my:tab-next-right)
+   ("p" my:tab-next-left)
+   ("s" tab-bar-select-tab-by-name)
+   ("M-n" my:tab-move-right)
+   ("M-p" my:tab-move-left)
+   ("z" tab-bar-history-back)
+   ("Z" tab-bar-history-forward)
+   ("q" nil)))
+
 (leaf *window
   :config
   (leaf switch-window
@@ -563,22 +622,6 @@
     (set-face-attribute 'switch-window-label nil :height 10.0)
     (cl-loop for key in switch-window-qwerty-shortcuts
              do (bind-key key nil switch-window-extra-map)))
-
-  (leaf eyebrowse
-    :ensure t
-    :require t
-    :custom
-    ;; eyebrowse-mode-map にキーをバインドしない
-    (eyebrowse-keymap-prefix . "")
-    (eyebrowse-new-workspace . #'my-eyebrowse-new-workspace-func)
-    ;; doom-mode-line では別途 Window Config 番号が表示されるので eyebrowse での表示は削除
-    (eyebrowse-mode-line-style . 'hide)
-
-    :config
-    (defun my:eyebrowse-new-workspace-func ()
-      (switch-to-buffer "*scratch*")
-      (my:default-window-split))
-    (eyebrowse-mode 1))
 
   (leaf popwin
     :ensure t
@@ -655,46 +698,17 @@ _o_: select        _h_  : right
       ("C-e"        mod-popwin:seq-end)
       ("ESC"        hydra-window/body :exit t)
       ("q"          nil))
-    :hydra
-    (hydra-eyebrowse
-     (:hint nil)
-"
-^Create^           ^Switch^          ^Quit^
-^^^^^^^^-------------------------------------------------------
-_c_  : create      _p_  : prev       _ESC_: Window
-_k_  : close       _n_  : next       _q_  : quit
-^ ^                _'_  : last
-^ ^                _._  : select
-^ ^                0~9  : switch
-"
-      ("c" eyebrowse-create-window-config :exit t)
-      ("k" eyebrowse-close-window-config)
-      ("p" eyebrowse-prev-window-config)
-      ("n" eyebrowse-next-window-config)
-      ("'" eyebrowse-last-window-config)
-      ("." eyebrowse-switch-to-window-config)
-      ("0" eyebrowse-switch-to-window-config-0)
-      ("1" eyebrowse-switch-to-window-config-1)
-      ("2" eyebrowse-switch-to-window-config-2)
-      ("3" eyebrowse-switch-to-window-config-3)
-      ("4" eyebrowse-switch-to-window-config-4)
-      ("5" eyebrowse-switch-to-window-config-5)
-      ("6" eyebrowse-switch-to-window-config-6)
-      ("7" eyebrowse-switch-to-window-config-7)
-      ("8" eyebrowse-switch-to-window-config-8)
-      ("9" eyebrowse-switch-to-window-config-9)
-      ("ESC" hydra-window/body :exit t)
-      ("q" nil :exit t))
+
     :hydra
     (hydra-window
      (:hint nil)
 "
-^Division^         ^Move^           ^Eyebrowse^          ^Popwin^          ^Undo^                   ^Quit^
+^Division^         ^Move^           ^Popwin^          ^Undo^                   ^Quit^
 ^^^^^^^^-----------------------------------------------------------------------------------------
-_h_: horizon       _C-n_: down      _c_: create          _p_: popwin       _z_  : winner-undo       _q_: quit
-_v_: vertical      _C-p_: up        _k_: close           ^ ^               _C-z_: winner-redo
-_d_: delete        _C-f_: right     _._: switch
-_s_: switch        _C-b_: left      _e_: eyebrowse
+_h_: horizon       _C-n_: down      _p_: popwin       _z_  : winner-undo       _q_: quit
+_v_: vertical      _C-p_: up        ^ ^               _C-z_: winner-redo
+_d_: delete        _C-f_: right
+_s_: switch        _C-b_: left
 "
       ("h" split-window-below)
       ("v" split-window-right)
@@ -704,10 +718,6 @@ _s_: switch        _C-b_: left      _e_: eyebrowse
       ("C-p" windmove-up)
       ("C-f" windmove-right)
       ("C-b" windmove-left)
-      ("c" eyebrowse-create-window-config :exit t)
-      ("k" hydra-eyebrowse/eyebrowse-close-window-config :exit t)
-      ("." hydra-eyebrowse/eyebrowse-switch-to-window-config :exit t)
-      ("e" hydra-eyebrowse/body :exit t)
       ("p" hydra-popwin/body :exit t)
       ("z" winner-undo)
       ("C-z" winner-redo)
